@@ -51,5 +51,20 @@ class EventParserSpec extends MySpecification {
     "parse MoveCaretEvent" in {
       parse( """MoveCaretEvent {"path":"/aaa","offset":12}""", MoveCaretEvent("/aaa", 12))
     }
+    "parse CreateDirEvent" in {
+      parse( """CreateDirEvent {"path":"/aaa"} """, CreateDirEvent("/aaa"))
+    }
+    "parse CreateFileEvent" in {
+      parse( """CreateFileEvent {"path":"/aaa","content":{"text":"full-content","charset":"UTF-8"}}""", CreateFileEvent("/aaa", Content("full-content", "UTF-8")))
+    }
+    "parse DeleteDirEvent" in {
+      parse( """DeleteDirEvent {"path":"/aaa"}""", DeleteDirEvent("/aaa"))
+    }
+    "parse DeleteFileEvent" in {
+      parse( """DeleteFileEvent {"path":"/aaa"}""", DeleteFileEvent("/aaa"))
+    }
+    "parse RenameEvent" in {
+      parse( """RenameEvent {"from":"/aaa","to":"/bbb"}""", RenameEvent("/aaa", "/bbb"))
+    }
   }
 }
