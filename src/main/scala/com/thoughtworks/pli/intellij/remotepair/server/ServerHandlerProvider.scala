@@ -78,10 +78,22 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
     case event: MoveCaretEvent => broadcastToOtherMembers(client, event)
     case event: IgnoreFilesRequest => handleIgnoreFilesRequest(client, event)
     case req: SyncFilesRequest => sendToMaster(client, req)
-    case event: MasterPairableFiles => broadcastToOtherMembers(client, event)
+    case event: MasterPairableFiles => sendToClientWithId(event)
+    case event: SyncFileEvent => sendToClientWithId(event)
     case event: CreateDocument => handleCreateDocument(project, client, event)
     case request: CreateServerDocumentRequest => handleCreateServerDocumentRequest(client, request)
+    case SyncFilesForAll => handleSyncFilesForAll(client)
     case _ => broadcastToOtherMembers(client, event)
+  }
+
+  private def handleSyncFilesForAll(client: Client): Unit = for {
+    project <- projects.findForClient(client)
+    master <- project.getMasterMember
+    other <- project.otherMembers(master)
+  } other.writeEvent(SyncFilesForAll)
+
+  private def sendToClientWithId(event: PairEvent {val toClientId: String}): Unit = {
+    clients.findById(event.toClientId) foreach (_.writeEvent(event))
   }
 
   private def handleCreateDocument(project: Project, client: Client, event: CreateDocument): Unit = {

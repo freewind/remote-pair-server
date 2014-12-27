@@ -30,5 +30,8 @@ trait Clients {
 
   def size = contexts.size
 
-  def findByUserName(username: String): Option[Client] = contexts.find(_._2.name == Some(username)).map(_._2)
+  def findByUserName(username: String): Option[Client] = contexts.map(_._2).find(_.name == Some(username))
+
+  def findById(id: String): Option[Client] = contexts.map(_._2).find(_.id == id)
+
 }

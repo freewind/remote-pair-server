@@ -116,5 +116,5 @@ trait MockEvents {
   val selectContentEvent2 = SelectContentEvent("/aaa", 20, 7)
   val selectContentEvent3 = SelectContentEvent("/bbb", 14, 8)
 
-  val syncFilesRequest = SyncFilesRequest("123", Nil)
+  val syncFilesRequest = SyncFilesRequest("any-id", Nil)
 }

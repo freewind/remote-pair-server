@@ -11,11 +11,11 @@ case class SyncFilesRequest(fromClientId: String, fileSummaries: Seq[FileSummary
   override def toJson = Serialization.write(this)
 }
 
-case class SyncFileEvent(path: String, content: Content) extends PairEvent {
+case class SyncFileEvent(toClientId: String, path: String, content: Content) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 
-case class MasterPairableFiles(paths: Seq[String]) extends PairEvent {
+case class MasterPairableFiles(toClientId: String, paths: Seq[String]) extends PairEvent {
   // TODO: remove it later
   val invalid = paths.filter(_.startsWith("/Users"))
   if (invalid.nonEmpty) {
