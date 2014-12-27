@@ -91,7 +91,7 @@ trait ProtocolMocking extends MyMocking with MockEvents {
 
   def clientId(context: ChannelHandlerContext) = handler.clients.get(context).map(_.id).get
 
-  def resetMock(mock: Any) = org.mockito.Mockito.reset(mock)
+  def resetMocks(mocks: Any*) = mocks.foreach(mock => org.mockito.Mockito.reset(mock))
 }
 
 trait MockEvents {

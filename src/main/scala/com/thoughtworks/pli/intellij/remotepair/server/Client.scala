@@ -17,7 +17,7 @@ case class Client(context: ChannelHandlerContext) {
   val projectSpecifiedLocks = new ProjectSpecifiedLocks
 
   def writeEvent(event: PairEvent) = {
-    ServerLogger.info("########## server's gonna send message to " + name + ": " + event.toMessage)
+    ServerLogger.info("Server -> " + name + ": " + event.toMessage)
     context.writeAndFlush(event.toMessage)
   }
 

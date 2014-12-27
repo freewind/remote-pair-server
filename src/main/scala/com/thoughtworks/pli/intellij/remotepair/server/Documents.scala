@@ -1,7 +1,6 @@
 package com.thoughtworks.pli.intellij.remotepair.server
 
-import com.thoughtworks.pli.intellij.remotepair._
-import com.thoughtworks.pli.intellij.remotepair.protocol.{CreateDocument, Content}
+import com.thoughtworks.pli.intellij.remotepair.protocol.{CreateDocumentConfirmation, CreateDocument, Content}
 import com.thoughtworks.pli.intellij.remotepair.utils.{ContentDiff, StringDiff}
 
 class Documents {
@@ -47,6 +46,9 @@ case class ServerVersionedDocument(path: String, initContent: Content, versions:
   }
 
   def latestContent = StringDiff.applyDiffs(initContent.text, versions.reverse.flatMap(_.changes))
+
+  def createConfirmation() = CreateDocumentConfirmation(this.path, this.latestVersion, this.initContent)
+
 }
 
 object ServerVersionedDocument {

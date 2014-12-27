@@ -44,13 +44,7 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
   override def channelRead(context: ChannelHandlerContext, msg: Any) = msg match {
     case line: String => val client = clients.get(context).get
 
-      if (parseEvent(line).getClass.getName.toLowerCase.contains("content")) {
-        ServerLogger.info("\n")
-        ServerLogger.info("server get message from client " + client.name + ": " + line)
-        ServerLogger.info("\n")
-      }
-
-      //      println("server get message from client " + client.name + ": " + line)
+      ServerLogger.info(client.name + " -> server: " + line)
       projects.findForClient(client) match {
         case Some(project) => handleEventInProject(project, parseEvent(line), client)
         case _ => handleEventWithoutProject(parseEvent(line), client)
@@ -64,7 +58,10 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
   }
 
   def handleCreateServerDocumentRequest(client: Client, request: CreateServerDocumentRequest) = {
-    sendToMaster(client, request)
+    projects.findForClient(client).flatMap(_.documents.find(request.path)) match {
+      case Some(doc) => client.writeEvent(doc.createConfirmation())
+      case _ => sendToMaster(client, request)
+    }
   }
 
   private def handleEventInProject(project: Project, event: PairEvent, client: Client) = event match {
@@ -89,8 +86,11 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
   }
 
   private def handleCreateDocument(project: Project, client: Client, event: CreateDocument): Unit = {
-    val doc = project.documents.find(event.path).fold(project.documents.create(event))(identity)
-    broadcastToAllMembers(client, CreateDocumentConfirmation(doc.path, doc.latestVersion, doc.initContent))
+    project.documents.find(event.path) match {
+      case None => val doc = project.documents.create(event)
+        broadcastToAllMembers(client, doc.createConfirmation())
+      case Some(doc) => client.writeEvent(doc.createConfirmation())
+    }
   }
 
   private def handleEventWithoutProject(event: PairEvent, client: Client) = {
@@ -150,19 +150,20 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
 
   private def handleChangeContentEvent(client: Client, event: ChangeContentEvent) {
     projects.findForClient(client) match {
-      case Some(project) => project.documents.find(event.path) match {
-        case Some(doc) => doc.synchronized {
-          val changes = doc.getLaterChangesFromVersion(event.baseVersion)
-          val adjustedChanges = StringDiff.adjustDiffs(changes, event.changes)
-          val newDoc = project.documents.update(doc, adjustedChanges)
-          val confirm = ChangeContentConfirmation(event.eventId, event.path, newDoc.latestVersion, newDoc.latestChanges, newDoc.latestContent)
+      case Some(project) => project.documents.synchronized {
+        project.documents.find(event.path) match {
+          case Some(doc) =>
+            val changes = doc.getLaterChangesFromVersion(event.baseVersion)
+            val adjustedChanges = StringDiff.adjustDiffs0(changes, event.changes)
+            val newDoc = project.documents.update(doc, adjustedChanges)
+            val confirm = ChangeContentConfirmation(event.eventId, event.path, newDoc.latestVersion, newDoc.latestChanges, newDoc.latestContent)
 
-          for {
-            project <- projects.findForClient(client)
-            member <- project.members
-          } member.writeEvent(confirm)
+            for {
+              project <- projects.findForClient(client)
+              member <- project.members
+            } member.writeEvent(confirm)
+          case _ => ???
         }
-        case _ => ???
       }
       case _ =>
     }

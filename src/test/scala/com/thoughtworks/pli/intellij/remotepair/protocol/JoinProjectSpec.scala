@@ -131,7 +131,7 @@ class JoinProjectSpec extends MySpecification {
     }
     "be sent to client when working mode changes" in new ProtocolMocking {
       client(context1).createOrJoinProject("test1")
-      resetMock(context1)
+      resetMocks(context1)
       client(context1).shareCaret()
       there was one(context1).writeAndFlush(ClientInfoResponse(clientId(context1), "test1", "Freewind", isMaster = true).toMessage)
     }
