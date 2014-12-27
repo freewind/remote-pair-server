@@ -81,8 +81,8 @@ class JoinProjectSpec extends MySpecification {
     "not send editor related events" in new ProtocolMocking {
       cannotSendEvents(
         openTabEvent1, closeTabEvent, resetTabEvent,
-        changeContentEventA1, resetContentEvent,
         moveCaretEvent1,
+        changeContentEventA1,
         selectContentEvent1
       )
     }

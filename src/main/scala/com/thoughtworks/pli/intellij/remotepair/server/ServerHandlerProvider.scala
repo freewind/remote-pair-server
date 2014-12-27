@@ -75,7 +75,6 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
     case event: ResetTabEvent => handleResetTabEvent(client, event)
     case ResetTabRequest => sendToMaster(client, ResetTabRequest)
     case event: ChangeContentEvent => handleChangeContentEvent(client, event)
-    case event: ResetContentEvent => handleResetContentEvent(client, event)
     case event: MoveCaretEvent => broadcastToOtherMembers(client, event)
     case event: IgnoreFilesRequest => handleIgnoreFilesRequest(client, event)
     case req: SyncFilesRequest => sendToMaster(client, req)
@@ -104,10 +103,6 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
   private def handleResetTabEvent(client: Client, event: ResetTabEvent) {
     projects.findForClient(client).foreach(_.members.foreach(_.projectSpecifiedLocks.activeTabLocks.clear()))
     broadcastToSameProjectMembersThen(client, event)(_.projectSpecifiedLocks.activeTabLocks.add(event.path))
-  }
-
-  private def handleResetContentEvent(client: Client, event: ResetContentEvent) {
-    broadcastToOtherMembers(client, event)
   }
 
   private def handleIgnoreFilesRequest(client: Client, request: IgnoreFilesRequest) {
@@ -193,7 +188,7 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
         f(otherMember)
       }
       pairEvent match {
-        case _: ChangeContentEvent | _: ResetContentEvent |
+        case _: ChangeContentEvent |
              _: CreateFileEvent | _: DeleteFileEvent | _: CreateDirEvent | _: DeleteDirEvent | _: RenameEvent => doit()
         case _ if areSharingCaret(client) => doit()
         case _ =>

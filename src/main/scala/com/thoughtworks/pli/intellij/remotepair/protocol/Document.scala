@@ -23,6 +23,5 @@ case class ChangeContentConfirmation(forEventId: String, path: String, newVersio
   override def toJson = Serialization.write(this)
 }
 
-case class ResetContentEvent(path: String, content: String, summary: String) extends PairEvent {
   override def toJson = Serialization.write(this)
 }

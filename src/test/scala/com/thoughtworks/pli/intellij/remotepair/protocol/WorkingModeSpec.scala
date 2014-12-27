@@ -38,9 +38,6 @@ class WorkingModeSpec extends MySpecification {
       "include selection events" in new ProtocolMocking {
         broadcast(selectContentEvent1)
       }
-      "include content events" in new ProtocolMocking {
-        broadcast(changeContentEventA1, resetContentEvent)
-      }
     }
 
     "can't share caret if it's not in any project" in new ProtocolMocking {
