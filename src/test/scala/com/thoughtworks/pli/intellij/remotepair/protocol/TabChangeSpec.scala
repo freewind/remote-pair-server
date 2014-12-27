@@ -4,57 +4,57 @@ import com.thoughtworks.pli.intellij.remotepair.MySpecification
 
 class TabChangeSpec extends MySpecification {
 
-  "OpenTabEvent" should {
-    "be a lock when it sent" in new ProtocolMocking {
-      client(context1, context2).createOrJoinProject("test").shareCaret()
-
-      client(context1).send(openTabEvent1)
-
-      dataOf(context2).projectSpecifiedLocks.activeTabLocks.size === 1
-    }
-    "clear the first lock if the feedback event is matched, and it won't be broadcasted" in new ProtocolMocking {
+  "When a client receives an OpenTabEvent, it" should {
+    "issue the same event before issue OpenTabEvent with other path" in new ProtocolMocking {
       client(context1, context2).createOrJoinProject("test").shareCaret()
 
       client(context1).send(openTabEvent1)
       client(context2).send(openTabEvent1)
-
-      dataOf(context2).projectSpecifiedLocks.activeTabLocks.size === 0
-      dataOf(context1).projectSpecifiedLocks.activeTabLocks.size === 0
-    }
-    "send ResetTabRequest to master if the feedback event is not matched" in new ProtocolMocking {
-      client(context1, context2).createOrJoinProject("test").shareCaret()
-
-      client(context1).beMaster().send(openTabEvent1)
       client(context2).send(openTabEvent2)
 
-      there was one(context1).writeAndFlush(ResetTabRequest.toMessage)
-      there was no(context2).writeAndFlush(ResetTabRequest.toMessage)
+      there was no(context1).writeAndFlush(openTabEvent1.toMessage)
+      there was one(context1).writeAndFlush(openTabEvent2.toMessage)
     }
   }
 
-  "TabResetEvent" should {
-    "clear existing locks and be the new lock" in new ProtocolMocking {
+  "If a client sends an OpenTabEvent with different path when it receives an OpenTabEvent, the other client" should {
+    "not receive it" in new ProtocolMocking {
       client(context1, context2).createOrJoinProject("test").shareCaret()
 
-      client(context1).send(openTabEvent1, resetTabEvent)
+      client(context1).send(openTabEvent1)
+      client(context2).send(openTabEvent2)
 
-      val locks = dataOf(context2).projectSpecifiedLocks.activeTabLocks
-      locks.size === 1
-      locks.headOption === Some("/ccc")
+      there was no(context1).writeAndFlush(openTabEvent2.toMessage)
     }
-    "clear the master locks as well" in new ProtocolMocking {
-      client(context1, context2)
-      client(context1).beMaster()
+    "receives a ResetTabRequest if it's master" in new ProtocolMocking {
+      client(context1, context2, context3).createOrJoinProject("test").shareCaret()
 
+      client(context3).send(openTabEvent1)
+      client(context2).send(openTabEvent2)
+
+      there was one(context1).writeAndFlush(resetTabRequest.toMessage)
+      there was no(context3).writeAndFlush(resetTabRequest.toMessage)
+    }
+  }
+
+  "When client receives an TabResetEvent, it" should {
+    "just need to send an OpenTabEvent with same path before send OpenTabEvent with other paths" in new ProtocolMocking {
+      client(context1, context2).createOrJoinProject("test").shareCaret()
+      client(context1).send(openTabEvent1, openTabEvent2, resetTabEvent)
+      client(context2).send(openTabEvent3, openTabEvent2)
+      there was one(context1).writeAndFlush(openTabEvent2.toMessage)
+      there was no(context1).writeAndFlush(openTabEvent3.toMessage)
+    }
+    "be able to send OpenTabEvent with other paths immediately if it's master" in new ProtocolMocking {
+      client(context1, context2).createOrJoinProject("test").shareCaret()
       client(context2).send(openTabEvent1)
-      client(context1).send(resetTabEvent)
-
-      dataOf(context1).projectSpecifiedLocks.activeTabLocks.size === 0
+      client(context1).send(resetTabEvent, openTabEvent2)
+      there was one(context2).writeAndFlush(openTabEvent2.toMessage)
     }
   }
 
   "CloseTabEvent" should {
-    "broadcast to caret-sharing users" in new ProtocolMocking {
+    "broadcast to others simply if in an caret-sharing project" in new ProtocolMocking {
       client(context1, context2).createOrJoinProject("test").shareCaret()
 
       client(context1).send(closeTabEvent)
