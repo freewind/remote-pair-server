@@ -1,24 +1,23 @@
 package com.thoughtworks.pli.intellij.remotepair.protocol
 
 import com.thoughtworks.pli.intellij.remotepair.MySpecification
-import com.thoughtworks.pli.intellij.remotepair._
 
 class WorkingModeSpec extends MySpecification {
 
   "CaretSharingMode" should {
-    "tell all the clients in caret sharing mode" in new ProtocolMocking {
+    "mark the project in CaretSharingMode" in new ProtocolMocking {
       client(context1, context2, context3).createOrJoinProject("test").shareCaret()
 
       project("test").isSharingCaret === true
     }
-    "change the mode of client from other mode" in new ProtocolMocking {
-      client(context1, context2).createOrJoinProject("test")
+    "be required from any client of a project" in new ProtocolMocking {
+      client(context1, context2).createOrJoinProject("test").parallel()
 
-      client(context1).parallel().shareCaret()
+      client(context1).shareCaret()
 
       project("test").isSharingCaret === true
     }
-    "broadcast many events with each other" should {
+    "allow to broadcast many events with each other" should {
       def broadcast(events: PairEvent*) = new ProtocolMocking {
         client(context1, context2).createOrJoinProject("test").shareCaret()
 
@@ -40,7 +39,7 @@ class WorkingModeSpec extends MySpecification {
       }
     }
 
-    "can't share caret if it's not in any project" in new ProtocolMocking {
+    "can't be issues if the client is not in any project" in new ProtocolMocking {
       client(context1).shareCaret()
 
       there was one(context1).writeAndFlush(AskForJoinProject(Some("You need to join a project first")).toMessage)
@@ -48,10 +47,18 @@ class WorkingModeSpec extends MySpecification {
   }
 
   "ParallelModeRequest" should {
-    "change the mode of client from other mode" in new ProtocolMocking {
-      client(context1).createOrJoinProject("test")
-      client(context1).shareCaret().parallel()
+    "be required by any client of a project" in new ProtocolMocking {
+      client(context1, context2).createOrJoinProject("test").shareCaret()
+      client(context1).parallel()
       project("test").isSharingCaret === false
+    }
+    "not broadcast tab events to other members" in new ProtocolMocking {
+      client(context1, context2).createOrJoinProject("test").parallel()
+      client(context1).send(openTabEvent1, closeTabEvent, resetTabEvent)
+
+      there was no(context2).writeAndFlush(openTabEvent1.toMessage)
+      there was no(context2).writeAndFlush(closeTabEvent.toMessage)
+      there was no(context2).writeAndFlush(resetTabEvent.toMessage)
     }
   }
 
