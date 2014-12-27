@@ -19,9 +19,6 @@ case class CreateServerDocumentRequest(path: String) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 
-case class ChangeContentConfirmation(forEventId: String, path: String, newVersion: Int, diffs: Seq[ContentDiff], content: String) extends PairEvent {
-  override def toJson = Serialization.write(this)
-}
-
+case class ChangeContentConfirmation(forEventId: String, path: String, newVersion: Int, diffs: Seq[ContentDiff]) extends PairEvent {
   override def toJson = Serialization.write(this)
 }

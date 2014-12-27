@@ -151,7 +151,7 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
             val changes = doc.getLaterChangesFromVersion(event.baseVersion)
             val adjustedChanges = StringDiff.adjustDiffs0(changes, event.changes)
             val newDoc = project.documents.update(doc, adjustedChanges)
-            val confirm = ChangeContentConfirmation(event.eventId, event.path, newDoc.latestVersion, newDoc.latestChanges, newDoc.latestContent)
+            val confirm = ChangeContentConfirmation(event.eventId, event.path, newDoc.latestVersion, newDoc.latestChanges)
 
             for {
               project <- projects.findForClient(client)
