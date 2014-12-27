@@ -1,6 +1,7 @@
 package com.thoughtworks.pli.intellij.remotepair.server
 
-import com.thoughtworks.pli.intellij.remotepair.WorkingMode
+import com.thoughtworks.pli.intellij.remotepair.protocol.WorkingMode
+
 
 object Projects extends Projects
 

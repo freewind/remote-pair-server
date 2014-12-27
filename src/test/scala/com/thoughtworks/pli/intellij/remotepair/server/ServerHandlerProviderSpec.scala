@@ -1,8 +1,7 @@
 package com.thoughtworks.pli.intellij.remotepair.server
 
 import com.thoughtworks.pli.intellij.remotepair.MySpecification
-import com.thoughtworks.pli.intellij.remotepair._
-import com.thoughtworks.pli.intellij.remotepair.protocol.ProtocolMocking
+import com.thoughtworks.pli.intellij.remotepair.protocol.{AskForJoinProject, ProtocolMocking}
 
 class ServerHandlerProviderSpec extends MySpecification {
 

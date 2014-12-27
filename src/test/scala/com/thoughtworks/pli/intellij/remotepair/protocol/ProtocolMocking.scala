@@ -1,7 +1,8 @@
 package com.thoughtworks.pli.intellij.remotepair.protocol
 
+import com.thoughtworks.pli.intellij.remotepair.MyMocking
 import com.thoughtworks.pli.intellij.remotepair.server.{Clients, Projects, ServerHandlerProvider}
-import com.thoughtworks.pli.intellij.remotepair.{ChangeContentEvent, ChangeMasterEvent, CloseTabEvent, CreateFileEvent, CreateProjectRequest, DeleteFileEvent, JoinProjectRequest, MoveCaretEvent, MyMocking, OpenTabEvent, RenameEvent, ResetContentEvent, ResetTabEvent, SelectContentEvent, _}
+import com.thoughtworks.pli.intellij.remotepair.utils.Insert
 import io.netty.channel.ChannelHandlerContext
 
 trait ProtocolMocking extends MyMocking with MockEvents {

@@ -1,7 +1,7 @@
-package com.thoughtworks.pli.intellij.remotepair
+package com.thoughtworks.pli.intellij.remotepair.protocol
 
+import com.thoughtworks.pli.intellij.remotepair.utils.ContentDiff
 import org.json4s.native.Serialization
-import JsonFormats.formats
 
 case class CreateDocument(path: String, content: Content) extends PairEvent {
   override def toJson = Serialization.write(this)

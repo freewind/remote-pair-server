@@ -2,6 +2,7 @@ package com.thoughtworks.pli.intellij.remotepair.server
 
 import java.util.UUID
 
+import com.thoughtworks.pli.intellij.remotepair.protocol.PairEvent
 import io.netty.channel.ChannelHandlerContext
 import com.thoughtworks.pli.intellij.remotepair._
 

@@ -1,10 +1,12 @@
 package com.thoughtworks.pli.intellij.remotepair
 
-import org.json4s.JsonAST.JString
+import com.thoughtworks.pli.intellij.remotepair.utils.{Delete, Insert, ContentDiff}
+import org.json4s.JsonAST.{JInt, JString, JField, JObject}
 import org.json4s._
 import org.json4s.ext.EnumNameSerializer
 
-object JsonFormats {
+package object protocol {
+
   implicit val formats = DefaultFormats + new EnumNameSerializer(WorkingMode) + new ContentDiffSerializer
 
   class ContentDiffSerializer extends CustomSerializer[ContentDiff](format => ( {

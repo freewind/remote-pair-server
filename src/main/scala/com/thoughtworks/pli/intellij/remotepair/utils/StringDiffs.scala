@@ -1,5 +1,6 @@
-package com.thoughtworks.pli.intellij.remotepair
+package com.thoughtworks.pli.intellij.remotepair.utils
 
+import com.thoughtworks.pli.intellij.remotepair.GoogleDiffMatchPatch
 import com.thoughtworks.pli.intellij.remotepair.GoogleDiffMatchPatch.Diff
 
 import scala.collection.JavaConversions._

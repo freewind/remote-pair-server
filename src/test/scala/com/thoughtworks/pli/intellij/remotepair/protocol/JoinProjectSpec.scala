@@ -1,7 +1,8 @@
 package com.thoughtworks.pli.intellij.remotepair.protocol
 
+import com.thoughtworks.pli.intellij.remotepair.MySpecification
 import com.thoughtworks.pli.intellij.remotepair.server.{Project, Projects}
-import com.thoughtworks.pli.intellij.remotepair.{AskForJoinProject, MySpecification, ServerErrorResponse, _}
+import com.thoughtworks.pli.intellij.remotepair.protocol._
 
 import scalaz.Scalaz._
 

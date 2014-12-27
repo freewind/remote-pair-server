@@ -1,7 +1,6 @@
-package com.thoughtworks.pli.intellij.remotepair
+package com.thoughtworks.pli.intellij.remotepair.protocol
 
 import org.json4s.native.Serialization
-import JsonFormats.formats
 
 case class JoinProjectRequest(projectName: String, clientName: String) extends PairEvent {
   override def toJson = Serialization.write(this)

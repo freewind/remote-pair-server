@@ -1,6 +1,8 @@
 package com.thoughtworks.pli.intellij.remotepair.server
 
 import com.thoughtworks.pli.intellij.remotepair._
+import com.thoughtworks.pli.intellij.remotepair.protocol._
+import com.thoughtworks.pli.intellij.remotepair.utils.StringDiff
 import io.netty.channel._
 
 object ServerHandlerProvider {

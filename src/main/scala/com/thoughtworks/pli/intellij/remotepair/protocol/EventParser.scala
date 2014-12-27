@@ -1,7 +1,7 @@
-package com.thoughtworks.pli.intellij.remotepair
+package com.thoughtworks.pli.intellij.remotepair.protocol
 
+import com.thoughtworks.pli.intellij.remotepair.ServerLogger
 import org.json4s.native.Serialization
-import JsonFormats.formats
 
 trait EventParser {
 

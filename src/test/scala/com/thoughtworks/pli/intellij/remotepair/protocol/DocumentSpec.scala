@@ -1,6 +1,7 @@
 package com.thoughtworks.pli.intellij.remotepair.protocol
 
 import com.thoughtworks.pli.intellij.remotepair._
+import com.thoughtworks.pli.intellij.remotepair.utils.Insert
 
 class DocumentSpec extends MySpecification {
 

@@ -1,7 +1,6 @@
 package com.thoughtworks.pli.intellij.remotepair.protocol
 
 import com.thoughtworks.pli.intellij.remotepair.MySpecification
-import com.thoughtworks.pli.intellij.remotepair.{ChangeMasterEvent, ClientInfoResponse, ProjectInfoData, ServerStatusResponse, _}
 
 class ServerStatusSpec extends MySpecification {
   "ServerStatusResponse" should {

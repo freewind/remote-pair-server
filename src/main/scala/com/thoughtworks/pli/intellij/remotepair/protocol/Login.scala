@@ -1,7 +1,6 @@
-package com.thoughtworks.pli.intellij.remotepair
+package com.thoughtworks.pli.intellij.remotepair.protocol
 
 import org.json4s.native.Serialization
-import JsonFormats.formats
 
 case class ServerStatusResponse(projects: Seq[ProjectInfoData], freeClients: Int) extends PairEvent {
   override def toJson = Serialization.write(this)
@@ -22,4 +21,8 @@ case class ServerErrorResponse(message: String) extends PairEvent {
 
 case class ServerMessageResponse(message: String) extends PairEvent {
   override def toJson = Serialization.write(this)
+}
+
+object WorkingMode extends Enumeration {
+  val CaretSharing, Parallel = Value
 }

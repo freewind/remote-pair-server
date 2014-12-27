@@ -1,4 +1,4 @@
-package com.thoughtworks.pli.intellij.remotepair
+package com.thoughtworks.pli.intellij.remotepair.protocol
 
 trait PairEvent {
   def toJson: String

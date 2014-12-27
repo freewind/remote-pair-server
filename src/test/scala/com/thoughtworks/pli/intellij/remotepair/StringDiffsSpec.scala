@@ -1,5 +1,6 @@
 package com.thoughtworks.pli.intellij.remotepair
 
+import com.thoughtworks.pli.intellij.remotepair.utils.{Delete, Insert, ContentDiff, StringDiff}
 import org.specs2.mutable.Specification
 
 class StringDiffsSpec extends Specification {
