@@ -33,7 +33,7 @@ class WorkingModeSpec extends MySpecification {
         broadcast(openTabEvent1, closeTabEvent, resetTabEvent)
       }
       "include caret events" in new ProtocolMocking {
-        broadcast(moveCaretEvent1)
+        broadcast(moveCaretEvent)
       }
       "include selection events" in new ProtocolMocking {
         broadcast(selectContentEvent1)

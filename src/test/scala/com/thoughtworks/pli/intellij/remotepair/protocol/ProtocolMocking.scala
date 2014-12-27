@@ -108,9 +108,7 @@ trait MockEvents {
   val renameEvent = RenameEvent("/ccc", "/eee")
   val changeMasterEvent = ChangeMasterEvent("Lily")
 
-  val moveCaretEvent1 = MoveCaretEvent("/aaa", 10)
-  val moveCaretEvent2 = MoveCaretEvent("/aaa", 20)
-  val moveCaretEvent3 = MoveCaretEvent("/bbb", 10)
+  val moveCaretEvent = MoveCaretEvent("/aaa", 10)
 
   val selectContentEvent1 = SelectContentEvent("/aaa", 10, 5)
   val selectContentEvent2 = SelectContentEvent("/aaa", 20, 7)
