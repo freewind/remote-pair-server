@@ -4,20 +4,26 @@ import com.thoughtworks.pli.intellij.remotepair.MySpecification
 
 class BeMasterSpec extends MySpecification {
 
-  "Master context" should {
-    "be the first one who joined a project" in new ProtocolMocking {
+  "The first member of a project" should {
+    "be the master of the project" in new ProtocolMocking {
       client(context1, context2).createOrJoinProject("test")
 
       dataOf(context1).isMaster === true
       dataOf(context2).isMaster === false
     }
-    "will change to next one automatically if the master is disconnected" in new ProtocolMocking {
+  }
+
+  "If a master client is disconnect, it" should {
+    "set the next client as master automatically" in new ProtocolMocking {
       client(context1, context2).createOrJoinProject("test")
 
       handler.channelInactive(context1)
       dataOf(context2).isMaster === true
     }
-    "changed to the one which is requested" in new ProtocolMocking {
+  }
+
+  "If server receives a ChangeMasterEvent, it" should {
+    "change the request client as master" in new ProtocolMocking {
       client(context1, context2).createOrJoinProject("test")
 
       client(context1).send(changeMasterEvent)
