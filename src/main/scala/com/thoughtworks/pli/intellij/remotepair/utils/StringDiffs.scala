@@ -27,7 +27,7 @@ object StringDiff {
     }
   }
 
-  def adjustDiffs0(diffs1: Seq[ContentDiff], diffs2: Seq[ContentDiff]): Seq[ContentDiff] = {
+  def adjustLaterDiffs(diffs1: Seq[ContentDiff], diffs2: Seq[ContentDiff]): Seq[ContentDiff] = {
     def adjust(diff: ContentDiff) = diffs1.foldLeft(diff) {
       case (op: Insert, Insert(offset, content)) if op.offset >= offset => op.copy(offset = op.offset + content.length)
       case (op: Delete, Insert(offset, content)) if op.offset >= offset => op.copy(offset = op.offset + content.length)
@@ -39,8 +39,8 @@ object StringDiff {
     flatOperationsOnSamePosition(adjusted2)
   }
 
-  def adjustDiffs(diffs1: Seq[ContentDiff], diffs2: Seq[ContentDiff]): Seq[ContentDiff] = {
-    diffs1 ++: adjustDiffs0(diffs1, diffs2)
+  def adjustAndMergeDiffs(diffs1: Seq[ContentDiff], diffs2: Seq[ContentDiff]): Seq[ContentDiff] = {
+    diffs1 ++: adjustLaterDiffs(diffs1, diffs2)
   }
 
   private def flatOperationsOnSamePosition(diffs: Seq[ContentDiff]): Seq[ContentDiff] = {

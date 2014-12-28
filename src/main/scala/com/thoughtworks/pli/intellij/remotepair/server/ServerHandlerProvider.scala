@@ -182,7 +182,7 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser with 
           case Some(doc) if event.diffs.isEmpty => project.documents.trackClientVersion(event.path, client.id, event.baseVersion)
           case Some(doc) =>
             val changes = doc.getLaterChangesFromVersion(event.baseVersion)
-            val adjustedChanges = StringDiff.adjustDiffs0(changes, event.diffs)
+            val adjustedChanges = StringDiff.adjustLaterDiffs(changes, event.diffs)
             val newDoc = project.documents.update(doc, adjustedChanges)
             val confirm = ChangeContentConfirmation(event.eventId, event.path, newDoc.latestVersion, newDoc.latestChanges)
 
