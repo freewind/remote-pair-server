@@ -69,7 +69,7 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
     case JoinProjectRequest(projectName, clientName) => handleJoinProjectRequest(client, projectName, clientName)
     case CaretSharingModeRequest => handleWorkingModeRequest(project, WorkingMode.CaretSharing, client)
     case ParallelModeRequest => handleWorkingModeRequest(project, WorkingMode.Parallel, client)
-    case event: ChangeMasterEvent => handleChangeMasterEvent(client, event)
+    case event: ChangeMasterRequest => handleChangeMasterEvent(client, event)
     case event: OpenTabEvent => handleOpenTabEvent(client, event)
     case event: CloseTabEvent => broadcastToOtherMembers(client, event)
     case event: ResetTabEvent => handleResetTabEvent(client, event)
@@ -137,6 +137,7 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
 
 
   private def handleJoinProjectRequest(client: Client, projectName: String, clientName: String) {
+    val originalProject = projects.findForClient(client)
     projects.get(projectName) match {
       case Some(p) => {
         if (p.otherMembers(client).exists(_.name == Some(clientName))) {
@@ -146,6 +147,9 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
             client.name = Some(clientName)
           } else {
             p.addMember(client, clientName)
+          }
+          if (originalProject.isDefined && originalProject != Some(p)) {
+            originalProject.foreach(_.removeMember(client))
           }
           client.writeEvent(JoinedToProjectEvent(projectName, clientName))
           broadcastServerStatusResponse(Some(client))
@@ -210,7 +214,7 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
 
   private def areSharingCaret(data: Client) = projects.findForClient(data).forall(_.isSharingCaret)
 
-  private def handleChangeMasterEvent(client: Client, event: ChangeMasterEvent) {
+  private def handleChangeMasterEvent(client: Client, event: ChangeMasterRequest) {
     projects.findForClient(client).foreach { project =>
       if (project.hasMember(event.clientName)) {
         project.setMaster(event.clientName)

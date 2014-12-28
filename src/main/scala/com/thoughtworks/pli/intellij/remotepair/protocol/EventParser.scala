@@ -11,7 +11,7 @@ trait EventParser {
       case "OpenTabEvent" => Serialization.read[OpenTabEvent](json)
       case "CloseTabEvent" => Serialization.read[CloseTabEvent](json)
       case "ChangeContentEvent" => Serialization.read[ChangeContentEvent](json)
-      case "ChangeMasterEvent" => Serialization.read[ChangeMasterEvent](json)
+      case "ChangeMasterRequest" => Serialization.read[ChangeMasterRequest](json)
       case "ResetTabEvent" => Serialization.read[ResetTabEvent](json)
       case "CreateFileEvent" => Serialization.read[CreateFileEvent](json)
       case "DeleteFileEvent" => Serialization.read[DeleteFileEvent](json)

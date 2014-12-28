@@ -70,7 +70,7 @@ trait ProtocolMocking extends MyMocking with MockEvents {
     }
     def changeMaster(newName: String): this.type = {
       contexts.foreach { context =>
-        singleSend(context, ChangeMasterEvent(newName))
+        singleSend(context, ChangeMasterRequest(newName))
       }
       this
     }
@@ -108,7 +108,7 @@ trait MockEvents {
   val createDirEvent = CreateFileEvent("/ddd", Content("my-content", "UTF-8"))
   val deleteDirEvent = DeleteFileEvent("/ddd")
   val renameEvent = RenameEvent("/ccc", "/eee")
-  val changeMasterEvent = ChangeMasterEvent("Lily")
+  val changeMasterEvent = ChangeMasterRequest("Lily")
 
   val moveCaretEvent = MoveCaretEvent("/aaa", 10)
 
