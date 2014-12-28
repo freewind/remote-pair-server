@@ -189,7 +189,7 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser with 
               project <- projects.findForClient(client)
               member <- project.members
             } member.writeEvent(confirm)
-          case _ => ???
+          case _ => client.writeEvent(ServerErrorResponse(s"The document of '${event.path}' is not existed on server"))
         }
       }
       case _ =>

@@ -83,4 +83,12 @@ class DocumentSpec extends MySpecification {
     }
   }
 
+  "When server receives an ChangeContentEvent, but there is no corresponding doc, it" should {
+    "response an error" in new ProtocolMocking {
+      client(context1).createOrJoinProject("test1")
+      client(context1).send(ChangeContentEvent("eventId1", "/aaa", 0, Seq(Insert(3, "111"))))
+      there was one(context1).writeAndFlush(ServerErrorResponse("The document of '/aaa' is not existed on server").toMessage)
+    }
+  }
+
 }
