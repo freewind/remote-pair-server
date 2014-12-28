@@ -10,9 +10,9 @@ case class Client(context: ChannelHandlerContext) {
 
   val id = UUID.randomUUID().toString
 
-  var isMaster = false
+  @volatile var isMaster = false
 
-  var name: Option[String] = None
+  @volatile var name: Option[String] = None
 
   val projectSpecifiedLocks = new ProjectSpecifiedLocks
 

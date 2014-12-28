@@ -22,10 +22,10 @@ trait Projects {
 
 case class Project(name: String, private var member: Client) {
 
-  var members: Seq[Client] = Seq(member)
-  var ignoredFiles: Seq[String] = Nil
-  var myWorkingMode: WorkingMode.Value = WorkingMode.CaretSharing
-  var documents = new Documents(this)
+  @volatile var members: Seq[Client] = Seq(member)
+  @volatile var ignoredFiles: Seq[String] = Nil
+  @volatile var myWorkingMode: WorkingMode.Value = WorkingMode.CaretSharing
+  val documents = new Documents(this)
 
   def findMemberByName(clientName: String): Option[Client] = members.find(_.name == Some(clientName))
   def hasMember(client: Client) = members.exists(_.id == client.id)
