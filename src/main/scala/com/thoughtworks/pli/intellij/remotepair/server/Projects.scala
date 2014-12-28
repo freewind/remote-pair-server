@@ -25,7 +25,7 @@ case class Project(name: String, private var member: Client) {
   var members: Seq[Client] = Seq(member)
   var ignoredFiles: Seq[String] = Nil
   var myWorkingMode: WorkingMode.Value = WorkingMode.CaretSharing
-  var documents = new Documents
+  var documents = new Documents(this)
 
   def findMemberByName(clientName: String): Option[Client] = members.find(_.name == Some(clientName))
   def hasMember(client: Client) = members.exists(_.id == client.id)

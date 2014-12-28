@@ -85,6 +85,9 @@ trait ProtocolMocking extends MyMocking with MockEvents {
       }
       this
     }
+    def disconnect(): Unit = {
+      contexts.foreach(handler.channelInactive)
+    }
   }
 
   def project(name: String) = projects.get(name).get

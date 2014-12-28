@@ -3,7 +3,7 @@ package com.thoughtworks.pli.intellij.remotepair.server
 import com.thoughtworks.pli.intellij.remotepair.protocol.{CreateDocumentConfirmation, CreateDocument, Content}
 import com.thoughtworks.pli.intellij.remotepair.utils.{ContentDiff, StringDiff}
 
-class Documents {
+class Documents(project: Project) {
 
   private var trackedClientVersions = Map.empty[String, Map[String, Int]]
 
@@ -33,12 +33,15 @@ class Documents {
 
   def trackClientVersion(path: String, clientId: String, version: Int) = synchronized {
     find(path) foreach { doc =>
-      trackedClientVersions.get(path) match {
-        case Some(_) =>
-        case _ => trackedClientVersions += (path -> Map(clientId -> version))
+      if (trackedClientVersions.get(path).isEmpty) {
+        trackedClientVersions += (path -> Map(clientId -> version))
       }
+
       val idVersionMap = trackedClientVersions.get(path).get
-      val newMap = idVersionMap + (clientId -> version)
+      val newMap = (idVersionMap + (clientId -> version)).filter {
+        case (cId, _) => project.members.map(_.id).contains(cId)
+      }
+
       trackedClientVersions += (path -> newMap)
       val minVersion = newMap.values.min
       if (minVersion > doc.initVersion) {
