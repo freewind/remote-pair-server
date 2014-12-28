@@ -83,7 +83,7 @@ class JoinProjectSpec extends MySpecification {
         openTabEvent1, closeTabEvent, resetTabEvent,
         changeContentEventA1,
         moveCaretEvent,
-        selectContentEvent1
+        selectContentEvent
       )
     }
     "not send mode related request" in new ProtocolMocking {
