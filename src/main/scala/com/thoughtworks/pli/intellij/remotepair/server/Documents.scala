@@ -5,6 +5,8 @@ import com.thoughtworks.pli.intellij.remotepair.utils.{ContentDiff, StringDiff}
 
 class Documents {
 
+  private var trackedClientVersions = Map.empty[String, Map[String, Int]]
+
   private var docs = Map.empty[String, ServerVersionedDocument]
 
   def update(doc: ServerVersionedDocument, diffs: Seq[ContentDiff]): ServerVersionedDocument = synchronized {
@@ -14,7 +16,7 @@ class Documents {
   }
 
   def create(createDoc: CreateDocument): ServerVersionedDocument = synchronized {
-    val doc = ServerVersionedDocument(createDoc.path, createDoc.content)
+    val doc = ServerVersionedDocument(createDoc.path, createDoc.content, ServerVersionedDocument.InitVersion)
     docs += (doc.path -> doc)
     doc
   }
@@ -28,14 +30,36 @@ class Documents {
   def find(path: String): Option[ServerVersionedDocument] = synchronized(docs.get(path))
 
   def allPaths: Seq[String] = synchronized(docs.keys.toSeq)
+
+  def trackClientVersion(path: String, clientId: String, version: Int) = synchronized {
+    find(path) foreach { doc =>
+      trackedClientVersions.get(path) match {
+        case Some(_) =>
+        case _ => trackedClientVersions += (path -> Map(clientId -> version))
+      }
+      val idVersionMap = trackedClientVersions.get(path).get
+      val newMap = idVersionMap + (clientId -> version)
+      trackedClientVersions += (path -> newMap)
+      val minVersion = newMap.values.min
+      if (minVersion > doc.initVersion) {
+        docs += path -> doc.createBaseOn(minVersion)
+      }
+    }
+  }
 }
 
 case class DocumentVersion(version: Int, changes: Seq[ContentDiff])
 
-case class ServerVersionedDocument(path: String, initContent: Content, versions: List[DocumentVersion] = Nil) {
+case class ServerVersionedDocument(path: String, initContent: Content, initVersion: Int, versions: List[DocumentVersion] = Nil) {
+  def createBaseOn(version: Int): ServerVersionedDocument = {
+    val (below, up) = versions.partition(_.version <= version)
+    val newInitText = StringDiff.applyDiffs(initContent.text, below.reverse.flatMap(_.changes))
+    ServerVersionedDocument(path, Content(newInitText, initContent.charset), version, up)
+  }
+
   def latestChanges: Seq[ContentDiff] = versions.headOption.map(_.changes).getOrElse(Nil)
 
-  def latestVersion = versions.headOption.map(_.version).getOrElse(ServerVersionedDocument.InitVersion)
+  def latestVersion = versions.headOption.map(_.version).getOrElse(initVersion)
 
   def getLaterChangesFromVersion(version: Int): List[ContentDiff] = {
     val matchVersions = versions.reverse.filter(_.version > version)

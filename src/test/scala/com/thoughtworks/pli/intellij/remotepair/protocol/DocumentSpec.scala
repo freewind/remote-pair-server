@@ -81,6 +81,13 @@ class DocumentSpec extends MySpecification {
       there was one(context1).writeAndFlush(ChangeContentConfirmation("eventId1", "/aaa", 1, Seq(Insert(3, "111"))).toMessage)
       there was one(context1).writeAndFlush(ChangeContentConfirmation("eventId2", "/aaa", 2, Seq(Insert(6, "222"))).toMessage)
     }
+    "not change doc version on server if the diffs is empty" in new ProtocolMocking {
+      client(context1).createOrJoinProject("test1")
+      client(context1).send(CreateDocument("/aaa", Content("abc", "UTF-8")))
+      client(context1).send(ChangeContentEvent("eventId1", "/aaa", 0, Nil))
+      client(context1).send(ChangeContentEvent("eventId1", "/aaa", 0, Seq(Insert(3, "111"))))
+      there was one(context1).writeAndFlush(ChangeContentConfirmation("eventId1", "/aaa", 1, Seq(Insert(3, "111"))).toMessage)
+    }
   }
 
   "When server receives an ChangeContentEvent, but there is no corresponding doc, it" should {
@@ -88,6 +95,38 @@ class DocumentSpec extends MySpecification {
       client(context1).createOrJoinProject("test1")
       client(context1).send(ChangeContentEvent("eventId1", "/aaa", 0, Seq(Insert(3, "111"))))
       there was one(context1).writeAndFlush(ServerErrorResponse("The document of '/aaa' is not existed on server").toMessage)
+    }
+  }
+
+  "In order to improve performance, the server" should {
+    "track the versions of a document the clients hold and calculate latest possible content ASAP for the case of 1 client" in new ProtocolMocking {
+      client(context1, context2).createOrJoinProject("test1")
+      client(context1).send(CreateDocument("/aaa", Content("abc", "UTF-8")))
+
+      client(context1).send(ChangeContentEvent("eventId1", "/aaa", 0, Seq(Insert(0, "x"))))
+      client(context1).send(ChangeContentEvent("eventId1", "/aaa", 1, Seq(Insert(0, "x"))))
+
+      project("test1").documents.find("/aaa").map(_.initContent.text) ==== Some("xabc")
+      project("test1").documents.find("/aaa").map(_.initVersion) ==== Some(1)
+      project("test1").documents.find("/aaa").map(_.versions.last.version) ==== Some(2)
+    }
+
+    "track the versions of a document the clients hold and calculate latest content ASAP for the case of multi clients" in new ProtocolMocking {
+      client(context1, context2).createOrJoinProject("test1")
+      client(context1).send(CreateDocument("/aaa", Content("abc", "UTF-8")))
+
+      client(context1).send(ChangeContentEvent("eventId1", "/aaa", 0, Seq(Insert(0, "x"))))
+      client(context2).send(ChangeContentEvent("eventId1", "/aaa", 0, Nil))
+
+      1 to 10 foreach { version =>
+        client(context1).send(ChangeContentEvent("eventId1", "/aaa", version, Seq(Insert(0, "x"))))
+      }
+
+      client(context2).send(ChangeContentEvent("eventId1", "/aaa", 4, Seq(Insert(0, "b"))))
+
+      project("test1").documents.find("/aaa").map(_.initContent.text) ==== Some("xxxxabc")
+      project("test1").documents.find("/aaa").map(_.initVersion) ==== Some(4)
+      project("test1").documents.find("/aaa").map(_.versions.last.version) ==== Some(5)
     }
   }
 
