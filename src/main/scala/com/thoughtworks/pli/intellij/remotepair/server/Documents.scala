@@ -19,8 +19,15 @@ class Documents {
     doc
   }
 
+  def remove(path: String): Option[ServerVersionedDocument] = synchronized {
+    val doc = find(path)
+    docs -= path
+    doc
+  }
+
   def find(path: String): Option[ServerVersionedDocument] = synchronized(docs.get(path))
 
+  def allPaths: Seq[String] = synchronized(docs.keys.toSeq)
 }
 
 case class DocumentVersion(version: Int, changes: Seq[ContentDiff])

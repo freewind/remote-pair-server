@@ -2,7 +2,7 @@ package com.thoughtworks.pli.intellij.remotepair.server
 
 import com.thoughtworks.pli.intellij.remotepair._
 import com.thoughtworks.pli.intellij.remotepair.protocol._
-import com.thoughtworks.pli.intellij.remotepair.utils.StringDiff
+import com.thoughtworks.pli.intellij.remotepair.utils.{PathSupport, StringDiff}
 import io.netty.channel._
 
 object ServerHandlerProvider {
@@ -10,7 +10,7 @@ object ServerHandlerProvider {
   val projects: Projects = Projects
 }
 
-class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
+class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser with PathSupport {
 
   def clients: Clients = ServerHandlerProvider.clients
   def projects: Projects = ServerHandlerProvider.projects
@@ -83,7 +83,23 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser {
     case event: CreateDocument => handleCreateDocument(project, client, event)
     case request: CreateServerDocumentRequest => handleCreateServerDocumentRequest(client, request)
     case SyncFilesForAll => handleSyncFilesForAll(client)
+    case event: DeleteFileEvent => handleDeleteFileEvent(client, event)
+    case event: DeleteDirEvent => handleDeleteDirEvent(client, event)
     case _ => broadcastToOtherMembers(client, event)
+  }
+
+  private def handleDeleteDirEvent(client: Client, event: DeleteDirEvent) = {
+    projects.findForClient(client).foreach { project =>
+      project.documents.allPaths.filter(isSubPathOf(_, event.path))
+        .foreach(project.documents.remove)
+    }
+  }
+
+  private def handleDeleteFileEvent(client: Client, event: DeleteFileEvent) = {
+    projects.findForClient(client).foreach { p =>
+      p.documents.remove(event.path)
+      broadcastToOtherMembers(client, event)
+    }
   }
 
   private def handleSyncFilesForAll(client: Client): Unit = for {
