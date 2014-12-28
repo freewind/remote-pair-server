@@ -108,7 +108,7 @@ class DocumentSpec extends MySpecification {
 
       project("test1").documents.find("/aaa").map(_.initContent.text) ==== Some("xabc")
       project("test1").documents.find("/aaa").map(_.initVersion) ==== Some(1)
-      project("test1").documents.find("/aaa").map(_.versions.last.version) ==== Some(2)
+      project("test1").documents.find("/aaa").map(_.versions.head.version) ==== Some(2)
     }
 
     "track the versions of a document the clients hold and calculate latest content ASAP for the case of multi clients" in new ProtocolMocking {
@@ -126,7 +126,7 @@ class DocumentSpec extends MySpecification {
 
       project("test1").documents.find("/aaa").map(_.initContent.text) ==== Some("xxxxabc")
       project("test1").documents.find("/aaa").map(_.initVersion) ==== Some(4)
-      project("test1").documents.find("/aaa").map(_.versions.last.version) ==== Some(5)
+      project("test1").documents.find("/aaa").map(_.versions.head.version) ==== Some(5)
     }
 
     "track the correct version even if a client is disconnected" in new ProtocolMocking {
@@ -141,7 +141,7 @@ class DocumentSpec extends MySpecification {
 
       project("test1").documents.find("/aaa").map(_.initContent.text) ==== Some("xabc")
       project("test1").documents.find("/aaa").map(_.initVersion) ==== Some(1)
-      project("test1").documents.find("/aaa").map(_.versions.last.version) ==== Some(2)
+      project("test1").documents.find("/aaa").map(_.versions.head.version) ==== Some(2)
     }
 
   }
