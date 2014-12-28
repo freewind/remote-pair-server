@@ -8,9 +8,7 @@ import scala.collection.JavaConversions._
 object StringDiff {
 
   def diffs(original: String, modified: String): Seq[ContentDiff] = {
-    val x = new GoogleDiffMatchPatch
-    val result = x.diff_main(original, modified)
-
+    val result = new GoogleDiffMatchPatch().diff_main(original, modified)
     convertDiffs(result)
   }
 
