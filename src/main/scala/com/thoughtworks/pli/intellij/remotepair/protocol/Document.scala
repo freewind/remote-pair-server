@@ -11,7 +11,7 @@ case class CreateDocumentConfirmation(path: String, version: Int, content: Conte
   override def toJson = Serialization.write(this)
 }
 
-case class ChangeContentEvent(eventId: String, path: String, baseVersion: Int, changes: Seq[ContentDiff]) extends PairEvent {
+case class ChangeContentEvent(eventId: String, path: String, baseVersion: Int, diffs: Seq[ContentDiff]) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 

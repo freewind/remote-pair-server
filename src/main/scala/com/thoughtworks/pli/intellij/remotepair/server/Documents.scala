@@ -51,23 +51,23 @@ class Documents(project: Project) {
   }
 }
 
-case class DocumentVersion(version: Int, changes: Seq[ContentDiff])
+case class DocumentVersion(version: Int, diffs: Seq[ContentDiff])
 
 case class ServerVersionedDocument(path: String, initContent: Content, initVersion: Int, versions: List[DocumentVersion] = Nil) {
   def createBaseOn(version: Int): ServerVersionedDocument = {
     val (below, up) = versions.partition(_.version <= version)
-    val newInitText = StringDiff.applyDiffs(initContent.text, below.reverse.flatMap(_.changes))
+    val newInitText = StringDiff.applyDiffs(initContent.text, below.reverse.flatMap(_.diffs))
     ServerVersionedDocument(path, Content(newInitText, initContent.charset), version, up)
   }
 
-  def latestChanges: Seq[ContentDiff] = versions.headOption.map(_.changes).getOrElse(Nil)
+  def latestChanges: Seq[ContentDiff] = versions.headOption.map(_.diffs).getOrElse(Nil)
 
   def latestVersion = versions.headOption.map(_.version).getOrElse(initVersion)
 
   def getLaterChangesFromVersion(version: Int): List[ContentDiff] = {
     val matchVersions = versions.reverse.filter(_.version > version)
     checkMatchVersions(version, matchVersions)
-    matchVersions.flatMap(_.changes)
+    matchVersions.flatMap(_.diffs)
   }
 
   private def checkMatchVersions(version: Int, matchVersions: List[DocumentVersion]): Unit = {
@@ -79,7 +79,7 @@ case class ServerVersionedDocument(path: String, initContent: Content, initVersi
     }
   }
 
-  def latestContent = StringDiff.applyDiffs(initContent.text, versions.reverse.flatMap(_.changes))
+  def latestContent = StringDiff.applyDiffs(initContent.text, versions.reverse.flatMap(_.diffs))
 
   def createConfirmation() = CreateDocumentConfirmation(this.path, this.latestVersion, this.initContent)
 
