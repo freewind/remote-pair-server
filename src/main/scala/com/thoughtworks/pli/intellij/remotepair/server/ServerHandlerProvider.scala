@@ -28,6 +28,9 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser with 
         if (client.isMaster) {
           project.members.headOption.foreach(_.isMaster = true)
         }
+        if(project.members.isEmpty) {
+          project.documents.clearAll()
+        }
       }
     }
 

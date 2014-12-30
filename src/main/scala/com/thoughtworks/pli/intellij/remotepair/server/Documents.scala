@@ -49,6 +49,12 @@ class Documents(project: Project) {
       }
     }
   }
+
+  def clearAll(): Unit = synchronized {
+    trackedClientVersions = Map.empty
+    docs = Map.empty
+  }
+
 }
 
 case class DocumentVersion(version: Int, diffs: Seq[ContentDiff])

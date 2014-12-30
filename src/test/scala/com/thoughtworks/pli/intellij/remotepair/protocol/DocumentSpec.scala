@@ -146,4 +146,15 @@ class DocumentSpec extends MySpecification {
 
   }
 
+  "When all clients of a project left, the server" should {
+    "clear all held documents" in new ProtocolMocking {
+      client(context1, context2).createOrJoinProject("test1")
+      client(context1).send(CreateDocument("/aaa", Content("abc", "UTF-8")))
+      client(context2).send(CreateDocument("/bbb", Content("abc", "UTF-8")))
+      client(context1, context2).disconnect()
+
+      project("test1").documents.allPaths === Nil
+    }
+  }
+
 }
