@@ -4,26 +4,33 @@ import com.thoughtworks.pli.intellij.remotepair.MySpecification
 
 class SyncFilesSpec extends MySpecification {
 
-  "SyncFilesRequest" should {
-    "be forwarded to master" in new ProtocolMocking {
-      client(context1, context2).createOrJoinProject("test")
+  "Some events" should {
+    def forwardToMaster(event: PairEvent) = new ProtocolMocking {
+      client(context1, context2, context3).createOrJoinProject("test")
       client(context2).beMaster()
-      client(context1).send(syncFilesRequest)
-      there was one(context2).writeAndFlush(syncFilesRequest.toMessage)
-      there was no(context1).writeAndFlush(syncFilesRequest.toMessage)
+      client(context1).send(event)
+      there was one(context2).writeAndFlush(event.toMessage)
+      there was no(context1).writeAndFlush(event.toMessage)
+      there was no(context3).writeAndFlush(event.toMessage)
+    }
+
+    "be forwarded to master only" in new ProtocolMocking {
+      forwardToMaster(syncFilesRequest)
+      forwardToMaster(getPairableFilesFromPair)
     }
   }
 
   "If server receives some event with 'toClientId', it should only forward it to correct client" should {
-    def check(x: String => PairEvent) = new ProtocolMocking {
+    def check(creator: String => PairEvent) = new ProtocolMocking {
       client(context1, context2, context3).createOrJoinProject("test")
-      val event = x(clientId(context2))
+      val event = creator(clientId(context2))
       client(context1).send(event)
       there was one(context2).writeAndFlush(event.toMessage)
       there was no(context3).writeAndFlush(event.toMessage)
     }
     "for MasterPairableFiles" in check(new MasterPairableFiles(_, Nil))
     "for SyncFileEvent" in check(new SyncFileEvent(_, "/aaa", Content("abc", "UTF-8")))
+    "for PairableFiles" in check(new PairableFiles(_))
   }
 
   "If server receives SyncFilesForAll, it" should {

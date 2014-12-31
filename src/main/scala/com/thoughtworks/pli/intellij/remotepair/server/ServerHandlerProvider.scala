@@ -28,7 +28,7 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser with 
         if (client.isMaster) {
           project.members.headOption.foreach(_.isMaster = true)
         }
-        if(project.members.isEmpty) {
+        if (project.members.isEmpty) {
           project.documents.clearAll()
         }
       }
@@ -83,6 +83,8 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser with 
     case req: SyncFilesRequest => sendToMaster(client, req)
     case event: MasterPairableFiles => sendToClientWithId(event)
     case event: SyncFileEvent => sendToClientWithId(event)
+    case event: PairableFiles => sendToClientWithId(event)
+    case event: GetPairableFilesFromPair => sendToMaster(client, event)
     case event: CreateDocument => handleCreateDocument(project, client, event)
     case request: CreateServerDocumentRequest => handleCreateServerDocumentRequest(client, request)
     case SyncFilesForAll => handleSyncFilesForAll(client)

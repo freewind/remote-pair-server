@@ -1,6 +1,7 @@
 package com.thoughtworks.pli.intellij.remotepair.protocol
 
 import com.thoughtworks.pli.intellij.remotepair.MyMocking
+import com.thoughtworks.pli.intellij.remotepair.protocol.GetPairableFilesFromPair
 import com.thoughtworks.pli.intellij.remotepair.server.{Clients, Projects, ServerHandlerProvider}
 import com.thoughtworks.pli.intellij.remotepair.utils.Insert
 import io.netty.channel.ChannelHandlerContext
@@ -118,4 +119,6 @@ trait MockEvents {
   val selectContentEvent = SelectContentEvent("/aaa", 10, 5)
 
   val syncFilesRequest = SyncFilesRequest("any-id", Nil)
+
+  val getPairableFilesFromPair = GetPairableFilesFromPair("any-id")
 }

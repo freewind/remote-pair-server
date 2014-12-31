@@ -39,6 +39,8 @@ trait EventParser {
       case "CreateDocumentConfirmation" => Serialization.read[CreateDocumentConfirmation](json)
       case "CreateServerDocumentRequest" => Serialization.read[CreateServerDocumentRequest](json)
       case "ChangeContentConfirmation" => Serialization.read[ChangeContentConfirmation](json)
+      case "PairableFiles" => Serialization.read[PairableFiles](json)
+      case "GetPairableFilesFromPair" => Serialization.read[GetPairableFilesFromPair](json)
       case _ =>
         ServerLogger.info("!!!!!!!!!!!!!!!!!!!!! unknown line from server: " + line)
         ???

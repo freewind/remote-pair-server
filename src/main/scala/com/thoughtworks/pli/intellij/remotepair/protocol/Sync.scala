@@ -15,6 +15,14 @@ case class SyncFileEvent(toClientId: String, path: String, content: Content) ext
   override def toJson = Serialization.write(this)
 }
 
+case class GetPairableFilesFromPair(fromClientId: String) extends PairEvent {
+  override def toJson = Serialization.write(this)
+}
+
+case class PairableFiles(toClientId: String) extends PairEvent {
+  override def toJson = Serialization.write(this)
+}
+
 case class MasterPairableFiles(toClientId: String, paths: Seq[String]) extends PairEvent {
   // TODO: remove it later
   val invalid = paths.filter(_.startsWith("/Users"))
