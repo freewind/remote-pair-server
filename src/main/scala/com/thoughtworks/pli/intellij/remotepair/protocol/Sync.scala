@@ -19,7 +19,7 @@ case class GetPairableFilesFromPair(fromClientId: String) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 
-case class PairableFiles(fromClientId: String, toClientId: String, paths: Seq[FileSummary]) extends PairEvent {
+case class PairableFiles(fromClientId: String, toClientId: String, fileSummaries: Seq[FileSummary]) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 
