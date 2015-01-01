@@ -76,7 +76,7 @@ class EventParserSpec extends MySpecification {
       parse( """GetPairableFilesFromPair {"fromClientId":"from-id"}""", GetPairableFilesFromPair("from-id"))
     }
     "parse PairableFiles" in {
-      parse( """PairableFiles {"toClientId":"from-id","paths":["/aaa"]}""", PairableFiles("from-id", Seq("/aaa")))
+      parse( """PairableFiles {"fromClientId":"from-id","toClientId":"to-id","paths":["/aaa"]}""", PairableFiles("from-id", "to-id", Seq("/aaa")))
     }
   }
 }
