@@ -70,13 +70,13 @@ class EventParserSpec extends MySpecification {
       parse( """SyncFilesForAll {}""", SyncFilesForAll)
     }
     "parse ChangeMasterRequest" in {
-      parse("""ChangeMasterRequest {"clientName":"myname"}""", ChangeMasterRequest("myname"))
+      parse( """ChangeMasterRequest {"clientName":"myname"}""", ChangeMasterRequest("myname"))
     }
     "parse GetPairableFilesFromPair" in {
-      parse("""GetPairableFilesFromPair {"fromClientId":"from-id"}""", GetPairableFilesFromPair("from-id"))
+      parse( """GetPairableFilesFromPair {"fromClientId":"from-id"}""", GetPairableFilesFromPair("from-id"))
     }
     "parse PairableFiles" in {
-      parse("""PairableFiles {"toClientId":"from-id"}""", PairableFiles("from-id"))
+      parse( """PairableFiles {"toClientId":"from-id","paths":["/aaa"]}""", PairableFiles("from-id", Seq("/aaa")))
     }
   }
 }
