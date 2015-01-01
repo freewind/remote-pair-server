@@ -28,7 +28,7 @@ class EventParserSpec extends MySpecification {
       parse( """SyncFileEvent {"fromClientId":"from-id","toClientId":"to-id","path":"/aaa","content":{"text":"my-content","charset":"UTF-8"}}""", SyncFileEvent("from-id", "to-id", "/aaa", Content("my-content", "UTF-8")))
     }
     "parse MasterPairableFiles" in {
-      parse( """MasterPairableFiles {"fromClientId":"from-id","toClientId":"to-id","paths":["/aaa"]}""", MasterPairableFiles("from-id", "to-id", Seq("/aaa")))
+      parse( """MasterPairableFiles {"fromClientId":"from-id","toClientId":"to-id","paths":["/aaa"],"diffFiles":2}""", MasterPairableFiles("from-id", "to-id", Seq("/aaa"), 2))
     }
     "parse SyncFilesRequest" in {
       parse( """SyncFilesRequest {"fromClientId":"id1","fileSummaries":[{"path":"/aaa","summary":"s1"}]}""", SyncFilesRequest("id1", Seq(FileSummary("/aaa", "s1"))))

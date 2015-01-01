@@ -23,7 +23,7 @@ case class PairableFiles(fromClientId: String, toClientId: String, fileSummaries
   override def toJson = Serialization.write(this)
 }
 
-case class MasterPairableFiles(fromClientId: String, toClientId: String, paths: Seq[String]) extends PairEvent {
+case class MasterPairableFiles(fromClientId: String, toClientId: String, paths: Seq[String], diffFiles: Int) extends PairEvent {
   // TODO: remove it later
   val invalid = paths.filter(_.startsWith("/Users"))
   if (invalid.nonEmpty) {
