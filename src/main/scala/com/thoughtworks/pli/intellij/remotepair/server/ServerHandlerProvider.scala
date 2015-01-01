@@ -84,13 +84,17 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser with 
     case event: MasterPairableFiles => sendToClientWithId(event)
     case event: SyncFileEvent => sendToClientWithId(event)
     case event: PairableFiles => sendToClientWithId(event)
-    case event: GetPairableFilesFromPair => sendToMaster(client, event)
+    case event: GetPairableFilesFromPair => handleGetPairableFilesFromPair(client, event)
     case event: CreateDocument => handleCreateDocument(project, client, event)
     case request: CreateServerDocumentRequest => handleCreateServerDocumentRequest(client, request)
     case SyncFilesForAll => handleSyncFilesForAll(client)
     case event: DeleteFileEvent => handleDeleteFileEvent(client, event)
     case event: DeleteDirEvent => handleDeleteDirEvent(client, event)
     case _ => broadcastToOtherMembers(client, event)
+  }
+
+  private def handleGetPairableFilesFromPair(client: Client, event: GetPairableFilesFromPair): Unit = {
+    clients.findById(event.toClientId).foreach(_.writeEvent(event))
   }
 
   private def handleDeleteDirEvent(client: Client, event: DeleteDirEvent) = {

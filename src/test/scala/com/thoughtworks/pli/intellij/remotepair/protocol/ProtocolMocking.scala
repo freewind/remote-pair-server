@@ -119,5 +119,5 @@ trait MockEvents {
 
   val syncFilesRequest = SyncFilesRequest("any-id", Nil)
 
-  val getPairableFilesFromPair = GetPairableFilesFromPair("any-id")
+  val getPairableFilesFromPair = GetPairableFilesFromPair("any-from-id", "any-to-id")
 }

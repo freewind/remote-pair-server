@@ -16,7 +16,6 @@ class SyncFilesSpec extends MySpecification {
 
     "be forwarded to master only" in new ProtocolMocking {
       forwardToMaster(syncFilesRequest)
-      forwardToMaster(getPairableFilesFromPair)
     }
   }
 
@@ -28,9 +27,10 @@ class SyncFilesSpec extends MySpecification {
       there was one(context2).writeAndFlush(event.toMessage)
       there was no(context3).writeAndFlush(event.toMessage)
     }
-    "for MasterPairableFiles" in check(new MasterPairableFiles("from-id", _, Nil))
-    "for SyncFileEvent" in check(new SyncFileEvent("from-id", _, "/aaa", Content("abc", "UTF-8")))
-    "for PairableFiles" in check(new PairableFiles("from-id", _, Seq(FileSummary("/aaa", "md5"))))
+    "for MasterPairableFiles" in check(MasterPairableFiles("from-id", _, Nil))
+    "for SyncFileEvent" in check(SyncFileEvent("from-id", _, "/aaa", Content("abc", "UTF-8")))
+    "for PairableFiles" in check(PairableFiles("from-id", _, Seq(FileSummary("/aaa", "md5"))))
+    "for GetPairableFilesFromPair" in check(GetPairableFilesFromPair("from-id", _))
   }
 
   "If server receives SyncFilesForAll, it" should {

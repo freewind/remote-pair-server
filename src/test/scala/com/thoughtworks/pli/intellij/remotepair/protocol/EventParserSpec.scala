@@ -76,7 +76,7 @@ class EventParserSpec extends MySpecification {
       parse( """ChangeMasterRequest {"clientName":"myname"}""", ChangeMasterRequest("myname"))
     }
     "parse GetPairableFilesFromPair" in {
-      parse( """GetPairableFilesFromPair {"fromClientId":"from-id"}""", GetPairableFilesFromPair("from-id"))
+      parse( """GetPairableFilesFromPair {"fromClientId":"from-id","toClientId":"to-id"} """, GetPairableFilesFromPair("from-id", "to-id"))
     }
     "parse PairableFiles" in {
       parse( """PairableFiles {"fromClientId":"from-id","toClientId":"to-id","fileSummaries":[{"path":"/aaa","summary":"md5"}]}""", PairableFiles("from-id", "to-id", Seq(FileSummary("/aaa", "md5"))))
