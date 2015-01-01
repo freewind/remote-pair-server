@@ -30,7 +30,7 @@ class SyncFilesSpec extends MySpecification {
     }
     "for MasterPairableFiles" in check(new MasterPairableFiles("from-id", _, Nil))
     "for SyncFileEvent" in check(new SyncFileEvent("from-id", _, "/aaa", Content("abc", "UTF-8")))
-    "for PairableFiles" in check(new PairableFiles("from-id", _, Seq("/aaa")))
+    "for PairableFiles" in check(new PairableFiles("from-id", _, Seq(FileSummary("/aaa", "md5"))))
   }
 
   "If server receives SyncFilesForAll, it" should {
