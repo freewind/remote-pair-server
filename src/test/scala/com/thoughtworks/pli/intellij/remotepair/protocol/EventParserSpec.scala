@@ -25,7 +25,10 @@ class EventParserSpec extends MySpecification {
         ServerStatusResponse(Seq(ProjectInfoData("myname", Seq(ClientInfoResponse("123", "test1", "user222", isMaster = true)), Nil, WorkingMode.CaretSharing)), freeClients = 0))
     }
     "parse SyncFileEvent" in {
-      parse( """SyncFileEvent {"toClientId":"111","path":"/aaa","content":{"text":"my-content","charset":"UTF-8"}}""", SyncFileEvent("111", "/aaa", Content("my-content", "UTF-8")))
+      parse( """SyncFileEvent {"fromClientId":"from-id","toClientId":"to-id","path":"/aaa","content":{"text":"my-content","charset":"UTF-8"}}""", SyncFileEvent("from-id", "to-id", "/aaa", Content("my-content", "UTF-8")))
+    }
+    "parse MasterPairableFiles" in {
+      parse( """MasterPairableFiles {"fromClientId":"from-id","toClientId":"to-id","paths":["/aaa"]}""", MasterPairableFiles("from-id", "to-id", Seq("/aaa")))
     }
     "parse SyncFilesRequest" in {
       parse( """SyncFilesRequest {"fromClientId":"id1","fileSummaries":[{"path":"/aaa","summary":"s1"}]}""", SyncFilesRequest("id1", Seq(FileSummary("/aaa", "s1"))))

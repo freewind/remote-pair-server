@@ -28,8 +28,8 @@ class SyncFilesSpec extends MySpecification {
       there was one(context2).writeAndFlush(event.toMessage)
       there was no(context3).writeAndFlush(event.toMessage)
     }
-    "for MasterPairableFiles" in check(new MasterPairableFiles(_, Nil))
-    "for SyncFileEvent" in check(new SyncFileEvent(_, "/aaa", Content("abc", "UTF-8")))
+    "for MasterPairableFiles" in check(new MasterPairableFiles("from-id", _, Nil))
+    "for SyncFileEvent" in check(new SyncFileEvent("from-id", _, "/aaa", Content("abc", "UTF-8")))
     "for PairableFiles" in check(new PairableFiles("from-id", _, Seq("/aaa")))
   }
 
