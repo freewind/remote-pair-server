@@ -9,7 +9,7 @@ import io.netty.handler.codec.LineBasedFrameDecoder
 import io.netty.handler.codec.string.{StringEncoder, StringDecoder}
 import java.nio.charset.Charset
 
-class Server {
+case class Server(host: Option[String], port: Int) {
 
   private val bossGroup = new NioEventLoopGroup()
   private val workerGroup = new NioEventLoopGroup()
@@ -22,26 +22,19 @@ class Server {
 
   private var channel: ChannelFuture = _
 
-  def startAndWait(port: Int) = {
-    try {
-      start(port)
-    } finally {
-      close()
-    }
-  }
+  def startAndWait() = try start() finally close()
 
-  def start(port: Int) = {
-    channel = bootstrap.bind(port)
+  def start() = {
+    channel = host match {
+      case Some(h) => bootstrap.bind(h, port)
+      case _ => bootstrap.bind(port)
+    }
     channel.sync()
   }
 
-  def close(): ChannelFuture = {
-    try {
-      channel.channel().close().sync()
-    } finally {
-      workerGroup.shutdownGracefully()
-      bossGroup.shutdownGracefully()
-    }
+  def close(): ChannelFuture = try channel.channel().close().sync() finally {
+    workerGroup.shutdownGracefully()
+    bossGroup.shutdownGracefully()
   }
 
   object ChildHandler extends ChannelInitializer[SocketChannel] {
