@@ -15,4 +15,4 @@ Install
 Issues
 ===========
 
-1. add `127.0.0.1 localhost $the_local_name`
+1. add `127.0.0.1 localhost $the_local_name` to `/etc/hosts`, the `$the_local_name` is the name which thrown in previous exception.
