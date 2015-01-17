@@ -13,9 +13,11 @@ class EventParserSpec extends MySpecification {
   }
 
   "EventParser" should {
-    "parse AskForJoinProject" in {
-      parse("AskForJoinProject {}", AskForJoinProject(None))
-      parse( """AskForJoinProject {"message":"project not found"}""", AskForJoinProject(Some("project not found")))
+    "parse InvalidOperationState" in {
+      parse( """InvalidOperationState {"message":"you should join a project first"}""", InvalidOperationState("you should join a project first"))
+    }
+    "parse ProjectOperationFailed" in {
+      parse( """ProjectOperationFailed {"message":"project not found"}""", ProjectOperationFailed("project not found"))
     }
     "parse ServerErrorResponse" in {
       parse( """ServerErrorResponse {"message":"test-error"}""", ServerErrorResponse("test-error"))

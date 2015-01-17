@@ -5,13 +5,6 @@ import com.thoughtworks.pli.intellij.remotepair.server.{Project, Projects}
 
 class JoinProjectSpec extends MySpecification {
 
-  "When a client is connected, server" should {
-    "send AskForJoinProject to it" in new ProtocolMocking {
-      client(context1)
-      there was one(context1).writeAndFlush(AskForJoinProject(None).toMessage)
-    }
-  }
-
   "When server receives CreateProjectRequest, it" should {
     "create a new project and join the client with the provided client name" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test", "Freewind"))
@@ -22,9 +15,9 @@ class JoinProjectSpec extends MySpecification {
       handler.projects must haveProjectMembers("test2", Seq("Freewind"))
       handler.projects must haveProjectMembers("test1", Nil)
     }
-    "ask the client to create a project with different name if the name is already used" in new ProtocolMocking {
+    "response an error response if the name is already used" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test", "Freewind"), CreateProjectRequest("test", "Freewind"))
-      there was one(context1).writeAndFlush(AskForJoinProject(Some("Project 'test' is already existed")).toMessage)
+      there was one(context1).writeAndFlush(ProjectOperationFailed("Project 'test' is already existed").toMessage)
     }
   }
 
@@ -35,9 +28,9 @@ class JoinProjectSpec extends MySpecification {
       client(context2).send(JoinProjectRequest("test", "Lily"))
       handler.projects must haveProjectMembers("test", Seq("Freewind", "Lily"))
     }
-    "ask for join an exist project if the requested project is not exist" in new ProtocolMocking {
+    "response an error response if the requested project is not exist" in new ProtocolMocking {
       client(context1).send(JoinProjectRequest("non-exist", "Freewind"))
-      there was one(context1).writeAndFlush(AskForJoinProject(Some("Project 'non-exist' is not existed")).toMessage)
+      there was one(context1).writeAndFlush(ProjectOperationFailed("Project 'non-exist' is not existed").toMessage)
     }
     "move the client from old project to the new one if the client is already in some project" in new ProtocolMocking {
       client(context1, context2)
@@ -47,10 +40,10 @@ class JoinProjectSpec extends MySpecification {
       handler.projects must haveProjectMembers("test2", Seq("Lily", "Freewind"))
       handler.projects must haveProjectMembers("test1", Nil)
     }
-    "ask for use another client name if the client's name is already taken" in new ProtocolMocking {
+    "response an error response if the client's name is already taken" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test1", "Freewind"))
       client(context2).send(JoinProjectRequest("test1", "Freewind"))
-      there was one(context2).writeAndFlush(AskForJoinProject(Some("The client name 'Freewind' is already used in project 'test1'")).toMessage)
+      there was one(context2).writeAndFlush(ProjectOperationFailed("The client name 'Freewind' is already used in project 'test1'").toMessage)
       handler.projects.get("test1").map(_.members.size) must beSome(1)
     }
     "use the new client name if the client is already in the requested project" in new ProtocolMocking {
@@ -108,7 +101,7 @@ class JoinProjectSpec extends MySpecification {
       client(context1).send(events: _*)
 
       events.map(event => there was no(context1).writeAndFlush(event.toMessage))
-      there were atLeast(events.size)(context1).writeAndFlush(AskForJoinProject(Some("You need to join a project first")).toMessage)
+      there were atLeast(events.size)(context1).writeAndFlush(InvalidOperationState("You need to join a project first").toMessage)
     }
   }
 

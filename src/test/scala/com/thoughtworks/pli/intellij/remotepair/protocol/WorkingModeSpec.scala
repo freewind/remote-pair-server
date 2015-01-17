@@ -42,7 +42,7 @@ class WorkingModeSpec extends MySpecification {
     "can't be issues if the client is not in any project" in new ProtocolMocking {
       client(context1).shareCaret()
 
-      there was one(context1).writeAndFlush(AskForJoinProject(Some("You need to join a project first")).toMessage)
+      there was one(context1).writeAndFlush(InvalidOperationState("You need to join a project first").toMessage)
     }
   }
 

@@ -133,7 +133,7 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser with 
     event match {
       case CreateProjectRequest(projectName, clientName) => handleCreateProjectRequest(client, projectName, clientName)
       case JoinProjectRequest(projectName, clientName) => handleJoinProjectRequest(client, projectName, clientName)
-      case _ => client.writeEvent(AskForJoinProject(Some("You need to join a project first")))
+      case _ => client.writeEvent(InvalidOperationState("You need to join a project first"))
     }
   }
 
@@ -149,7 +149,7 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser with 
 
   private def handleCreateProjectRequest(client: Client, projectName: String, clientName: String) {
     if (projects.contains(projectName)) {
-      client.writeEvent(AskForJoinProject(Some(s"Project '$projectName' is already existed")))
+      client.writeEvent(ProjectOperationFailed(s"Project '$projectName' is already existed"))
     } else {
       projects.findForClient(client) match {
         case Some(p) => p.removeMember(client)
@@ -166,7 +166,7 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser with 
     projects.get(projectName) match {
       case Some(p) => {
         if (p.otherMembers(client).exists(_.name == Some(clientName))) {
-          client.writeEvent(AskForJoinProject(Some(s"The client name '$clientName' is already used in project '$projectName'")))
+          client.writeEvent(ProjectOperationFailed(s"The client name '$clientName' is already used in project '$projectName'"))
         } else {
           if (p.hasMember(client)) {
             client.name = Some(clientName)
@@ -180,7 +180,7 @@ class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser with 
           broadcastServerStatusResponse(Some(client))
         }
       }
-      case _ => client.writeEvent(AskForJoinProject(Some(s"Project '$projectName' is not existed")))
+      case _ => client.writeEvent(ProjectOperationFailed(s"Project '$projectName' is not existed"))
     }
   }
 

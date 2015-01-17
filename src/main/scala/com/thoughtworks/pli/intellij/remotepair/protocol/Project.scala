@@ -2,11 +2,12 @@ package com.thoughtworks.pli.intellij.remotepair.protocol
 
 import org.json4s.native.Serialization
 
+@deprecated
 case class AskForJoinProject(message: Option[String] = None) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 
-case object AskForWorkingMode extends PairEvent {
+case class ProjectOperationFailed(message: String) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 

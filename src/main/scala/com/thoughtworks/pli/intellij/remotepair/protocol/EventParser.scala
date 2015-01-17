@@ -28,7 +28,8 @@ trait EventParser {
       case "JoinProjectRequest" => Serialization.read[JoinProjectRequest](json)
       case "JoinedToProjectEvent" => Serialization.read[JoinedToProjectEvent](json)
       case "ParallelModeRequest" => ParallelModeRequest
-      case "AskForJoinProject" => Serialization.read[AskForJoinProject](json)
+      case "InvalidOperationState" => Serialization.read[InvalidOperationState](json)
+      case "ProjectOperationFailed" => Serialization.read[ProjectOperationFailed](json)
       case "ServerStatusResponse" => Serialization.read[ServerStatusResponse](json)
       case "ClientInfoResponse" => Serialization.read[ClientInfoResponse](json)
       case "ServerErrorResponse" => Serialization.read[ServerErrorResponse](json)
