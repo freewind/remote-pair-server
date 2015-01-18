@@ -5,15 +5,15 @@ import com.thoughtworks.pli.intellij.remotepair.protocol._
 import com.thoughtworks.pli.intellij.remotepair.utils.{PathSupport, StringDiff}
 import io.netty.channel._
 
-object ServerHandlerProvider {
+object ServerHandler {
   val clients: Clients = Clients
   val projects: Projects = Projects
 }
 
-class ServerHandlerProvider extends ChannelHandlerAdapter with EventParser with PathSupport {
+class ServerHandler extends ChannelHandlerAdapter with EventParser with PathSupport {
 
-  def clients: Clients = ServerHandlerProvider.clients
-  def projects: Projects = ServerHandlerProvider.projects
+  def clients: Clients = ServerHandler.clients
+  def projects: Projects = ServerHandler.projects
 
   override def channelActive(ctx: ChannelHandlerContext) {
     val client = clients.newClient(ctx)

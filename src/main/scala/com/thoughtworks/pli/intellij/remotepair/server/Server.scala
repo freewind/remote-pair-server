@@ -43,7 +43,7 @@ case class Server(host: Option[String], port: Int) {
         new LineBasedFrameDecoder(Int.MaxValue),
         new StringDecoder(Charset.forName("UTF-8")),
         new StringEncoder(Charset.forName("UTF-8")),
-        new ServerHandlerProvider)
+        new ServerHandler)
     }
   }
 
