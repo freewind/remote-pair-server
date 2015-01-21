@@ -18,7 +18,6 @@ class ServerHandler extends ChannelHandlerAdapter with EventParser with PathSupp
   override def channelActive(ctx: ChannelHandlerContext) {
     val client = clients.newClient(ctx)
     broadcastServerStatusResponse(Some(client))
-    client.writeEvent(AskForJoinProject())
   }
 
   override def channelInactive(ctx: ChannelHandlerContext) {

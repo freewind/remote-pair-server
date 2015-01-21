@@ -1,16 +1,9 @@
 package com.thoughtworks.pli.intellij.remotepair.server
 
 import com.thoughtworks.pli.intellij.remotepair.MySpecification
-import com.thoughtworks.pli.intellij.remotepair.protocol.{AskForJoinProject, ProtocolMocking}
+import com.thoughtworks.pli.intellij.remotepair.protocol.ProtocolMocking
 
 class ServerHandlerProviderSpec extends MySpecification {
-
-  "When client is connected, server" should {
-    "ask for client information" in new ProtocolMocking {
-      client(context1)
-      there was one(context1).writeAndFlush(AskForJoinProject(None).toMessage)
-    }
-  }
 
   "ServerHandler" should {
     "add the context to global cache when channelActive" in new ProtocolMocking {
