@@ -33,3 +33,9 @@ libraryDependencies ++= Seq(
 )
 
 mainClass in Compile := Some("com.thoughtworks.pli.intellij.remotepair.server.StandaloneServer")
+
+initialize ~= { _ =>
+  val specVersion = sys.props("java.specification.version")
+  println(s"Detected Java version: $specVersion")
+  require(specVersion == "1.6", "Jdk 1.6.x is required")
+}
