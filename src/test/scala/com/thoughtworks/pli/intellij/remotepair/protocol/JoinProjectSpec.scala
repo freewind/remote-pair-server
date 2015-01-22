@@ -10,6 +10,10 @@ class JoinProjectSpec extends MySpecification {
       client(context1).send(CreateProjectRequest("test", "Freewind"))
       handler.projects must haveProjectMembers("test", Seq("Freewind"))
     }
+    "response JoinedToProjectEvent if created successfully" in new ProtocolMocking {
+      client(context1).send(CreateProjectRequest("test", "Freewind"))
+      there was one(context1).writeAndFlush(JoinedToProjectEvent("test", "Freewind").toMessage)
+    }
     "move the client from old project to new if it has already in some project" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test1", "Freewind"), CreateProjectRequest("test2", "Freewind"))
       handler.projects must haveProjectMembers("test2", Seq("Freewind"))
@@ -27,6 +31,12 @@ class JoinProjectSpec extends MySpecification {
       client(context1).send(CreateProjectRequest("test", "Freewind"))
       client(context2).send(JoinProjectRequest("test", "Lily"))
       handler.projects must haveProjectMembers("test", Seq("Freewind", "Lily"))
+    }
+    "response JoinedToProjectEvent if joined successfully" in new ProtocolMocking {
+      client(context1, context2)
+      client(context1).send(CreateProjectRequest("test", "Freewind"))
+      client(context2).send(JoinProjectRequest("test", "Lily"))
+      there was one(context2).writeAndFlush(JoinedToProjectEvent("test", "Lily").toMessage)
     }
     "response an error response if the requested project is not exist" in new ProtocolMocking {
       client(context1).send(JoinProjectRequest("non-exist", "Freewind"))

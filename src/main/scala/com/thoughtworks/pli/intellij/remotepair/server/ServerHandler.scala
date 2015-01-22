@@ -155,6 +155,7 @@ class ServerHandler extends ChannelHandlerAdapter with EventParser with PathSupp
         case _ =>
       }
       projects.create(client, projectName, clientName)
+      client.writeEvent(JoinedToProjectEvent(projectName, clientName))
       broadcastServerStatusResponse(Some(client))
     }
   }
