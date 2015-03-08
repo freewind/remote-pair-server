@@ -6,7 +6,7 @@ import com.thoughtworks.pli.intellij.remotepair.utils.Insert
 class DocumentSpec extends MySpecification {
 
   "when server receives CreateDocument event from client, it" should {
-    "response version 0 and init content if the its just be created" in new ProtocolMocking {
+    "response version 0 and init content if its just be created" in new ProtocolMocking {
       client(context1).createOrJoinProject("test1")
       client(context1).send(CreateDocument("/aaa", Content("abc", "UTF-8")))
       there was one(context1).writeAndFlush(CreateDocumentConfirmation("/aaa", 0, Content("abc", "UTF-8")).toMessage)
