@@ -3,10 +3,6 @@ package com.thoughtworks.pli.intellij.remotepair.server
 import io.netty.channel.ChannelHandlerContext
 import scala.collection.mutable
 
-trait ContextInitializer {
-  def contexts: mutable.Map[ChannelHandlerContext, Client]
-}
-
 class Clients {
   val contexts: mutable.Map[ChannelHandlerContext, Client] = mutable.LinkedHashMap.empty[ChannelHandlerContext, Client]
 

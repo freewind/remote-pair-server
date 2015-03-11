@@ -2,6 +2,7 @@ package com.thoughtworks.pli.intellij.remotepair.server
 
 import com.softwaremill.macwire.{Macwire, Wired}
 import com.thoughtworks.pli.intellij.remotepair.protocol.ParseEvent
+import com.thoughtworks.pli.intellij.remotepair.server.event_handlers.ServerHandlerModule
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel._
 import io.netty.channel.nio.NioEventLoopGroup

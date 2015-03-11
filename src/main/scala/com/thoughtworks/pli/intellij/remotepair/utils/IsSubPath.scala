@@ -1,8 +1,8 @@
 package com.thoughtworks.pli.intellij.remotepair.utils
 
-trait PathSupport {
+class IsSubPath {
 
-  def isSubPathOf(subPath: String, parentPath: String): Boolean = {
+  def apply(subPath: String, parentPath: String): Boolean = {
     subPath == parentPath || subPath.startsWith(parentPath + "/")
   }
 

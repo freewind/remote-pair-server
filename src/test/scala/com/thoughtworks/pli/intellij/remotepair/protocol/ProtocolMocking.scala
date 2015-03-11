@@ -1,7 +1,8 @@
 package com.thoughtworks.pli.intellij.remotepair.protocol
 
 import com.thoughtworks.pli.intellij.remotepair.MyMocking
-import com.thoughtworks.pli.intellij.remotepair.server.{ServerHandlerModule, ServerHandler, Clients, Projects}
+import com.thoughtworks.pli.intellij.remotepair.server.event_handlers.ServerHandlerModule
+import com.thoughtworks.pli.intellij.remotepair.server.{Clients, Projects}
 import com.thoughtworks.pli.intellij.remotepair.utils.Insert
 import io.netty.channel.ChannelHandlerContext
 
