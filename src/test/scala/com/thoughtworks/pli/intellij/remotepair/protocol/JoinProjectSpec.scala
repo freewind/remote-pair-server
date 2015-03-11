@@ -8,7 +8,7 @@ class JoinProjectSpec extends MySpecification {
   "When server receives CreateProjectRequest, it" should {
     "create a new project and join the client with the provided client name" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test", "Freewind"))
-      handler.projects must haveProjectMembers("test", Seq("Freewind"))
+      projects must haveProjectMembers("test", Seq("Freewind"))
     }
     "response JoinedToProjectEvent if created successfully" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test", "Freewind"))
@@ -16,8 +16,8 @@ class JoinProjectSpec extends MySpecification {
     }
     "move the client from old project to new if it has already in some project" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test1", "Freewind"), CreateProjectRequest("test2", "Freewind"))
-      handler.projects must haveProjectMembers("test2", Seq("Freewind"))
-      handler.projects must haveProjectMembers("test1", Nil)
+      projects must haveProjectMembers("test2", Seq("Freewind"))
+      projects must haveProjectMembers("test1", Nil)
     }
     "response an error response if the name is already used" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test", "Freewind"), CreateProjectRequest("test", "Freewind"))
@@ -30,7 +30,7 @@ class JoinProjectSpec extends MySpecification {
       client(context1, context2)
       client(context1).send(CreateProjectRequest("test", "Freewind"))
       client(context2).send(JoinProjectRequest("test", "Lily"))
-      handler.projects must haveProjectMembers("test", Seq("Freewind", "Lily"))
+      projects must haveProjectMembers("test", Seq("Freewind", "Lily"))
     }
     "response JoinedToProjectEvent if joined successfully" in new ProtocolMocking {
       client(context1, context2)
@@ -47,27 +47,27 @@ class JoinProjectSpec extends MySpecification {
       client(context1).send(CreateProjectRequest("test1", "Freewind"))
       client(context2).send(CreateProjectRequest("test2", "Lily"))
       client(context1).send(JoinProjectRequest("test2", "Freewind"))
-      handler.projects must haveProjectMembers("test2", Seq("Lily", "Freewind"))
-      handler.projects must haveProjectMembers("test1", Nil)
+      projects must haveProjectMembers("test2", Seq("Lily", "Freewind"))
+      projects must haveProjectMembers("test1", Nil)
     }
     "response an error response if the client's name is already taken" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test1", "Freewind"))
       client(context2).send(JoinProjectRequest("test1", "Freewind"))
       there was one(context2).writeAndFlush(ProjectOperationFailed("The client name 'Freewind' is already used in project 'test1'").toMessage)
-      handler.projects.get("test1").map(_.members.size) must beSome(1)
+      projects.get("test1").map(_.members.size) must beSome(1)
     }
     "use the new client name if the client is already in the requested project" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test1", "Freewind")).send(JoinProjectRequest("test1", "Lily"))
-      handler.projects.get("test1").map(_.members.flatMap(_.name)) must beSome(Seq("Lily"))
+      projects.get("test1").map(_.members.flatMap(_.name)) must beSome(Seq("Lily"))
     }
   }
 
   "Project on server" should {
     "be kept even if all its members are left" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test1", "Freewind")).send(CreateProjectRequest("test2", "Freewind"))
-      handler.projects.all.size === 2
-      handler.projects must haveProjectMembers("test1", Seq())
-      handler.projects must haveProjectMembers("test2", Seq("Freewind"))
+      projects.all.size === 2
+      projects must haveProjectMembers("test1", Seq())
+      projects must haveProjectMembers("test2", Seq("Freewind"))
     }
   }
 

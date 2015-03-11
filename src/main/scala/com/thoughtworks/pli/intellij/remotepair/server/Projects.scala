@@ -3,9 +3,7 @@ package com.thoughtworks.pli.intellij.remotepair.server
 import com.thoughtworks.pli.intellij.remotepair.protocol.WorkingMode
 
 
-object Projects extends Projects
-
-trait Projects {
+class Projects {
   private var map = Map.empty[String, Project]
   def all = map.values
   def singles = all.filter(_.members.size == 1)

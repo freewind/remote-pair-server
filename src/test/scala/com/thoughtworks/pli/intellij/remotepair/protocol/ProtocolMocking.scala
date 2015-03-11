@@ -1,23 +1,15 @@
 package com.thoughtworks.pli.intellij.remotepair.protocol
 
 import com.thoughtworks.pli.intellij.remotepair.MyMocking
-import com.thoughtworks.pli.intellij.remotepair.server.{ServerHandler, Clients, Projects}
+import com.thoughtworks.pli.intellij.remotepair.server.{ServerHandlerModule, ServerHandler, Clients, Projects}
 import com.thoughtworks.pli.intellij.remotepair.utils.Insert
 import io.netty.channel.ChannelHandlerContext
 
-trait ProtocolMocking extends MyMocking with MockEvents {
+trait ProtocolMocking extends MyMocking with MockEvents with ServerHandlerModule {
   m =>
 
-  private val contexts = new Clients {}
-
-  val projects = new Projects {}
   def dataOf(context: ChannelHandlerContext) = {
-    handler.clients.get(context).get
-  }
-
-  val handler = new ServerHandler {
-    override val clients = m.contexts
-    override val projects = m.projects
+    clients.get(context).get
   }
 
   val context1 = mock[ChannelHandlerContext]
@@ -37,13 +29,13 @@ trait ProtocolMocking extends MyMocking with MockEvents {
   def client(contexts: ChannelHandlerContext*) = new {
 
     contexts.foreach { context =>
-      if (!handler.clients.contains(context)) {
-        handler.channelActive(context)
+      if (!clients.contains(context)) {
+        serverHandler.channelActive(context)
       }
     }
 
     private def singleSend(context: ChannelHandlerContext, event: PairEvent) = {
-      handler.channelRead(context, event.toMessage)
+      serverHandler.channelRead(context, event.toMessage)
     }
 
     def createOrJoinProject(projectName: String): this.type = {
@@ -77,22 +69,22 @@ trait ProtocolMocking extends MyMocking with MockEvents {
 
     def beMaster(): this.type = {
       contexts.foreach { context =>
-        if (!handler.clients.contains(context)) {
-          handler.clients.newClient(context)
+        if (!clients.contains(context)) {
+          clients.newClient(context)
         }
-        handler.clients.all.foreach(_.isMaster = false)
+        clients.all.foreach(_.isMaster = false)
         dataOf(context).isMaster = true
       }
       this
     }
     def disconnect(): Unit = {
-      contexts.foreach(handler.channelInactive)
+      contexts.foreach(serverHandler.channelInactive)
     }
   }
 
   def project(name: String) = projects.get(name).get
 
-  def clientId(context: ChannelHandlerContext) = handler.clients.get(context).map(_.id).get
+  def clientId(context: ChannelHandlerContext) = clients.get(context).map(_.id).get
 
   def resetMocks(mocks: Any*) = mocks.foreach(mock => org.mockito.Mockito.reset(mock))
 }

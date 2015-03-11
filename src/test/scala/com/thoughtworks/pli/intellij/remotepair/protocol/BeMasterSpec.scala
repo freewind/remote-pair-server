@@ -17,7 +17,7 @@ class BeMasterSpec extends MySpecification {
     "set the next client as master automatically" in new ProtocolMocking {
       client(context1, context2).createOrJoinProject("test")
 
-      handler.channelInactive(context1)
+      serverHandler.channelInactive(context1)
       dataOf(context2).isMaster === true
     }
   }

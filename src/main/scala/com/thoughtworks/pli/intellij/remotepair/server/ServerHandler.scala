@@ -1,19 +1,19 @@
 package com.thoughtworks.pli.intellij.remotepair.server
 
+import com.softwaremill.macwire.Macwire
 import com.thoughtworks.pli.intellij.remotepair._
 import com.thoughtworks.pli.intellij.remotepair.protocol._
 import com.thoughtworks.pli.intellij.remotepair.utils.{PathSupport, StringDiff}
 import io.netty.channel._
 
-object ServerHandler {
-  val clients: Clients = Clients
-  val projects: Projects = Projects
+trait ServerHandlerModule extends Macwire {
+  lazy val clients = wire[Clients]
+  lazy val projects = wire[Projects]
+  lazy val parseEvent = wire[ParseEvent]
+  lazy val serverHandler = wire[ServerHandler]
 }
 
-class ServerHandler extends ChannelHandlerAdapter with EventParser with PathSupport {
-
-  def clients: Clients = ServerHandler.clients
-  def projects: Projects = ServerHandler.projects
+class ServerHandler(clients: Clients, projects: Projects, parseEvent: ParseEvent) extends ChannelHandlerAdapter with PathSupport {
 
   override def channelActive(ctx: ChannelHandlerContext) {
     val client = clients.newClient(ctx)

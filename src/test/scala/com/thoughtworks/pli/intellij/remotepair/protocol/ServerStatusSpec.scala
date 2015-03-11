@@ -48,7 +48,7 @@ class ServerStatusSpec extends MySpecification {
 
       resetMocks(context1)
 
-      handler.channelInactive(context2)
+      serverHandler.channelInactive(context2)
       there was one(context1).writeAndFlush(ServerStatusResponse(
         Seq(ProjectInfoData("test", Seq(ClientInfoResponse(clientId(context1), "test", "Freewind", isMaster = true)), Nil, WorkingMode.CaretSharing)),
         freeClients = 0

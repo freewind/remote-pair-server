@@ -5,10 +5,10 @@ import com.thoughtworks.pli.intellij.remotepair.utils.{Delete, Insert}
 
 class EventParserSpec extends MySpecification {
 
-  val parser = new EventParser {}
+  val parser = new ParseEvent {}
 
   def parse(line: String, expectedEvent: PairEvent) = {
-    val event = parser.parseEvent(line)
+    val event = parser.apply(line)
     event === expectedEvent
   }
 

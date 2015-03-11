@@ -7,9 +7,7 @@ trait ContextInitializer {
   def contexts: mutable.Map[ChannelHandlerContext, Client]
 }
 
-object Clients extends Clients
-
-trait Clients {
+class Clients {
   val contexts: mutable.Map[ChannelHandlerContext, Client] = mutable.LinkedHashMap.empty[ChannelHandlerContext, Client]
 
   def newClient(context: ChannelHandlerContext): Client = {

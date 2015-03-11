@@ -3,9 +3,9 @@ package com.thoughtworks.pli.intellij.remotepair.protocol
 import com.thoughtworks.pli.intellij.remotepair.ServerLogger
 import org.json4s.native.Serialization
 
-trait EventParser {
+class ParseEvent {
 
-  def parseEvent(line: String): PairEvent = {
+  def apply(line: String): PairEvent = {
     val (name, json) = line.span(_ != ' ')
     name match {
       case "OpenTabEvent" => Serialization.read[OpenTabEvent](json)

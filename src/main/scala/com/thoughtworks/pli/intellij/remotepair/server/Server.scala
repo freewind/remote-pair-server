@@ -1,5 +1,7 @@
 package com.thoughtworks.pli.intellij.remotepair.server
 
+import com.softwaremill.macwire.{Macwire, Wired}
+import com.thoughtworks.pli.intellij.remotepair.protocol.ParseEvent
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel._
 import io.netty.channel.nio.NioEventLoopGroup
@@ -9,7 +11,7 @@ import io.netty.handler.codec.LineBasedFrameDecoder
 import io.netty.handler.codec.string.{StringEncoder, StringDecoder}
 import java.nio.charset.Charset
 
-case class Server(host: Option[String], port: Int) {
+case class Server(host: Option[String], port: Int) extends ServerHandlerModule {
 
   private val bossGroup = new NioEventLoopGroup()
   private val workerGroup = new NioEventLoopGroup()
@@ -43,7 +45,7 @@ case class Server(host: Option[String], port: Int) {
         new LineBasedFrameDecoder(Int.MaxValue),
         new StringDecoder(Charset.forName("UTF-8")),
         new StringEncoder(Charset.forName("UTF-8")),
-        new ServerHandler)
+        serverHandler)
     }
   }
 
