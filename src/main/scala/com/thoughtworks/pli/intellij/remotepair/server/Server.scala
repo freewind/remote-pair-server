@@ -1,7 +1,7 @@
 package com.thoughtworks.pli.intellij.remotepair.server
 
-import com.softwaremill.macwire.{Macwire, Wired}
-import com.thoughtworks.pli.intellij.remotepair.protocol.ParseEvent
+import java.nio.charset.Charset
+
 import com.thoughtworks.pli.intellij.remotepair.server.event_handlers.ServerHandlerModule
 import io.netty.bootstrap.ServerBootstrap
 import io.netty.channel._
@@ -9,8 +9,7 @@ import io.netty.channel.nio.NioEventLoopGroup
 import io.netty.channel.socket.SocketChannel
 import io.netty.channel.socket.nio.NioServerSocketChannel
 import io.netty.handler.codec.LineBasedFrameDecoder
-import io.netty.handler.codec.string.{StringEncoder, StringDecoder}
-import java.nio.charset.Charset
+import io.netty.handler.codec.string.{StringDecoder, StringEncoder}
 
 case class Server(host: Option[String], port: Int) extends ServerHandlerModule {
 
@@ -46,7 +45,7 @@ case class Server(host: Option[String], port: Int) extends ServerHandlerModule {
         new LineBasedFrameDecoder(Int.MaxValue),
         new StringDecoder(Charset.forName("UTF-8")),
         new StringEncoder(Charset.forName("UTF-8")),
-        serverHandler)
+        serverHandlerFactory.create())
     }
   }
 

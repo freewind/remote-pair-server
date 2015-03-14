@@ -33,6 +33,6 @@ trait ServerHandlerModule extends Macwire {
   lazy val isSubPath = wire[IsSubPath]
   lazy val handleDeleteDirEvent = wire[HandleDeleteDirEvent]
   lazy val handleEventInProject = wire[HandleEventInProject]
-  lazy val serverHandler = wire[ServerHandler]
+  lazy val serverHandlerFactory = wire[ServerHandlerFactory]
 
 }

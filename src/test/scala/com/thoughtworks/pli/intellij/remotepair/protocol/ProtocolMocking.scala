@@ -27,6 +27,8 @@ trait ProtocolMocking extends MyMocking with MockEvents with ServerHandlerModule
     context5 -> "Alex"
   ).apply(ctx)
 
+  val serverHandler = serverHandlerFactory.create()
+
   def client(contexts: ChannelHandlerContext*) = new {
 
     contexts.foreach { context =>
