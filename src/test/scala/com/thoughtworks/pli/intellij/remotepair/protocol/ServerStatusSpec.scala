@@ -54,10 +54,10 @@ class ServerStatusSpec extends MySpecification {
         freeClients = 0
       ).toMessage)
     }
-    "be sent automatically when ignored files changed" in new ProtocolMocking {
+    "be sent automatically when pairable files changed" in new ProtocolMocking {
       client(context1).createOrJoinProject("test")
 
-      client(context1).send(IgnoreFilesRequest(Seq("/aaa")))
+      client(context1).send(PairableFilesRequest(Seq("/aaa")))
       there was one(context1).writeAndFlush(ServerStatusResponse(
         Seq(ProjectInfoData("test", Seq(ClientInfoResponse(clientId(context1), "test", "Freewind", isMaster = true)), Seq("/aaa"), WorkingMode.CaretSharing)),
         freeClients = 0
@@ -73,11 +73,11 @@ class ServerStatusSpec extends MySpecification {
     }
   }
 
-  "IgnoreFilesRequest" should {
+  "PairableFilesRequest" should {
     "store the files on server" in new ProtocolMocking {
-      client(context1).createOrJoinProject("test").send(IgnoreFilesRequest(Seq("/aaa", "/bbb")))
+      client(context1).createOrJoinProject("test").send(PairableFilesRequest(Seq("/aaa", "/bbb")))
 
-      project("test").ignoredFiles === Seq("/aaa", "/bbb")
+      project("test").pairableFiles === Seq("/aaa", "/bbb")
     }
   }
 

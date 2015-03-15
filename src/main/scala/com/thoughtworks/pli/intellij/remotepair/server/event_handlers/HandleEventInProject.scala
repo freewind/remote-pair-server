@@ -13,7 +13,7 @@ class HandleEventInProject(handleCreateProjectRequest: HandleCreateProjectReques
                            handleResetTabEvent: HandleResetTabEvent,
                            sendToMaster: SendToMaster,
                            handleChangeContentEvent: HandleChangeContentEvent,
-                           handleIgnoreFilesRequest: HandleIgnoreFilesRequest,
+                           handlePairableFilesRequest: HandlePairableFilesRequest,
                            sendToClientWithId: SendToClientWithId,
                            handleGetPairableFilesFromPair: HandleGetPairableFilesFromPair,
                            handleCreateDocument: HandleCreateDocument,
@@ -34,7 +34,7 @@ class HandleEventInProject(handleCreateProjectRequest: HandleCreateProjectReques
     case ResetTabRequest => sendToMaster(client, ResetTabRequest)
     case event: ChangeContentEvent => handleChangeContentEvent(client, event)
     case event: MoveCaretEvent => broadcastToOtherMembers(client, event)
-    case event: IgnoreFilesRequest => handleIgnoreFilesRequest(client, event)
+    case event: PairableFilesRequest => handlePairableFilesRequest(client, event)
     case req: SyncFilesRequest => sendToMaster(client, req)
     case event: MasterPairableFiles => sendToClientWithId(event)
     case event: SyncFileEvent => sendToClientWithId(event)

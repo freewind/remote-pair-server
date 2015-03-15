@@ -22,7 +22,7 @@ trait ServerHandlerModule extends Macwire {
   lazy val handleResetTabEvent = wire[HandleResetTabEvent]
   lazy val sendToMaster = wire[SendToMaster]
   lazy val handleChangeContentEvent = wire[HandleChangeContentEvent]
-  lazy val handleIgnoreFilesRequest = wire[HandleIgnoreFilesRequest]
+  lazy val handlePairableFilesRequest = wire[HandlePairableFilesRequest]
   lazy val sendToClientWithId = wire[SendToClientWithId]
   lazy val handleGetPairableFilesFromPair = wire[HandleGetPairableFilesFromPair]
   lazy val broadcastToAllMembers = wire[BroadcastToAllMembers]

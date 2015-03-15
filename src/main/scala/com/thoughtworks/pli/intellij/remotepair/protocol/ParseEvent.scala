@@ -20,7 +20,7 @@ class ParseEvent {
       case "RenameEvent" => Serialization.read[RenameEvent](json)
       case "MoveCaretEvent" => Serialization.read[MoveCaretEvent](json)
       case "SelectContentEvent" => Serialization.read[SelectContentEvent](json)
-      case "IgnoreFilesRequest" => Serialization.read[IgnoreFilesRequest](json)
+      case "PairableFilesRequest" => Serialization.read[PairableFilesRequest](json)
       case "SyncFilesRequest" => Serialization.read[SyncFilesRequest](json)
       case "SyncFilesForAll" => SyncFilesForAll
       case "CaretSharingModeRequest" => CaretSharingModeRequest

@@ -100,8 +100,8 @@ class JoinProjectSpec extends MySpecification {
     "not send master related request" in new ProtocolMocking {
       cannotSendEvents(changeMasterEvent)
     }
-    "not send IgnoreFilesRequest related request" in new ProtocolMocking {
-      cannotSendEvents(IgnoreFilesRequest(Seq("/aaa")))
+    "not send PairableFilesRequest related request" in new ProtocolMocking {
+      cannotSendEvents(PairableFilesRequest(Seq("/aaa")))
     }
     "not send SyncFilesRequest related request" in new ProtocolMocking {
       cannotSendEvents(syncFilesRequest)

@@ -23,7 +23,7 @@ class EventParserSpec extends MySpecification {
       parse( """ServerErrorResponse {"message":"test-error"}""", ServerErrorResponse("test-error"))
     }
     "parse ServerStatusResponse" in {
-      parse( """ServerStatusResponse {"projects":[{"name":"myname","clients":[{"clientId":"123","project":"test1","name":"user222","isMaster":true}],"ignoredFiles":[],"workingMode":"CaretSharing"}],"freeClients":0}""",
+      parse( """ServerStatusResponse {"projects":[{"name":"myname","clients":[{"clientId":"123","project":"test1","name":"user222","isMaster":true}],"pairableFiles":[],"workingMode":"CaretSharing"}],"freeClients":0}""",
         ServerStatusResponse(Seq(ProjectInfoData("myname", Seq(ClientInfoResponse("123", "test1", "user222", isMaster = true)), Nil, WorkingMode.CaretSharing)), freeClients = 0))
     }
     "parse SyncFileEvent" in {
