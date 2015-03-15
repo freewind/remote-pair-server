@@ -21,7 +21,7 @@ class Projects {
 case class Project(name: String, private var member: Client) {
 
   @volatile var members: Seq[Client] = Seq(member)
-  @volatile var pairableFiles: Seq[String] = Nil
+  @volatile var watchFiles: Seq[String] = Nil
   @volatile var myWorkingMode: WorkingMode.Value = WorkingMode.CaretSharing
   val documents = new Documents(this)
 

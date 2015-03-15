@@ -20,7 +20,7 @@ class ParseEvent {
       case "RenameEvent" => Serialization.read[RenameEvent](json)
       case "MoveCaretEvent" => Serialization.read[MoveCaretEvent](json)
       case "SelectContentEvent" => Serialization.read[SelectContentEvent](json)
-      case "PairableFilesRequest" => Serialization.read[PairableFilesRequest](json)
+      case "WatchFilesRequest" => Serialization.read[WatchFilesRequest](json)
       case "SyncFilesRequest" => Serialization.read[SyncFilesRequest](json)
       case "SyncFilesForAll" => SyncFilesForAll
       case "CaretSharingModeRequest" => CaretSharingModeRequest
@@ -35,13 +35,13 @@ class ParseEvent {
       case "ServerErrorResponse" => Serialization.read[ServerErrorResponse](json)
       case "ResetTabRequest" => ResetTabRequest
       case "SyncFileEvent" => Serialization.read[SyncFileEvent](json)
-      case "MasterPairableFiles" => Serialization.read[MasterPairableFiles](json)
+      case "MasterWatchingFiles" => Serialization.read[MasterWatchingFiles](json)
       case "CreateDocument" => Serialization.read[CreateDocument](json)
       case "CreateDocumentConfirmation" => Serialization.read[CreateDocumentConfirmation](json)
       case "CreateServerDocumentRequest" => Serialization.read[CreateServerDocumentRequest](json)
       case "ChangeContentConfirmation" => Serialization.read[ChangeContentConfirmation](json)
-      case "PairableFiles" => Serialization.read[PairableFiles](json)
-      case "GetPairableFilesFromPair" => Serialization.read[GetPairableFilesFromPair](json)
+      case "WatchingFiles" => Serialization.read[WatchingFiles](json)
+      case "GetWatchingFilesFromPair" => Serialization.read[GetWatchingFilesFromPair](json)
       case _ =>
         ServerLogger.info("!!!!!!!!!!!!!!!!!!!!! unknown line from server: " + line)
         ???

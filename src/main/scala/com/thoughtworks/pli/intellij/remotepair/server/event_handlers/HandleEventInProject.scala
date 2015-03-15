@@ -13,9 +13,9 @@ class HandleEventInProject(handleCreateProjectRequest: HandleCreateProjectReques
                            handleResetTabEvent: HandleResetTabEvent,
                            sendToMaster: SendToMaster,
                            handleChangeContentEvent: HandleChangeContentEvent,
-                           handlePairableFilesRequest: HandlePairableFilesRequest,
+                           handleWatchFilesRequest: HandleWatchFilesRequest,
                            sendToClientWithId: SendToClientWithId,
-                           handleGetPairableFilesFromPair: HandleGetPairableFilesFromPair,
+                           handleGetWatchingFilesFromPair: HandleGetWatchingFilesFromPair,
                            handleCreateDocument: HandleCreateDocument,
                            handleCreateServerDocumentRequest: HandleCreateServerDocumentRequest,
                            handleSyncFilesForAll: HandleSyncFilesForAll,
@@ -34,12 +34,12 @@ class HandleEventInProject(handleCreateProjectRequest: HandleCreateProjectReques
     case ResetTabRequest => sendToMaster(client, ResetTabRequest)
     case event: ChangeContentEvent => handleChangeContentEvent(client, event)
     case event: MoveCaretEvent => broadcastToOtherMembers(client, event)
-    case event: PairableFilesRequest => handlePairableFilesRequest(client, event)
+    case event: WatchFilesRequest => handleWatchFilesRequest(client, event)
     case req: SyncFilesRequest => sendToMaster(client, req)
-    case event: MasterPairableFiles => sendToClientWithId(event)
+    case event: MasterWatchingFiles => sendToClientWithId(event)
     case event: SyncFileEvent => sendToClientWithId(event)
-    case event: PairableFiles => sendToClientWithId(event)
-    case event: GetPairableFilesFromPair => handleGetPairableFilesFromPair(client, event)
+    case event: WatchingFiles => sendToClientWithId(event)
+    case request: GetWatchingFilesFromPair => handleGetWatchingFilesFromPair(client, request)
     case event: CreateDocument => handleCreateDocument(project, client, event)
     case request: CreateServerDocumentRequest => handleCreateServerDocumentRequest(client, request)
     case SyncFilesForAll => handleSyncFilesForAll(client)

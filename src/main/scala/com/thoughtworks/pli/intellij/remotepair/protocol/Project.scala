@@ -18,7 +18,7 @@ case class JoinProjectRequest(projectName: String, clientName: String) extends P
   override def toJson = Serialization.write(this)
 }
 
-case class PairableFilesRequest(files: Seq[String]) extends PairEvent {
+case class WatchFilesRequest(files: Seq[String]) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 

@@ -7,7 +7,7 @@ case class ServerStatusResponse(projects: Seq[ProjectInfoData], freeClients: Int
   def findProject(name: String) = projects.find(_.name == name)
 }
 
-case class ProjectInfoData(name: String, clients: Seq[ClientInfoResponse], pairableFiles: Seq[String], workingMode: WorkingMode.Value) {
+case class ProjectInfoData(name: String, clients: Seq[ClientInfoResponse], watchingFiles: Seq[String], workingMode: WorkingMode.Value) {
   def isCaretSharing = workingMode == WorkingMode.CaretSharing
 }
 

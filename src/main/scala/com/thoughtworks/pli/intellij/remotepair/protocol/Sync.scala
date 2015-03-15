@@ -14,15 +14,15 @@ case class SyncFileEvent(fromClientId: String, toClientId: String, path: String,
   override def toJson = Serialization.write(this)
 }
 
-case class GetPairableFilesFromPair(fromClientId: String, toClientId: String) extends PairEvent {
+case class GetWatchingFilesFromPair(fromClientId: String, toClientId: String) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 
-case class PairableFiles(fromClientId: String, toClientId: String, fileSummaries: Seq[FileSummary]) extends PairEvent {
+case class WatchingFiles(fromClientId: String, toClientId: String, fileSummaries: Seq[FileSummary]) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 
-case class MasterPairableFiles(fromClientId: String, toClientId: String, paths: Seq[String], diffFiles: Int) extends PairEvent {
+case class MasterWatchingFiles(fromClientId: String, toClientId: String, paths: Seq[String], diffFiles: Int) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 

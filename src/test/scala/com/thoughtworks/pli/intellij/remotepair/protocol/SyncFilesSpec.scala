@@ -27,10 +27,10 @@ class SyncFilesSpec extends MySpecification {
       there was one(context2).writeAndFlush(event.toMessage)
       there was no(context3).writeAndFlush(event.toMessage)
     }
-    "for MasterPairableFiles" in check(MasterPairableFiles("from-id", _, Nil, 2))
+    "for MasterWatchingFiles" in check(MasterWatchingFiles("from-id", _, Nil, 2))
     "for SyncFileEvent" in check(SyncFileEvent("from-id", _, "/aaa", Content("abc", "UTF-8")))
-    "for PairableFiles" in check(PairableFiles("from-id", _, Seq(FileSummary("/aaa", "md5"))))
-    "for GetPairableFilesFromPair" in check(GetPairableFilesFromPair("from-id", _))
+    "for WatchingFiles" in check(WatchingFiles("from-id", _, Seq(FileSummary("/aaa", "md5"))))
+    "for GetWatchingFilesFromPair" in check(GetWatchingFilesFromPair("from-id", _))
   }
 
   "If server receives SyncFilesForAll, it" should {
