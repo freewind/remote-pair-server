@@ -29,8 +29,6 @@ libraryDependencies ++= Seq(
   "org.json4s" %% "json4s-core" % "3.2.11",
   "org.json4s" %% "json4s-ext" % "3.2.11",
   "ch.qos.logback" % "logback-classic" % "1.1.2",
-  "com.softwaremill.macwire" %% "macros" % "0.8.0",
-  "com.softwaremill.macwire" %% "runtime" % "0.8.0",
   "org.slf4j" % "slf4j-api" % "1.7.7",
   "org.specs2" %% "specs2" % "2.4.11" % "test",
   "io.netty" % "netty-all" % "5.0.0.Alpha1"

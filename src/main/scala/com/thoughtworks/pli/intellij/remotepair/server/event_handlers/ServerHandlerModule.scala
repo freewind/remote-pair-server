@@ -1,38 +1,37 @@
 package com.thoughtworks.pli.intellij.remotepair.server.event_handlers
 
-import com.softwaremill.macwire.Macwire
 import com.thoughtworks.pli.intellij.remotepair.protocol.ParseEvent
 import com.thoughtworks.pli.intellij.remotepair.server.{Clients, Projects}
 import com.thoughtworks.pli.intellij.remotepair.utils.IsSubPath
 
-trait ServerHandlerModule extends Macwire {
+trait ServerHandlerModule {
 
-  lazy val clients = wire[Clients]
-  lazy val projects = wire[Projects]
-  lazy val parseEvent = wire[ParseEvent]
-  lazy val sendClientInfo = wire[SendClientInfo]
-  lazy val broadcastServerStatusResponse = wire[BroadcastServerStatusResponse]
-  lazy val handleCreateProjectRequest = wire[HandleCreateProjectRequest]
-  lazy val handleJoinProjectRequest = wire[HandleJoinProjectRequest]
-  lazy val handleWorkingModeRequest = wire[HandleWorkingModeRequest]
-  lazy val handleChangeMasterEvent = wire[HandleChangeMasterEvent]
-  lazy val handleOpenTabEvent = wire[HandleOpenTabEvent]
-  lazy val broadcastToSameProjectMembersThen = wire[BroadcastToSameProjectMembersThen]
-  lazy val broadcastToOtherMembers = wire[BroadcastToOtherMembers]
-  lazy val handleResetTabEvent = wire[HandleResetTabEvent]
-  lazy val sendToMaster = wire[SendToMaster]
-  lazy val handleChangeContentEvent = wire[HandleChangeContentEvent]
-  lazy val handleWatchFilesRequest = wire[HandleWatchFilesRequest]
-  lazy val sendToClientWithId = wire[SendToClientWithId]
-  lazy val handleGetWatchingFilesFromPair = wire[HandleGetWatchingFilesFromPair]
-  lazy val broadcastToAllMembers = wire[BroadcastToAllMembers]
-  lazy val handleCreateDocument = wire[HandleCreateDocument]
-  lazy val handleCreateServerDocumentRequest = wire[HandleCreateServerDocumentRequest]
-  lazy val handleSyncFilesForAll = wire[HandleSyncFilesForAll]
-  lazy val handleDeleteFileEvent = wire[HandleDeleteFileEvent]
-  lazy val isSubPath = wire[IsSubPath]
-  lazy val handleDeleteDirEvent = wire[HandleDeleteDirEvent]
-  lazy val handleEventInProject = wire[HandleEventInProject]
-  lazy val serverHandlerFactory = wire[ServerHandlerFactory]
+  lazy val clients = new Clients
+  lazy val projects = new Projects
+  lazy val parseEvent = new ParseEvent
+  lazy val sendClientInfo = new SendClientInfo(projects)
+  lazy val broadcastServerStatusResponse = new BroadcastServerStatusResponse(clients, projects, sendClientInfo)
+  lazy val handleCreateProjectRequest = new HandleCreateProjectRequest(projects, broadcastServerStatusResponse)
+  lazy val handleJoinProjectRequest = new HandleJoinProjectRequest(projects, broadcastServerStatusResponse)
+  lazy val handleWorkingModeRequest = new HandleWorkingModeRequest(broadcastServerStatusResponse)
+  lazy val handleChangeMasterEvent = new HandleChangeMasterEvent(projects, broadcastServerStatusResponse)
+  lazy val handleOpenTabEvent = new HandleOpenTabEvent(sendToMaster, broadcastToSameProjectMembersThen)
+  lazy val broadcastToSameProjectMembersThen = new BroadcastToSameProjectMembersThen(projects)
+  lazy val broadcastToOtherMembers = new BroadcastToOtherMembers(broadcastToSameProjectMembersThen)
+  lazy val handleResetTabEvent = new HandleResetTabEvent(projects, broadcastToSameProjectMembersThen)
+  lazy val sendToMaster = new SendToMaster(projects)
+  lazy val handleChangeContentEvent = new HandleChangeContentEvent(projects)
+  lazy val handleWatchFilesRequest = new HandleWatchFilesRequest(projects, broadcastServerStatusResponse)
+  lazy val sendToClientWithId = new SendToClientWithId(clients)
+  lazy val handleGetWatchingFilesFromPair = new HandleGetWatchingFilesFromPair(clients)
+  lazy val broadcastToAllMembers = new BroadcastToAllMembers(projects)
+  lazy val handleCreateDocument = new HandleCreateDocument(broadcastToAllMembers)
+  lazy val handleCreateServerDocumentRequest = new HandleCreateServerDocumentRequest(projects, sendToMaster)
+  lazy val handleSyncFilesForAll = new HandleSyncFilesForAll(projects)
+  lazy val handleDeleteFileEvent = new HandleDeleteFileEvent(projects, broadcastToOtherMembers)
+  lazy val isSubPath = new IsSubPath
+  lazy val handleDeleteDirEvent = new HandleDeleteDirEvent(projects, isSubPath)
+  lazy val handleEventInProject = new HandleEventInProject(handleCreateProjectRequest, handleJoinProjectRequest, handleWorkingModeRequest, handleChangeMasterEvent, handleOpenTabEvent, broadcastToSameProjectMembersThen, broadcastToOtherMembers, handleResetTabEvent, sendToMaster, handleChangeContentEvent, handleWatchFilesRequest, sendToClientWithId, handleGetWatchingFilesFromPair, handleCreateDocument, handleCreateServerDocumentRequest, handleSyncFilesForAll, handleDeleteFileEvent, handleDeleteDirEvent)
+  lazy val serverHandlerFactory = new ServerHandlerFactory(clients, projects, parseEvent, isSubPath, handleEventInProject, broadcastServerStatusResponse, broadcastToSameProjectMembersThen, sendToMaster, handleCreateProjectRequest, handleJoinProjectRequest, broadcastToOtherMembers)
 
 }
