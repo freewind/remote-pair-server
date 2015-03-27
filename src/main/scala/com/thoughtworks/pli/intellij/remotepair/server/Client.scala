@@ -14,15 +14,9 @@ case class Client(context: ChannelHandlerContext) {
 
   @volatile var name: Option[String] = None
 
-  val projectSpecifiedLocks = new ProjectSpecifiedLocks
-
   def writeEvent(event: PairEvent) = {
     ServerLogger.info("Server -> " + name + ": " + event.toMessage)
     context.writeAndFlush(event.toMessage)
   }
 
-}
-
-class ProjectSpecifiedLocks {
-  val activeTabLocks = new EventLocks[String]
 }

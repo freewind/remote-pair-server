@@ -12,7 +12,6 @@ class ParseEvent {
       case "CloseTabEvent" => Serialization.read[CloseTabEvent](json)
       case "ChangeContentEvent" => Serialization.read[ChangeContentEvent](json)
       case "ChangeMasterRequest" => Serialization.read[ChangeMasterRequest](json)
-      case "ResetTabEvent" => Serialization.read[ResetTabEvent](json)
       case "CreateFileEvent" => Serialization.read[CreateFileEvent](json)
       case "DeleteFileEvent" => Serialization.read[DeleteFileEvent](json)
       case "CreateDirEvent" => Serialization.read[CreateDirEvent](json)
@@ -33,7 +32,6 @@ class ParseEvent {
       case "ServerStatusResponse" => Serialization.read[ServerStatusResponse](json)
       case "ClientInfoResponse" => Serialization.read[ClientInfoResponse](json)
       case "ServerErrorResponse" => Serialization.read[ServerErrorResponse](json)
-      case "ResetTabRequest" => ResetTabRequest
       case "SyncFileEvent" => Serialization.read[SyncFileEvent](json)
       case "MasterWatchingFiles" => Serialization.read[MasterWatchingFiles](json)
       case "CreateDocument" => Serialization.read[CreateDocument](json)

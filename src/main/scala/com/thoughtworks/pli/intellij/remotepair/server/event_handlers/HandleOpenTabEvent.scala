@@ -1,15 +1,13 @@
 package com.thoughtworks.pli.intellij.remotepair.server.event_handlers
 
-import com.thoughtworks.pli.intellij.remotepair.protocol.{OpenTabEvent, ResetTabRequest}
-import com.thoughtworks.pli.intellij.remotepair.server.Client
+import com.thoughtworks.pli.intellij.remotepair.protocol.OpenTabEvent
+import com.thoughtworks.pli.intellij.remotepair.server.{Projects, Client}
 
-class HandleOpenTabEvent(sendToMaster: SendToMaster, broadcastToSameProjectMembersThen: BroadcastToSameProjectMembersThen) {
-  def apply(client: Client, event: OpenTabEvent) {
-    val locks = client.projectSpecifiedLocks.activeTabLocks
-    locks.headOption match {
-      case Some(x) if x == event.path => locks.removeHead()
-      case Some(_) => sendToMaster(client, ResetTabRequest)
-      case _ => broadcastToSameProjectMembersThen(client, event)(_.projectSpecifiedLocks.activeTabLocks.add(event.path))
+class HandleOpenTabEvent(sendToMaster: SendToMaster, broadcastToSameProjectMembers: BroadcastToSameProjectMembers, projects: Projects) {
+
+  def apply(client: Client, event: OpenTabEvent): Unit = {
+    if (projects.findForClient(client).exists(_.isSharingCaret)) {
+      broadcastToSameProjectMembers(client, event)
     }
   }
 

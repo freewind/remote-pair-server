@@ -10,7 +10,6 @@ class HandleEventInProject(handleCreateProjectRequest: HandleCreateProjectReques
                            handleOpenTabEvent: HandleOpenTabEvent,
                            broadcastToSameProjectMembersThen: BroadcastToSameProjectMembersThen,
                            broadcastToOtherMembers: BroadcastToOtherMembers,
-                           handleResetTabEvent: HandleResetTabEvent,
                            sendToMaster: SendToMaster,
                            handleChangeContentEvent: HandleChangeContentEvent,
                            handleWatchFilesRequest: HandleWatchFilesRequest,
@@ -30,8 +29,6 @@ class HandleEventInProject(handleCreateProjectRequest: HandleCreateProjectReques
     case event: ChangeMasterRequest => handleChangeMasterEvent(client, event)
     case event: OpenTabEvent => handleOpenTabEvent(client, event)
     case event: CloseTabEvent => broadcastToOtherMembers(client, event)
-    case event: ResetTabEvent => handleResetTabEvent(client, event)
-    case ResetTabRequest => sendToMaster(client, ResetTabRequest)
     case event: ChangeContentEvent => handleChangeContentEvent(client, event)
     case event: MoveCaretEvent => broadcastToOtherMembers(client, event)
     case event: WatchFilesRequest => handleWatchFilesRequest(client, event)

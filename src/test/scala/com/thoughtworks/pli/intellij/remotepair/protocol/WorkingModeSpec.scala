@@ -25,11 +25,10 @@ class WorkingModeSpec extends MySpecification {
 
         events.foreach { event =>
           there was one(context2).writeAndFlush(event.toMessage)
-          there was no(context1).writeAndFlush(event.toMessage)
         }
       }
       "include tab events" in new ProtocolMocking {
-        broadcast(openTabEvent1, closeTabEvent, resetTabEvent)
+        broadcast(openTabEvent1, closeTabEvent)
       }
       "include caret events" in new ProtocolMocking {
         broadcast(moveCaretEvent)
@@ -54,11 +53,10 @@ class WorkingModeSpec extends MySpecification {
     }
     "not broadcast tab events to other members" in new ProtocolMocking {
       client(context1, context2).createOrJoinProject("test").parallel()
-      client(context1).send(openTabEvent1, closeTabEvent, resetTabEvent)
+      client(context1).send(openTabEvent1, closeTabEvent)
 
       there was no(context2).writeAndFlush(openTabEvent1.toMessage)
       there was no(context2).writeAndFlush(closeTabEvent.toMessage)
-      there was no(context2).writeAndFlush(resetTabEvent.toMessage)
     }
   }
 

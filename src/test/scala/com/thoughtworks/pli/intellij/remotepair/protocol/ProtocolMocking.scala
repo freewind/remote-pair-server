@@ -98,8 +98,6 @@ trait MockEvents {
   val openTabEvent2 = OpenTabEvent("/bbb")
   val openTabEvent3 = OpenTabEvent("/ccc")
   val closeTabEvent = CloseTabEvent("/aaa")
-  val resetTabEvent = ResetTabEvent("/ccc")
-  val resetTabRequest = ResetTabRequest
 
   val createFileEvent = CreateFileEvent("/aaa", Content("my-content", "UTF-8"))
   val deleteFileEvent = DeleteFileEvent("/aaa")
