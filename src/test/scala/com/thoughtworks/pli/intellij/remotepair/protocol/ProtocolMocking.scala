@@ -2,7 +2,6 @@ package com.thoughtworks.pli.intellij.remotepair.protocol
 
 import com.thoughtworks.pli.intellij.remotepair.MyMocking
 import com.thoughtworks.pli.intellij.remotepair.server.event_handlers.ServerHandlerModule
-import com.thoughtworks.pli.intellij.remotepair.server.{Clients, Projects}
 import com.thoughtworks.pli.intellij.remotepair.utils.Insert
 import io.netty.channel.ChannelHandlerContext
 
@@ -27,7 +26,7 @@ trait ProtocolMocking extends MyMocking with MockEvents with ServerHandlerModule
     context5 -> "Alex"
   ).apply(ctx)
 
-  val serverHandler = serverHandlerFactory.create()
+  val serverHandler = serverHandlerFactory()
 
   def client(contexts: ChannelHandlerContext*) = new {
 

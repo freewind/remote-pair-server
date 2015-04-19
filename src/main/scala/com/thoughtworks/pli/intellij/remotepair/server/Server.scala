@@ -45,7 +45,7 @@ case class Server(host: Option[String], port: Int) extends ServerHandlerModule {
         new LineBasedFrameDecoder(Int.MaxValue),
         new StringDecoder(Charset.forName("UTF-8")),
         new StringEncoder(Charset.forName("UTF-8")),
-        serverHandlerFactory.create())
+        serverHandlerFactory())
     }
   }
 
