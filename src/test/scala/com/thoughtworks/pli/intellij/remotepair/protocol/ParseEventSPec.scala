@@ -3,16 +3,16 @@ package com.thoughtworks.pli.intellij.remotepair.protocol
 import com.thoughtworks.pli.intellij.remotepair.MySpecification
 import com.thoughtworks.pli.intellij.remotepair.utils.{Delete, Insert}
 
-class EventParserSpec extends MySpecification {
+class ParseEventSpec extends MySpecification {
 
-  val parser = new ParseEvent {}
+  val parseEvent = new ParseEvent {}
 
   def parse(line: String, expectedEvent: PairEvent) = {
-    val event = parser.apply(line)
+    val event = parseEvent(line)
     event === expectedEvent
   }
 
-  "EventParser" should {
+  "ParseEvent" should {
     "parse InvalidOperationState" in {
       parse( """InvalidOperationState {"message":"you should join a project first"}""", InvalidOperationState("you should join a project first"))
     }
@@ -82,6 +82,9 @@ class EventParserSpec extends MySpecification {
     }
     "parse WatchingFiles" in {
       parse( """WatchingFiles {"fromClientId":"from-id","toClientId":"to-id","fileSummaries":[{"path":"/aaa","summary":"md5"}]}""", WatchingFiles("from-id", "to-id", Seq(FileSummary("/aaa", "md5"))))
+    }
+    "parse CreatedProjectEvent" in {
+      parse( """CreatedProjectEvent {"projectName":"project-name","clientName":"client-name"}""", CreatedProjectEvent("project-name", "client-name"))
     }
   }
 }

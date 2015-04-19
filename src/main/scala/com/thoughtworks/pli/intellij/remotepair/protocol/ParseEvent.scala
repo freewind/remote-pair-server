@@ -40,6 +40,7 @@ class ParseEvent {
       case "ChangeContentConfirmation" => Serialization.read[ChangeContentConfirmation](json)
       case "WatchingFiles" => Serialization.read[WatchingFiles](json)
       case "GetWatchingFilesFromPair" => Serialization.read[GetWatchingFilesFromPair](json)
+      case "CreatedProjectEvent" => Serialization.read[CreatedProjectEvent](json)
       case _ =>
         ServerLogger.info("!!!!!!!!!!!!!!!!!!!!! unknown line from server: " + line)
         ???
