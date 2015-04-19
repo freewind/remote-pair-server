@@ -1,6 +1,6 @@
 package com.thoughtworks.pli.intellij.remotepair.server.event_handlers
 
-import com.thoughtworks.pli.intellij.remotepair.protocol.{JoinedToProjectEvent, ProjectOperationFailed}
+import com.thoughtworks.pli.intellij.remotepair.protocol.{CreatedProjectEvent, ProjectOperationFailed}
 import com.thoughtworks.pli.intellij.remotepair.server.{Client, Projects}
 
 class HandleCreateProjectRequest(projects: Projects, broadcastServerStatusResponse: BroadcastServerStatusResponse) {
@@ -13,7 +13,7 @@ class HandleCreateProjectRequest(projects: Projects, broadcastServerStatusRespon
         case _ =>
       }
       projects.create(client, projectName, clientName)
-      client.writeEvent(JoinedToProjectEvent(projectName, clientName))
+      client.writeEvent(CreatedProjectEvent(projectName, clientName))
       broadcastServerStatusResponse(Some(client))
     }
   }

@@ -6,6 +6,10 @@ case class ProjectOperationFailed(message: String) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 
+case class CreatedProjectEvent(projectName: String, clientName: String) extends PairEvent {
+  override def toJson = Serialization.write(this)
+}
+
 case class JoinedToProjectEvent(projectName: String, clientName: String) extends PairEvent {
   override def toJson = Serialization.write(this)
 }

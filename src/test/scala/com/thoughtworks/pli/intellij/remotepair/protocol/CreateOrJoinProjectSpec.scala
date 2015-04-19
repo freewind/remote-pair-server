@@ -3,16 +3,16 @@ package com.thoughtworks.pli.intellij.remotepair.protocol
 import com.thoughtworks.pli.intellij.remotepair.MySpecification
 import com.thoughtworks.pli.intellij.remotepair.server.{Project, Projects}
 
-class JoinProjectSpec extends MySpecification {
+class CreateOrJoinProjectSpec extends MySpecification {
 
   "When server receives CreateProjectRequest, it" should {
     "create a new project and join the client with the provided client name" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test", "Freewind"))
       projects must haveProjectMembers("test", Seq("Freewind"))
     }
-    "response JoinedToProjectEvent if created successfully" in new ProtocolMocking {
+    "response CreatedProjectEvent if created successfully" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test", "Freewind"))
-      there was one(context1).writeAndFlush(JoinedToProjectEvent("test", "Freewind").toMessage)
+      there was one(context1).writeAndFlush(CreatedProjectEvent("test", "Freewind").toMessage)
     }
     "move the client from old project to new if it has already in some project" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test1", "Freewind"), CreateProjectRequest("test2", "Freewind"))
