@@ -24,6 +24,7 @@ class DocumentSpec extends MySpecification {
 
       client(context2).send(CreateDocument("/aaa", Content("abc123", "UTF-8")))
       there was one(context2).writeAndFlush(CreateDocumentConfirmation("/aaa", 0, Content("abc", "UTF-8")).toMessage)
+      // FIXME !!!! contain is not treated as a matcher here
       there was no(context2).writeAndFlush(contain("abc123"))
     }
     "not broadcast to others if the event is not accepted" in new ProtocolMocking {
@@ -154,6 +155,26 @@ class DocumentSpec extends MySpecification {
       client(context1, context2).disconnect()
 
       project("test1").documents.allPaths === Nil
+    }
+  }
+
+  "When server receives GetDocumentSnapshot from a client, it" should {
+    "response DocumentSnapshotEvent to the client" in new ProtocolMocking {
+      client(context1).createOrJoinProject("test1")
+      client(context1).send(CreateDocument("/aaa", Content("abc", "UTF-8")))
+      client(context1).send(ChangeContentEvent("eventId1", "/aaa", 0, Seq(Insert(3, "123"))))
+      client(context1).send(ChangeContentEvent("eventId2", "/aaa", 1, Seq(Insert(3, "xyz"))))
+      client(context1).send(GetDocumentSnapshot(clientId(context1), "/aaa"))
+      there was one(context1).writeAndFlush(DocumentSnapshotEvent("/aaa", 2, Content("abcxyz123", "UTF-8")).toMessage)
+    }
+    "only response DocumentSnapshotEvent to requesting client" in new ProtocolMocking {
+      client(context1, context2).createOrJoinProject("test1")
+      client(context1).send(CreateDocument("/aaa", Content("abc", "UTF-8")))
+      resetMocks(context1)
+      client(context2).send(GetDocumentSnapshot(clientId(context2), "/aaa"))
+      // FIXME find a better way
+      // there was one(context2).writeAndFlush(contain("DocumentSnapshotEvent"))
+      there was no(context1).writeAndFlush(any)
     }
   }
 

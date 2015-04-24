@@ -1,6 +1,6 @@
 package com.thoughtworks.pli.intellij.remotepair.server
 
-import com.thoughtworks.pli.intellij.remotepair.protocol.{CreateDocumentConfirmation, CreateDocument, Content}
+import com.thoughtworks.pli.intellij.remotepair.protocol.{DocumentSnapshotEvent, CreateDocumentConfirmation, CreateDocument, Content}
 import com.thoughtworks.pli.intellij.remotepair.utils.{ContentDiff, StringDiff}
 
 class Documents(project: Project) {
@@ -60,6 +60,7 @@ class Documents(project: Project) {
 case class DocumentVersion(version: Int, diffs: Seq[ContentDiff])
 
 case class ServerVersionedDocument(path: String, initContent: Content, initVersion: Int, versions: Seq[DocumentVersion] = Nil) {
+
   def createBaseOn(version: Int): ServerVersionedDocument = {
     val (below, up) = versions.partition(_.version <= version)
     val newInitText = StringDiff.applyDiffs(initContent.text, below.flatMap(_.diffs))
@@ -85,9 +86,11 @@ case class ServerVersionedDocument(path: String, initContent: Content, initVersi
     }
   }
 
-  def latestContent = StringDiff.applyDiffs(initContent.text, versions.flatMap(_.diffs))
+  def latestContent: String = StringDiff.applyDiffs(initContent.text, versions.flatMap(_.diffs))
 
   def createConfirmation() = CreateDocumentConfirmation(this.path, this.latestVersion, this.initContent)
+
+  def createSnapshot(): DocumentSnapshotEvent = DocumentSnapshotEvent(this.path, this.latestVersion, initContent.copy(text = this.latestContent))
 
 }
 

@@ -86,5 +86,11 @@ class ParseEventSpec extends MySpecification {
     "parse CreatedProjectEvent" in {
       parse( """CreatedProjectEvent {"projectName":"project-name","clientName":"client-name"}""", CreatedProjectEvent("project-name", "client-name"))
     }
+    "parse DocumentSnapshotEvent" in {
+      parse( """DocumentSnapshotEvent {"path":"/abc","version":3,"content":{"text":"hello","charset":"UTF-8"}}""", DocumentSnapshotEvent("/abc", 3, Content("hello", "UTF-8")))
+    }
+    "parse GetDocumentSnapshot" in {
+      parse( """GetDocumentSnapshot {"fromClientId":"from-client-id","path":"/abc"}""", GetDocumentSnapshot("from-client-id", "/abc"))
+    }
   }
 }
