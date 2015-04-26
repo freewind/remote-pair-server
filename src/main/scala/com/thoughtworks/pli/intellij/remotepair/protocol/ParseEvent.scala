@@ -43,6 +43,8 @@ class ParseEvent {
       case "CreatedProjectEvent" => Serialization.read[CreatedProjectEvent](json)
       case "GetDocumentSnapshot" => Serialization.read[GetDocumentSnapshot](json)
       case "DocumentSnapshotEvent" => Serialization.read[DocumentSnapshotEvent](json)
+      case "DiagnosticInfo" => Serialization.read[DiagnosticInfo](json)
+      case "DiagnosticRequest" => DiagnosticRequest
       case _ =>
         ServerLogger.info("!!!!!!!!!!!!!!!!!!!!! unknown line from server: " + line)
         ???

@@ -41,3 +41,10 @@ initialize ~= { _ =>
   println(s"Detected Java version: $specVersion")
   require(specVersion == "1.6", "Jdk 1.6.x is required")
 }
+
+lazy val root = (project in file("."))
+  .enablePlugins(BuildInfoPlugin)
+  .settings(
+    buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion),
+    buildInfoPackage := "com.thoughtworks.pli.intellij.remotepair"
+  )

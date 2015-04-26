@@ -17,6 +17,7 @@ class ServerHandler(clients: Clients, projects: Projects, parseEvent: ParseEvent
                     sendToMaster: SendToMaster,
                     handleCreateProjectRequest: HandleCreateProjectRequest,
                     handleJoinProjectRequest: HandleJoinProjectRequest,
+                    handleDiagnosticRequest: HandleDiagnosticRequest,
                     broadcastToOtherMembers: BroadcastToOtherMembers) extends ChannelHandlerAdapter {
 
   override def channelActive(ctx: ChannelHandlerContext) {
@@ -63,6 +64,7 @@ class ServerHandler(clients: Clients, projects: Projects, parseEvent: ParseEvent
     event match {
       case CreateProjectRequest(projectName, clientName) => handleCreateProjectRequest(client, projectName, clientName)
       case JoinProjectRequest(projectName, clientName) => handleJoinProjectRequest(client, projectName, clientName)
+      case DiagnosticRequest => handleDiagnosticRequest(client)
       case _ => client.writeEvent(InvalidOperationState("You need to join a project first"))
     }
   }

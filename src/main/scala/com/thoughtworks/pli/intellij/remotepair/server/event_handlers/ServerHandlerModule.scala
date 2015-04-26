@@ -32,6 +32,7 @@ trait ServerHandlerModule {
   lazy val handleDeleteDirEvent = new HandleDeleteDirEvent(projects, isSubPath)
   lazy val handleGetDocumentSnapshot = new HandleGetDocumentSnapshot(clients)
   lazy val handleEventInProject = new HandleEventInProject(handleCreateProjectRequest, handleJoinProjectRequest, handleWorkingModeRequest, handleChangeMasterEvent, handleOpenTabEvent, broadcastToSameProjectMembersThen, broadcastToOtherMembers, sendToMaster, handleChangeContentEvent, handleWatchFilesRequest, sendToClientWithId, handleGetWatchingFilesFromPair, handleCreateDocument, handleCreateServerDocumentRequest, handleSyncFilesForAll, handleDeleteFileEvent, handleDeleteDirEvent, handleGetDocumentSnapshot)
-  lazy val serverHandlerFactory: ServerHandler.Factory = () => new ServerHandler(clients, projects, parseEvent, isSubPath, handleEventInProject, broadcastServerStatusResponse, broadcastToSameProjectMembersThen, sendToMaster, handleCreateProjectRequest, handleJoinProjectRequest, broadcastToOtherMembers)
+  lazy val handleDiagnosticRequest = new HandleDiagnosticRequest()
+  lazy val serverHandlerFactory: ServerHandler.Factory = () => new ServerHandler(clients, projects, parseEvent, isSubPath, handleEventInProject, broadcastServerStatusResponse, broadcastToSameProjectMembersThen, sendToMaster, handleCreateProjectRequest, handleJoinProjectRequest, handleDiagnosticRequest, broadcastToOtherMembers)
 
 }

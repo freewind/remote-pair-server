@@ -92,5 +92,11 @@ class ParseEventSpec extends MySpecification {
     "parse GetDocumentSnapshot" in {
       parse( """GetDocumentSnapshot {"fromClientId":"from-client-id","path":"/abc"}""", GetDocumentSnapshot("from-client-id", "/abc"))
     }
+    "parse DiagnosticInfo" in {
+      parse( """DiagnosticInfo {"version":"1.2.3"}""", DiagnosticInfo("1.2.3"))
+    }
+    "parse DiagnosticRequest" in {
+      parse( """DiagnosticRequest {}""", DiagnosticRequest)
+    }
   }
 }
