@@ -2,7 +2,7 @@ organization := "com.thoughtworks"
 
 name := "remote-pair-server"
 
-version := "0.2.2"
+version := "0.2.3"
 
 scalaVersion := "2.11.1"
 
