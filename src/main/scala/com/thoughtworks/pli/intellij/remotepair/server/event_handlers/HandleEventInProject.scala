@@ -20,6 +20,8 @@ class HandleEventInProject(handleCreateProjectRequest: HandleCreateProjectReques
                            handleSyncFilesForAll: HandleSyncFilesForAll,
                            handleDeleteFileEvent: HandleDeleteFileEvent,
                            handleDeleteDirEvent: HandleDeleteDirEvent,
+                           handleMoveDirEvent: HandleMoveDirEvent,
+                           handleMoveFileEvent: HandleMoveFileEvent,
                            handleGetDocumentSnapshot: HandleGetDocumentSnapshot) {
 
   def apply(project: Project, event: PairEvent, client: Client) = event match {
@@ -43,6 +45,8 @@ class HandleEventInProject(handleCreateProjectRequest: HandleCreateProjectReques
     case SyncFilesForAll => handleSyncFilesForAll(client)
     case event: DeleteFileEvent => handleDeleteFileEvent(client, event)
     case event: DeleteDirEvent => handleDeleteDirEvent(client, event)
+    case event: MoveDirEvent => handleMoveDirEvent(client, event)
+    case event: MoveFileEvent => handleMoveFileEvent(client, event)
     case event: GetDocumentSnapshot => handleGetDocumentSnapshot(project, event)
     case _ => broadcastToOtherMembers(client, event)
   }

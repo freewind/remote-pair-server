@@ -29,9 +29,11 @@ trait ServerHandlerModule {
   lazy val handleSyncFilesForAll = new HandleSyncFilesForAll(projects)
   lazy val handleDeleteFileEvent = new HandleDeleteFileEvent(projects, broadcastToOtherMembers)
   lazy val isSubPath = new IsSubPath
-  lazy val handleDeleteDirEvent = new HandleDeleteDirEvent(projects, isSubPath)
+  lazy val handleDeleteDirEvent = new HandleDeleteDirEvent(projects, isSubPath, broadcastToOtherMembers)
   lazy val handleGetDocumentSnapshot = new HandleGetDocumentSnapshot(clients)
-  lazy val handleEventInProject = new HandleEventInProject(handleCreateProjectRequest, handleJoinProjectRequest, handleWorkingModeRequest, handleChangeMasterEvent, handleOpenTabEvent, broadcastToSameProjectMembersThen, broadcastToOtherMembers, sendToMaster, handleChangeContentEvent, handleWatchFilesRequest, sendToClientWithId, handleGetWatchingFilesFromPair, handleCreateDocument, handleCreateServerDocumentRequest, handleSyncFilesForAll, handleDeleteFileEvent, handleDeleteDirEvent, handleGetDocumentSnapshot)
+  lazy val handleMoveDirEvent = new HandleMoveDirEvent(projects, isSubPath, broadcastToOtherMembers)
+  lazy val handleMoveFileEvent = new HandleMoveFileEvent(projects, broadcastToOtherMembers)
+  lazy val handleEventInProject = new HandleEventInProject(handleCreateProjectRequest, handleJoinProjectRequest, handleWorkingModeRequest, handleChangeMasterEvent, handleOpenTabEvent, broadcastToSameProjectMembersThen, broadcastToOtherMembers, sendToMaster, handleChangeContentEvent, handleWatchFilesRequest, sendToClientWithId, handleGetWatchingFilesFromPair, handleCreateDocument, handleCreateServerDocumentRequest, handleSyncFilesForAll, handleDeleteFileEvent, handleDeleteDirEvent, handleMoveDirEvent, handleMoveFileEvent, handleGetDocumentSnapshot)
   lazy val handleDiagnosticRequest = new HandleDiagnosticRequest()
   lazy val serverHandlerFactory: ServerHandler.Factory = () => new ServerHandler(clients, projects, parseEvent, isSubPath, handleEventInProject, broadcastServerStatusResponse, broadcastToSameProjectMembersThen, sendToMaster, handleCreateProjectRequest, handleJoinProjectRequest, handleDiagnosticRequest, broadcastToOtherMembers)
 

@@ -5,7 +5,7 @@ import com.thoughtworks.pli.intellij.remotepair.MySpecification
 class FileSpec extends MySpecification {
 
   "When server receives file related events, it" should {
-    def broadcast(event: PairEvent) = new ProtocolMocking {
+    def shouldBroadcast(event: PairEvent) = new ProtocolMocking {
       client(context1, context2).createOrJoinProject("test")
 
       client(context1).send(event, event)
@@ -13,23 +13,32 @@ class FileSpec extends MySpecification {
       there was two(context2).writeAndFlush(event.toMessage)
     }
     "broadcast to other contexts for CreateFileEvent" in new ProtocolMocking {
-      broadcast(createFileEvent)
+      shouldBroadcast(CreateFileEvent("/aaa", Content("my-content", "UTF-8")))
     }
     "broadcast to other contexts for DeleteFileEvent" in new ProtocolMocking {
-      broadcast(deleteFileEvent)
+      shouldBroadcast(DeleteFileEvent("/aaa"))
     }
     "broadcast to other contexts for CreateDirEvent" in new ProtocolMocking {
-      broadcast(createDirEvent)
+      shouldBroadcast(CreateDirEvent("/ddd"))
     }
     "broadcast to other contexts for DeleteDirEvent" in new ProtocolMocking {
-      broadcast(deleteDirEvent)
+      shouldBroadcast(DeleteDirEvent("/ddd"))
     }
-    "broadcast to other contexts for RenameEvent" in new ProtocolMocking {
-      broadcast(renameEvent)
+    "broadcast to other contexts for RenameDirEvent" in new ProtocolMocking {
+      shouldBroadcast(RenameDirEvent("/aaa/bbb", "ccc"))
+    }
+    "broadcast to other contexts for RenameFileEvent" in new ProtocolMocking {
+      shouldBroadcast(RenameFileEvent("/aaa/bbb", "ccc"))
+    }
+    "broadcast to other contexts for MoveDirEvent" in new ProtocolMocking {
+      shouldBroadcast(MoveDirEvent("/aaa/bbb", "/ccc"))
+    }
+    "broadcast to other contexts for MoveFileEvent" in new ProtocolMocking {
+      shouldBroadcast(MoveFileEvent("/aaa/bbb", "/ccc"))
     }
   }
 
-  "If server receives an DeleteFileEvent, it" should {
+  "If server receives a DeleteFileEvent, it" should {
     "delete corresponding server document if there exists" in new ProtocolMocking {
       client(context1).createOrJoinProject("test")
       client(context1).send(CreateDocument("/aaa", Content("abc123", "UTF-8")))
@@ -38,7 +47,7 @@ class FileSpec extends MySpecification {
     }
   }
 
-  "If server receives an DeleteDirEvent, it" should {
+  "If server receives a DeleteDirEvent, it" should {
     "delete all server documents under this dir if existed" in new ProtocolMocking {
       client(context1).createOrJoinProject("test")
       client(context1).send(CreateDocument("/aaa/11", Content("abc123", "UTF-8")))
@@ -48,6 +57,28 @@ class FileSpec extends MySpecification {
       project("test").documents.find("/aaa/11") ==== None
       project("test").documents.find("/aaa/22/33") ==== None
       project("test").documents.find("/bbb") must beSome
+    }
+  }
+
+  "If server receives a MoveDirEvent, it" should {
+    "delete all server documents under source dir if existed" in new ProtocolMocking {
+      client(context1).createOrJoinProject("test")
+      client(context1).send(CreateDocument("/aaa/11", Content("abc123", "UTF-8")))
+      client(context1).send(CreateDocument("/aaa/22/33", Content("abc123", "UTF-8")))
+      client(context1).send(CreateDocument("/bbb", Content("abc123", "UTF-8")))
+      client(context1).send(MoveDirEvent("/aaa", "/ccc"))
+      project("test").documents.find("/aaa/11") ==== None
+      project("test").documents.find("/aaa/22/33") ==== None
+      project("test").documents.find("/bbb") must beSome
+    }
+  }
+
+  "If server receives a MoveFileEvent, it" should {
+    "delete corresponding server document for source file if it exists" in new ProtocolMocking {
+      client(context1).createOrJoinProject("test")
+      client(context1).send(CreateDocument("/aaa", Content("abc123", "UTF-8")))
+      client(context1).send(MoveFileEvent("/aaa", "/bbb"))
+      project("test").documents.find("/aaa") ==== None
     }
   }
 
