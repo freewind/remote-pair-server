@@ -107,5 +107,8 @@ class ParseEventSpec extends MySpecification {
     "parse DiagnosticRequest" in {
       parse( """DiagnosticRequest {}""", DiagnosticRequest)
     }
+    "parse WatchFilesChangedEvent" in {
+      parse( """WatchFilesChangedEvent {"files":["/aaa","/bbb"]}""", WatchFilesChangedEvent(Seq("/aaa", "/bbb")))
+    }
   }
 }

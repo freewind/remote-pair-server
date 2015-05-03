@@ -26,6 +26,10 @@ case class WatchFilesRequest(files: Seq[String]) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 
+case class WatchFilesChangedEvent(files: Seq[String]) extends PairEvent {
+  override def toJson = Serialization.write(this)
+}
+
 case class ChangeMasterRequest(clientName: String) extends PairEvent {
   override def toJson = Serialization.write(this)
 }

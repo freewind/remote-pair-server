@@ -20,7 +20,7 @@ trait ServerHandlerModule {
   lazy val broadcastToOtherMembers = new BroadcastToOtherMembers(broadcastToSameProjectMembersThen)
   lazy val sendToMaster = new SendToMaster(projects)
   lazy val handleChangeContentEvent = new HandleChangeContentEvent(projects)
-  lazy val handleWatchFilesRequest = new HandleWatchFilesRequest(projects, broadcastServerStatusResponse)
+  lazy val handleWatchFilesRequest = new HandleWatchFilesRequest(projects, broadcastServerStatusResponse, broadcastToSameProjectMembers)
   lazy val sendToClientWithId = new SendToClientWithId(clients)
   lazy val handleGetWatchingFilesFromPair = new HandleGetWatchingFilesFromPair(clients)
   lazy val broadcastToSameProjectMembers = new BroadcastToSameProjectMembers(projects)
