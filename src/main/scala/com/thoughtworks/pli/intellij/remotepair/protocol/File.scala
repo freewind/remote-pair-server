@@ -18,6 +18,11 @@ case class DeleteFileEvent(path: String) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 
-case class RenameEvent(from: String, to: String) extends PairEvent {
+case class RenameDirEvent(path: String, newName: String) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
+
+case class RenameFileEvent(path: String, newName: String) extends PairEvent {
+  override def toJson = Serialization.write(this)
+}
+

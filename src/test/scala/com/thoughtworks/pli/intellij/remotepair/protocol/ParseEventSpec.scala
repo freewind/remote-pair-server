@@ -68,8 +68,11 @@ class ParseEventSpec extends MySpecification {
     "parse DeleteFileEvent" in {
       parse( """DeleteFileEvent {"path":"/aaa"}""", DeleteFileEvent("/aaa"))
     }
-    "parse RenameEvent" in {
-      parse( """RenameEvent {"from":"/aaa","to":"/bbb"}""", RenameEvent("/aaa", "/bbb"))
+    "parse RenameDirEvent" in {
+      parse( """RenameDirEvent {"path":"/ddd/aaa","newName":"bbb"}""", RenameDirEvent("/ddd/aaa", "bbb"))
+    }
+    "parse RenameFileEvent" in {
+      parse( """RenameFileEvent {"path":"/ddd/aaa","newName":"bbb"}""", RenameFileEvent("/ddd/aaa", "bbb"))
     }
     "parse SyncFilesForAll" in {
       parse( """SyncFilesForAll {}""", SyncFilesForAll)

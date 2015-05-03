@@ -102,7 +102,7 @@ trait MockEvents {
   val deleteFileEvent = DeleteFileEvent("/aaa")
   val createDirEvent = CreateFileEvent("/ddd", Content("my-content", "UTF-8"))
   val deleteDirEvent = DeleteFileEvent("/ddd")
-  val renameEvent = RenameEvent("/ccc", "/eee")
+  val renameEvent = RenameDirEvent("/ccc", "/eee")
   val changeMasterEvent = ChangeMasterRequest("Lily")
 
   val moveCaretEvent = MoveCaretEvent("/aaa", 10)
