@@ -74,6 +74,12 @@ class ParseEventSpec extends MySpecification {
     "parse RenameFileEvent" in {
       parse( """RenameFileEvent {"path":"/ddd/aaa","newName":"bbb"}""", RenameFileEvent("/ddd/aaa", "bbb"))
     }
+    "parse MoveDirEvent" in {
+      parse( """MoveDirEvent {"path":"/ddd/aaa","newParentPath":"/ccc"}""", MoveDirEvent("/ddd/aaa", "/ccc"))
+    }
+    "parse MoveFileEvent" in {
+      parse( """MoveFileEvent {"path":"/ddd/aaa","newParentPath":"/ccc"}""", MoveFileEvent("/ddd/aaa", "/ccc"))
+    }
     "parse SyncFilesForAll" in {
       parse( """SyncFilesForAll {}""", SyncFilesForAll)
     }

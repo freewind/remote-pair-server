@@ -26,3 +26,10 @@ case class RenameFileEvent(path: String, newName: String) extends PairEvent {
   override def toJson = Serialization.write(this)
 }
 
+case class MoveDirEvent(path: String, newParentPath: String) extends PairEvent {
+  override def toJson = Serialization.write(this)
+}
+
+case class MoveFileEvent(path: String, newParentPath: String) extends PairEvent {
+  override def toJson = Serialization.write(this)
+}

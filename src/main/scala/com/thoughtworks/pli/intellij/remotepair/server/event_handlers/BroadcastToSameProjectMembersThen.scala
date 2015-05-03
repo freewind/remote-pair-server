@@ -14,7 +14,8 @@ class BroadcastToSameProjectMembersThen(projects: Projects) {
       pairEvent match {
         case _: ChangeContentEvent |
              _: CreateFileEvent | _: DeleteFileEvent | _: CreateDirEvent | _: DeleteDirEvent |
-             _: RenameDirEvent | _: RenameFileEvent => doit()
+             _: RenameDirEvent | _: RenameFileEvent |
+             _: MoveDirEvent | _: MoveFileEvent => doit()
         case _ if areSharingCaret(client) => doit()
         case _ =>
       }

@@ -18,6 +18,8 @@ class ParseEvent {
       case "DeleteDirEvent" => Serialization.read[DeleteDirEvent](json)
       case "RenameDirEvent" => Serialization.read[RenameDirEvent](json)
       case "RenameFileEvent" => Serialization.read[RenameFileEvent](json)
+      case "MoveDirEvent" => Serialization.read[MoveDirEvent](json)
+      case "MoveFileEvent" => Serialization.read[MoveFileEvent](json)
       case "MoveCaretEvent" => Serialization.read[MoveCaretEvent](json)
       case "SelectContentEvent" => Serialization.read[SelectContentEvent](json)
       case "WatchFilesRequest" => Serialization.read[WatchFilesRequest](json)
