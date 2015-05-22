@@ -3,12 +3,22 @@ remote-pair-server
 
 The standalone server for the remote pair plugin
 
+Required Java Version
+=====================
+
+When you run `sbt` command, it will check if the java version is `jdk 1.6.x`, if not, it will throw an exception.
+
+We have this requirement is because the generated jar may be used in IDEA plugin, `1.6.x` is safer.
+
+But if you just want to employ it as a standalone server, or your IDEA is not working on `1.6.x`, you can use
+`-DversionCheck=false` to disable the checking.
+
 Install
 ===========
 
 1. `git clone https://github.com/freewind/remote-pair-server.git`
 2. `cd remote-pair-server`
-3. `./sbt assembly` will generate a jar, if throw exception, see "Issues"
+3. `./sbt assembly` or `./sbt -DversionCheck=false assembly` will generate a jar, if throw exception, see "Issues"
 4. `java -jar the_server.jar`
 
 
