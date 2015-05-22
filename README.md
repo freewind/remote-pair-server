@@ -18,8 +18,9 @@ Install
 
 1. `git clone https://github.com/freewind/remote-pair-server.git`
 2. `cd remote-pair-server`
-3. `./sbt assembly` or `./sbt -DversionCheck=false assembly` will generate a jar, if throw exception, see "Issues"
-4. `java -jar the_server.jar`
+3. `./sbt publishLocal` or `./sbt -DversionCheck=false publishLocal` to publish it to local cache
+4. `./sbt assembly` or `./sbt -DversionCheck=false assembly` will generate a jar, if throw exception, see "Issues"
+5. `java -jar the_server.jar`
 
 
 Issues
