@@ -2,7 +2,7 @@ organization := "com.thoughtworks"
 
 name := "remote-pair-server"
 
-version := "0.2.4"
+version := "0.3.0"
 
 scalaVersion := "2.11.1"
 
@@ -25,6 +25,7 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
+  "com.typesafe.akka" %% "akka-actor" % "2.3.12",
   "org.json4s" %% "json4s-native" % "3.2.11",
   "org.json4s" %% "json4s-core" % "3.2.11",
   "org.json4s" %% "json4s-ext" % "3.2.11",
