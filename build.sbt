@@ -4,9 +4,9 @@ name := "remote-pair-server"
 
 version := "0.2.4"
 
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.7"
 
-scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-language:reflectiveCalls", "scalac.patmat.analysisBudget=512")
+scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-language:reflectiveCalls")
 
 sbtVersion := "0.13.9"
 
