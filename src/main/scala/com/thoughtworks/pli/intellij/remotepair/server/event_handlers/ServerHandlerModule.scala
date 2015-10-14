@@ -1,7 +1,8 @@
 package com.thoughtworks.pli.intellij.remotepair.server.event_handlers
 
+import akka.actor.{Props, ActorSystem}
 import com.thoughtworks.pli.intellij.remotepair.protocol.ParseEvent
-import com.thoughtworks.pli.intellij.remotepair.server.{Clients, Projects}
+import com.thoughtworks.pli.intellij.remotepair.server.{ServerActor, Clients, Projects}
 import com.thoughtworks.pli.intellij.remotepair.utils.IsSubPath
 
 trait ServerHandlerModule {
@@ -35,6 +36,5 @@ trait ServerHandlerModule {
   lazy val handleMoveFileEvent = new HandleMoveFileEvent(projects, broadcastToOtherMembers)
   lazy val handleEventInProject = new HandleEventInProject(handleCreateProjectRequest, handleJoinProjectRequest, handleWorkingModeRequest, handleChangeMasterEvent, handleOpenTabEvent, broadcastToSameProjectMembersThen, broadcastToOtherMembers, sendToMaster, handleChangeContentEvent, handleWatchFilesRequest, sendToClientWithId, handleGetWatchingFilesFromPair, handleCreateDocument, handleCreateServerDocumentRequest, handleSyncFilesForAll, handleDeleteFileEvent, handleDeleteDirEvent, handleMoveDirEvent, handleMoveFileEvent, handleGetDocumentSnapshot)
   lazy val handleDiagnosticRequest = new HandleDiagnosticRequest()
-  lazy val serverHandlerFactory: ServerHandler.Factory = () => new ServerHandler(clients, projects, parseEvent, isSubPath, handleEventInProject, broadcastServerStatusResponse, broadcastToSameProjectMembersThen, sendToMaster, handleCreateProjectRequest, handleJoinProjectRequest, handleDiagnosticRequest, broadcastToOtherMembers)
-
+  lazy val serverActor = new ServerActor(clients, projects, parseEvent, isSubPath, handleEventInProject, broadcastServerStatusResponse, broadcastToSameProjectMembersThen, sendToMaster, handleCreateProjectRequest, handleJoinProjectRequest, handleDiagnosticRequest, broadcastToOtherMembers)
 }

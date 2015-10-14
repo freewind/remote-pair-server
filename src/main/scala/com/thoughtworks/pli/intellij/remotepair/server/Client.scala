@@ -2,11 +2,11 @@ package com.thoughtworks.pli.intellij.remotepair.server
 
 import java.util.UUID
 
-import com.thoughtworks.pli.intellij.remotepair.protocol.PairEvent
-import io.netty.channel.ChannelHandlerContext
+import akka.actor.ActorRef
 import com.thoughtworks.pli.intellij.remotepair._
+import com.thoughtworks.pli.intellij.remotepair.protocol.PairEvent
 
-case class Client(context: ChannelHandlerContext) {
+case class Client(context: ActorRef) {
 
   val id = UUID.randomUUID().toString
 
@@ -16,7 +16,7 @@ case class Client(context: ChannelHandlerContext) {
 
   def writeEvent(event: PairEvent) = {
     ServerLogger.info("Server -> " + name + ": " + event.toMessage)
-    context.writeAndFlush(event.toMessage)
+    context ! event
   }
 
 }
