@@ -6,9 +6,9 @@ version := "0.2.4"
 
 scalaVersion := "2.11.1"
 
-scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-language:reflectiveCalls")
+scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-language:reflectiveCalls", "scalac.patmat.analysisBudget=512")
 
-sbtVersion := "0.13.6"
+sbtVersion := "0.13.9"
 
 ivyScala := ivyScala.value map {
   _.copy(overrideScalaVersion = true)
@@ -40,7 +40,7 @@ initialize ~= { _ =>
   if (System.getProperty("versionCheck", "true").toBoolean) {
     val specVersion = sys.props("java.specification.version")
     println(s"Detected Java version: $specVersion")
-    require(specVersion == "1.6", "Jdk 1.6.x is required")
+    require(specVersion == "1.7", "Jdk 1.7.x is required")
   }
 }
 
