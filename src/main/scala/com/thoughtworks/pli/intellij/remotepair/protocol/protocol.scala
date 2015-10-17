@@ -1,11 +1,21 @@
 package com.thoughtworks.pli.intellij.remotepair
 
-import com.thoughtworks.pli.intellij.remotepair.utils.{Delete, Insert, ContentDiff}
-import org.json4s.JsonAST.{JInt, JString, JField, JObject}
+import com.thoughtworks.pli.intellij.remotepair.utils.{ContentDiff, Delete, Insert}
+import org.json4s.JsonAST.{JField, JInt, JObject, JString}
 import org.json4s._
 import org.json4s.ext.EnumNameSerializer
+import org.json4s.native.Serialization
 
 package object protocol {
+
+  trait PairEvent
+
+  implicit class RichPairEvent(event: PairEvent) {
+    def toJson: String = Serialization.write(event)
+
+    def toMessage: String = s"$eventName $toJson\n"
+    private def eventName: String = event.getClass.getSimpleName.takeWhile(_ != '$').mkString
+  }
 
   implicit val formats = DefaultFormats + new EnumNameSerializer(WorkingMode) + new ContentDiffSerializer
 
@@ -20,5 +30,7 @@ package object protocol {
       case Delete(offset, length) => JObject(JField("op", JString("delete")), JField("offset", JInt(offset)), JField("length", JInt(length)))
     }
   }))
+
+  case class Content(text: String, charset: String)
 
 }

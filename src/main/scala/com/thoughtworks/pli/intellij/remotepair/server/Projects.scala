@@ -1,7 +1,6 @@
 package com.thoughtworks.pli.intellij.remotepair.server
 
-import com.thoughtworks.pli.intellij.remotepair.protocol.WorkingMode
-
+import com.thoughtworks.pli.intellij.remotepair.protocol.{ProjectOperationFailed, WorkingMode}
 
 class Projects {
   private var map = Map.empty[String, Project]
