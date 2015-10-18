@@ -63,6 +63,7 @@ class ServerHandler(clients: Clients, projects: Projects, parseEvent: ParseEvent
       case CreateProjectRequest(projectName, clientName) => handleCreateProjectRequest(client, projectName, clientName)
       case JoinProjectRequest(projectName, clientName) => handleJoinProjectRequest(client, projectName, clientName)
       case DiagnosticRequest => handleDiagnosticRequest(client)
+      case ImMonitor => client.isMonitor = true
       case _ => client.writeEvent(InvalidOperationState("You need to join a project first"))
     }
   }

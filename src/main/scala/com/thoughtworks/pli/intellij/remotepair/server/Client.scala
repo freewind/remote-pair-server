@@ -12,6 +12,8 @@ case class Client(context: ChannelHandlerContext) {
 
   @volatile var isMaster = false
 
+  @volatile var isMonitor = false
+
   @volatile var name: Option[String] = None
 
   def writeEvent(event: PairEvent) = {

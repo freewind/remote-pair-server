@@ -6,28 +6,31 @@ import com.thoughtworks.pli.intellij.remotepair.server.{Projects, Clients, Proje
 class Broadcast(clients: Clients, projects: Projects, sendClientInfo: SendClientInfo) {
 
   def toSameProjectMembers(client: Client, pairEvent: PairEvent): Unit = {
-    projects.findForClient(client).map(_.members).foreach { members =>
-      members.foreach(m => m.writeEvent(pairEvent))
+    projects.findForClient(client).foreach { project =>
+      project.members.foreach(_.writeEvent(pairEvent))
+      clients.monitors.foreach(_.writeEvent(MonitorEvent(project.name, pairEvent.toMessage)))
     }
   }
 
   def toSameProjectOtherMembers(client: Client, pairEvent: PairEvent): Unit = toSameProjectOtherMembersThen(client, pairEvent)(identity)
 
   def toSameProjectOtherMembersThen(client: Client, pairEvent: PairEvent)(f: Client => Any) {
-    def otherMembers = projects.findForClient(client).map(_.otherMembersThan(client)).getOrElse(Nil)
-    otherMembers.foreach { otherMember =>
-      def doit() {
-        otherMember.writeEvent(pairEvent)
-        f(otherMember)
+    projects.findForClient(client).foreach { project =>
+      project.otherMembersThan(client).foreach { otherMember =>
+        def doit() {
+          otherMember.writeEvent(pairEvent)
+          f(otherMember)
+        }
+        pairEvent match {
+          case _: ChangeContentEvent |
+               _: CreateFileEvent | _: DeleteFileEvent | _: CreateDirEvent | _: DeleteDirEvent |
+               _: RenameDirEvent | _: RenameFileEvent |
+               _: MoveDirEvent | _: MoveFileEvent => doit()
+          case _ if areSharingCaret(client) => doit()
+          case _ =>
+        }
       }
-      pairEvent match {
-        case _: ChangeContentEvent |
-             _: CreateFileEvent | _: DeleteFileEvent | _: CreateDirEvent | _: DeleteDirEvent |
-             _: RenameDirEvent | _: RenameFileEvent |
-             _: MoveDirEvent | _: MoveFileEvent => doit()
-        case _ if areSharingCaret(client) => doit()
-        case _ =>
-      }
+      clients.monitors.foreach(_.writeEvent(new MonitorEvent(project.name, pairEvent.toMessage)))
     }
   }
 

@@ -65,3 +65,6 @@ case class FileSummary(path: String, summary: String)
 trait WorkingModeEvent extends PairEvent
 case object CaretSharingModeRequest extends WorkingModeEvent
 case object ParallelModeRequest extends WorkingModeEvent
+
+case object ImMonitor extends PairEvent
+case class MonitorEvent(projectName: String, realEventMessage: String, timestamp: Long = System.currentTimeMillis()) extends PairEvent
