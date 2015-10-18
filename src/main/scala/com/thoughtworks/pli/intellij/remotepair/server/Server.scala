@@ -14,7 +14,7 @@ import io.netty.handler.codec.string.{StringDecoder, StringEncoder}
 case class Server(host: Option[String], port: Int) extends ServerHandlerModule {
 
   private val bossGroup = new NioEventLoopGroup()
-  private val workerGroup = new NioEventLoopGroup(1 /* use single thread to make sure orders of messages*/)
+  private val workerGroup = new NioEventLoopGroup(1 /* use single thread to make sure orders of messages are correct*/)
   private val bootstrap = new ServerBootstrap()
   bootstrap.group(bossGroup, workerGroup)
     .channel(classOf[NioServerSocketChannel])
