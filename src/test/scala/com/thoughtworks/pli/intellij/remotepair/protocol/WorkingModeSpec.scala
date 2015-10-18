@@ -18,7 +18,7 @@ class WorkingModeSpec extends MySpecification {
       project("test").isSharingCaret === true
     }
     "allow to broadcast many events with each other" should {
-      def broadcast(events: PairEvent*) = new ProtocolMocking {
+      def broadcastEvents(events: PairEvent*) = new ProtocolMocking {
         client(context1, context2).createOrJoinProject("test").shareCaret()
 
         client(context1).send(events: _*)
@@ -28,13 +28,13 @@ class WorkingModeSpec extends MySpecification {
         }
       }
       "include tab events" in new ProtocolMocking {
-        broadcast(openTabEvent1, closeTabEvent)
+        broadcastEvents(openTabEvent1, closeTabEvent)
       }
       "include caret events" in new ProtocolMocking {
-        broadcast(moveCaretEvent)
+        broadcastEvents(moveCaretEvent)
       }
       "include selection events" in new ProtocolMocking {
-        broadcast(selectContentEvent)
+        broadcastEvents(selectContentEvent)
       }
     }
 

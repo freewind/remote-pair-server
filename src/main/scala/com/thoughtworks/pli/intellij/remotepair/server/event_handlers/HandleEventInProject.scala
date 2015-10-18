@@ -8,8 +8,7 @@ class HandleEventInProject(handleCreateProjectRequest: HandleCreateProjectReques
                            handleWorkingModeRequest: HandleWorkingModeRequest,
                            handleChangeMasterEvent: HandleChangeMasterEvent,
                            handleOpenTabEvent: HandleOpenTabEvent,
-                           broadcastToSameProjectMembersThen: BroadcastToSameProjectMembersThen,
-                           broadcastToOtherMembers: BroadcastToOtherMembers,
+                           broadcast: Broadcast,
                            sendToMaster: SendToMaster,
                            handleChangeContentEvent: HandleChangeContentEvent,
                            handleWatchFilesRequest: HandleWatchFilesRequest,
@@ -31,9 +30,9 @@ class HandleEventInProject(handleCreateProjectRequest: HandleCreateProjectReques
     case ParallelModeRequest => handleWorkingModeRequest(project, WorkingMode.Parallel, client)
     case event: ChangeMasterRequest => handleChangeMasterEvent(client, event)
     case event: OpenTabEvent => handleOpenTabEvent(client, event)
-    case event: CloseTabEvent => broadcastToOtherMembers(client, event)
+    case event: CloseTabEvent => broadcast.toSameProjectOtherMembers(client, event)
     case event: ChangeContentEvent => handleChangeContentEvent(client, event)
-    case event: MoveCaretEvent => broadcastToOtherMembers(client, event)
+    case event: MoveCaretEvent => broadcast.toSameProjectOtherMembers(client, event)
     case event: WatchFilesRequest => handleWatchFilesRequest(client, event)
     case req: SyncFilesRequest => sendToMaster(client, req)
     case event: MasterWatchingFiles => sendToClientWithId(event)
@@ -48,7 +47,7 @@ class HandleEventInProject(handleCreateProjectRequest: HandleCreateProjectReques
     case event: MoveDirEvent => handleMoveDirEvent(client, event)
     case event: MoveFileEvent => handleMoveFileEvent(client, event)
     case event: GetDocumentSnapshot => handleGetDocumentSnapshot(project, event)
-    case _ => broadcastToOtherMembers(client, event)
+    case _ => broadcast.toSameProjectOtherMembers(client, event)
   }
 
 }

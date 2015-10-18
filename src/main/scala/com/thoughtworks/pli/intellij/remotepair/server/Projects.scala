@@ -32,7 +32,7 @@ case class Project(name: String, private var member: Client) {
     members = members :+ user
     tryAutoSetMaster()
   }
-  def otherMembers(client: Client) = members.filter(_.id != client.id)
+  def otherMembersThan(client: Client) = members.filter(_.id != client.id)
   def removeMember(client: Client) {
     members = members.filter(_.id != client.id)
     tryAutoSetMaster()
@@ -44,7 +44,7 @@ case class Project(name: String, private var member: Client) {
   def setMaster(clientName: String) = {
     findMemberByName(clientName).foreach { client =>
       client.isMaster = true
-      otherMembers(client).foreach(_.isMaster = false)
+      otherMembersThan(client).foreach(_.isMaster = false)
     }
   }
   def isSharingCaret = myWorkingMode == WorkingMode.CaretSharing

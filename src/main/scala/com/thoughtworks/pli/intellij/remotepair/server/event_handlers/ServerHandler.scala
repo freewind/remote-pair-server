@@ -12,17 +12,15 @@ object ServerHandler {
 
 class ServerHandler(clients: Clients, projects: Projects, parseEvent: ParseEvent, isSubPath: IsSubPath,
                     handleEventInProject: HandleEventInProject,
-                    broadcastServerStatusResponse: BroadcastServerStatusResponse,
-                    broadcastToSameProjectMembersThen: BroadcastToSameProjectMembersThen,
+                    broadcast: Broadcast,
                     sendToMaster: SendToMaster,
                     handleCreateProjectRequest: HandleCreateProjectRequest,
                     handleJoinProjectRequest: HandleJoinProjectRequest,
-                    handleDiagnosticRequest: HandleDiagnosticRequest,
-                    broadcastToOtherMembers: BroadcastToOtherMembers) extends ChannelHandlerAdapter {
+                    handleDiagnosticRequest: HandleDiagnosticRequest) extends ChannelHandlerAdapter {
 
   override def channelActive(ctx: ChannelHandlerContext) {
     val client = clients.newClient(ctx)
-    broadcastServerStatusResponse(Some(client))
+    broadcast.serverStatusResponse(Some(client))
   }
 
   override def channelInactive(ctx: ChannelHandlerContext) {
@@ -40,7 +38,7 @@ class ServerHandler(clients: Clients, projects: Projects, parseEvent: ParseEvent
 
     removeFromProject(clients.get(ctx).get)
     clients.removeClient(ctx)
-    broadcastServerStatusResponse(None)
+    broadcast.serverStatusResponse(None)
   }
 
   override def exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {

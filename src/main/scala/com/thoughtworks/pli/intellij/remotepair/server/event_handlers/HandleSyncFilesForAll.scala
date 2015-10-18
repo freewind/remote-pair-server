@@ -7,7 +7,7 @@ class HandleSyncFilesForAll(projects: Projects) {
   def apply(client: Client): Unit = for {
     project <- projects.findForClient(client)
     master <- project.getMasterMember
-    other <- project.otherMembers(master)
+    other <- project.otherMembersThan(master)
   } other.writeEvent(SyncFilesForAll)
 
 }

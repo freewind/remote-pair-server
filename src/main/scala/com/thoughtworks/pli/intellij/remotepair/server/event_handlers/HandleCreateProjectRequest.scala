@@ -3,7 +3,7 @@ package com.thoughtworks.pli.intellij.remotepair.server.event_handlers
 import com.thoughtworks.pli.intellij.remotepair.protocol.{CreatedProjectEvent, ProjectOperationFailed}
 import com.thoughtworks.pli.intellij.remotepair.server.{Client, Projects}
 
-class HandleCreateProjectRequest(projects: Projects, broadcastServerStatusResponse: BroadcastServerStatusResponse) {
+class HandleCreateProjectRequest(projects: Projects, broadcast: Broadcast) {
   def apply(client: Client, projectName: String, clientName: String) {
     if (projects.contains(projectName)) {
       client.writeEvent(ProjectOperationFailed(s"Project '$projectName' is already existed"))
@@ -14,7 +14,7 @@ class HandleCreateProjectRequest(projects: Projects, broadcastServerStatusRespon
       }
       projects.create(client, projectName, clientName)
       client.writeEvent(CreatedProjectEvent(projectName, clientName))
-      broadcastServerStatusResponse(Some(client))
+      broadcast.serverStatusResponse(Some(client))
     }
   }
 
