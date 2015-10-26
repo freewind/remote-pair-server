@@ -12,3 +12,4 @@ project/boot/
 .cache
 .idea/
 
+.DS_Store
