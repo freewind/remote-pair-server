@@ -16,7 +16,8 @@ class ServerHandler(clients: Clients, projects: Projects, parseEvent: ParseEvent
                     sendToMaster: SendToMaster,
                     handleCreateProjectRequest: HandleCreateProjectRequest,
                     handleJoinProjectRequest: HandleJoinProjectRequest,
-                    handleDiagnosticRequest: HandleDiagnosticRequest) extends ChannelHandlerAdapter {
+                    handleDiagnosticRequest: HandleDiagnosticRequest,
+                    handleImMonitor: HandleImMonitor) extends ChannelHandlerAdapter {
 
   override def channelActive(ctx: ChannelHandlerContext) {
     val client = clients.newClient(ctx)
@@ -63,7 +64,7 @@ class ServerHandler(clients: Clients, projects: Projects, parseEvent: ParseEvent
       case CreateProjectRequest(projectName, clientName) => handleCreateProjectRequest(client, projectName, clientName)
       case JoinProjectRequest(projectName, clientName) => handleJoinProjectRequest(client, projectName, clientName)
       case DiagnosticRequest => handleDiagnosticRequest(client)
-      case ImMonitor => client.isMonitor = true
+      case ImMonitor => handleImMonitor(client)
       case _ => client.writeEvent(InvalidOperationState("You need to join a project first"))
     }
   }
