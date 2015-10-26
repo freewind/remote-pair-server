@@ -40,7 +40,7 @@ initialize ~= { _ =>
   if (System.getProperty("versionCheck", "true").toBoolean) {
     val specVersion = sys.props("java.specification.version")
     println(s"Detected Java version: $specVersion")
-    require(specVersion == "1.7", "Jdk 1.7.x is required")
+    require(specVersion == "1.6", "Jdk 1.6.x is required")
   }
 }
 
