@@ -9,8 +9,8 @@ case class DiagnosticInfo(version: String) extends PairEvent
 case class CreateDocument(path: String, content: Content) extends PairEvent
 case class CreateDocumentConfirmation(path: String, version: Int, content: Content) extends PairEvent
 case class ChangeContentEvent(eventId: String, path: String, baseVersion: Int, diffs: Seq[ContentDiff]) extends PairEvent
-case class CreateServerDocumentRequest(path: String) extends PairEvent
 case class ChangeContentConfirmation(forEventId: String, path: String, newVersion: Int, diffs: Seq[ContentDiff]) extends PairEvent
+case class CreateServerDocumentRequest(path: String) extends PairEvent
 case class GetDocumentSnapshot(fromClientId: String, path: String) extends PairEvent
 case class DocumentSnapshotEvent(path: String, version: Int, content: Content) extends PairEvent
 

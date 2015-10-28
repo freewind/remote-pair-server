@@ -17,7 +17,7 @@ trait ServerHandlerModule {
   lazy val handleChangeMasterEvent = new HandleChangeMasterEvent(projects, broadcast)
   lazy val handleOpenTabEvent = new HandleOpenTabEvent(sendToMaster, broadcast, projects)
   lazy val sendToMaster = new SendToMaster(projects)
-  lazy val handleChangeContentEvent = new HandleChangeContentEvent(projects)
+  lazy val handleChangeContentEvent = new HandleChangeContentEvent(projects, broadcast)
   lazy val handleWatchFilesRequest = new HandleWatchFilesRequest(projects, broadcast)
   lazy val sendToClientWithId = new SendToClientWithId(clients)
   lazy val handleGetWatchingFilesFromPair = new HandleGetWatchingFilesFromPair(clients)

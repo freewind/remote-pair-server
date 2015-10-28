@@ -4,7 +4,7 @@ import com.thoughtworks.pli.intellij.remotepair.protocol.{ChangeContentConfirmat
 import com.thoughtworks.pli.intellij.remotepair.server.{Client, Projects}
 import com.thoughtworks.pli.intellij.remotepair.utils.StringDiff
 
-class HandleChangeContentEvent(projects: Projects) {
+class HandleChangeContentEvent(projects: Projects, broadcast: Broadcast) {
   def apply(client: Client, event: ChangeContentEvent) {
     projects.findForClient(client) match {
       case Some(project) => project.documents.synchronized {
@@ -18,10 +18,7 @@ class HandleChangeContentEvent(projects: Projects) {
 
             project.documents.trackClientVersion(event.path, client.id, event.baseVersion)
 
-            for {
-              project <- projects.findForClient(client)
-              member <- project.members
-            } member.writeEvent(confirm)
+            broadcast.toSameProjectMembers(client, confirm)
           case _ => client.writeEvent(ServerErrorResponse(s"The document of '${event.path}' is not existed on server"))
         }
       }
