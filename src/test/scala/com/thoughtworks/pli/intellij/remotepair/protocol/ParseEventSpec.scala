@@ -1,6 +1,6 @@
 package com.thoughtworks.pli.intellij.remotepair.protocol
 
-import com.thoughtworks.pli.intellij.remotepair.{BuildInfo, MySpecification}
+import com.thoughtworks.pli.intellij.remotepair.MySpecification
 import com.thoughtworks.pli.intellij.remotepair.utils.{Delete, Insert}
 
 class ParseEventSpec extends MySpecification {
@@ -109,6 +109,9 @@ class ParseEventSpec extends MySpecification {
     }
     "parse WatchFilesChangedEvent" in {
       parse( """WatchFilesChangedEvent {"files":["/aaa","/bbb"]}""", WatchFilesChangedEvent(Seq("/aaa", "/bbb")))
+    }
+    "parse ServerVersionInfo" in {
+      parse( """ServerVersionInfo { "version": "1.2.3" }""", ServerVersionInfo("1.2.3"))
     }
   }
 }

@@ -51,6 +51,7 @@ class ParseEvent {
       case "DiagnosticRequest" => DiagnosticRequest
       case "MonitorEvent" => Serialization.read[MonitorEvent](json)
       case "ImMonitor" => ImMonitor
+      case "ServerVersionInfo" => Serialization.read[ServerVersionInfo](json)
       case _ =>
         ServerLogger.info("!!!!!!!!!!!!!!!!!!!!! unknown line from server: " + line)
         ???
