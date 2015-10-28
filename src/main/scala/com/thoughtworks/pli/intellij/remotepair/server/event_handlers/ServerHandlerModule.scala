@@ -9,8 +9,7 @@ trait ServerHandlerModule {
   lazy val clients = new Clients
   lazy val projects = new Projects
   lazy val parseEvent = new ParseEvent
-  lazy val sendClientInfo = new SendClientInfo(projects)
-  lazy val broadcast = new Broadcast(clients, projects, sendClientInfo)
+  lazy val broadcast = new Broadcast(clients, projects)
   lazy val handleCreateProjectRequest = new HandleCreateProjectRequest(projects, broadcast)
   lazy val handleJoinProjectRequest = new HandleJoinProjectRequest(projects, broadcast)
   lazy val handleWorkingModeRequest = new HandleWorkingModeRequest(broadcast)

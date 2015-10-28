@@ -44,7 +44,7 @@ case class ProjectInfoData(name: String, clients: Seq[ClientInfoResponse], watch
   def isCaretSharing = workingMode == WorkingMode.CaretSharing
 }
 
-case class ClientInfoResponse(clientId: String, project: String, name: String, isMaster: Boolean) extends PairEvent
+case class ClientInfoResponse(serverVersion: String, clientId: String, project: String, name: String, isMaster: Boolean) extends PairEvent
 case class ServerErrorResponse(message: String) extends PairEvent
 case class ServerMessageResponse(message: String) extends PairEvent
 

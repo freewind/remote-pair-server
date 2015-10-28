@@ -1,9 +1,10 @@
 package com.thoughtworks.pli.intellij.remotepair.server.event_handlers
 
+import com.thoughtworks.pli.intellij.remotepair.BuildInfo
 import com.thoughtworks.pli.intellij.remotepair.protocol._
 import com.thoughtworks.pli.intellij.remotepair.server.{Projects, Clients, Project, Client}
 
-class Broadcast(clients: Clients, projects: Projects, sendClientInfo: SendClientInfo) {
+class Broadcast(clients: Clients, projects: Projects) {
 
   def toSameProjectMembers(client: Client, pairEvent: PairEvent): Unit = {
     projects.findForClient(client).foreach { project =>
@@ -35,9 +36,12 @@ class Broadcast(clients: Clients, projects: Projects, sendClientInfo: SendClient
   }
 
   def serverStatusResponse(sourceClient: Option[Client]) {
-    sourceClient.foreach(sendClientInfo.apply)
+    for {
+      client <- sourceClient
+      project <- projects.findForClient(client)
+    } client.writeEvent(clientInfo(project, client))
 
-    def clientInfo(project: Project, client: Client) = ClientInfoResponse(client.id, projects.findForClient(client).get.name, client.name.get, client.isMaster)
+    def clientInfo(project: Project, client: Client) = ClientInfoResponse(BuildInfo.version, client.id, project.name, client.name.get, client.isMaster)
     val event = ServerStatusResponse(
       projects = projects.all.map(p => ProjectInfoData(p.name, p.members.map(clientInfo(p, _)), p.watchFiles, p.myWorkingMode)).toList,
       freeClients = clients.size - projects.all.flatMap(_.members).size)
