@@ -24,7 +24,7 @@ class ParseEventSpec extends MySpecification {
     }
     "parse ServerStatusResponse" in {
       parse( """ServerStatusResponse {"projects":[{"name":"myname","clients":[{"clientId":"123","project":"test1","name":"user222","isMaster":true}],"watchingFiles":["/aaa"],"workingMode":"CaretSharing"}],"freeClients":0}""",
-        ServerStatusResponse(Seq(ProjectInfoData("myname", Seq(ClientInfoResponse(BuildInfo.version, "123", "test1", "user222", isMaster = true)), Seq("/aaa"), WorkingMode.CaretSharing)), freeClients = 0))
+        ServerStatusResponse(Seq(ProjectInfoData("myname", Seq(ClientInfoResponse("123", "test1", "user222", isMaster = true)), Seq("/aaa"), WorkingMode.CaretSharing)), freeClients = 0))
     }
     "parse SyncFileEvent" in {
       parse( """SyncFileEvent {"fromClientId":"from-id","toClientId":"to-id","path":"/aaa","content":{"text":"my-content","charset":"UTF-8"}}""", SyncFileEvent("from-id", "to-id", "/aaa", Content("my-content", "UTF-8")))

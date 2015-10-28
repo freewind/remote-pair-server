@@ -133,13 +133,13 @@ class CreateOrJoinProjectSpec extends MySpecification {
   "When a client joins a project, it" should {
     "send ClientInfoResponse to the client" in new ProtocolMocking {
       client(context1).createOrJoinProject("test1")
-      there was one(context1).writeAndFlush(ClientInfoResponse(BuildInfo.version, clientId(context1), "test1", "Freewind", isMaster = true).toMessage)
+      there was one(context1).writeAndFlush(ClientInfoResponse(clientId(context1), "test1", "Freewind", isMaster = true).toMessage)
     }
     "not send it to other members of the same project" in new ProtocolMocking {
       client(context1).send(CreateProjectRequest("test1", "Freewind"))
       client(context2).send(JoinProjectRequest("test1", "Lily"))
-      there was one(context2).writeAndFlush(ClientInfoResponse(BuildInfo.version, clientId(context2), "test1", "Lily", isMaster = false).toMessage)
-      there was no(context2).writeAndFlush(ClientInfoResponse(BuildInfo.version, clientId(context1), "test1", "Freewind", isMaster = true).toMessage)
+      there was one(context2).writeAndFlush(ClientInfoResponse(clientId(context2), "test1", "Lily", isMaster = false).toMessage)
+      there was no(context2).writeAndFlush(ClientInfoResponse(clientId(context1), "test1", "Freewind", isMaster = true).toMessage)
     }
   }
 
@@ -148,7 +148,7 @@ class CreateOrJoinProjectSpec extends MySpecification {
       client(context1).createOrJoinProject("test1")
       resetMocks(context1)
       client(context1).shareCaret()
-      there was one(context1).writeAndFlush(ClientInfoResponse(BuildInfo.version, clientId(context1), "test1", "Freewind", isMaster = true).toMessage)
+      there was one(context1).writeAndFlush(ClientInfoResponse(clientId(context1), "test1", "Freewind", isMaster = true).toMessage)
     }
   }
 

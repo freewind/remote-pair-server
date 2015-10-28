@@ -21,6 +21,7 @@ class ServerHandler(clients: Clients, projects: Projects, parseEvent: ParseEvent
 
   override def channelActive(ctx: ChannelHandlerContext) {
     val client = clients.newClient(ctx)
+    client.writeEvent(ServerVersionInfo(BuildInfo.version))
     broadcast.serverStatusResponse(Some(client))
   }
 

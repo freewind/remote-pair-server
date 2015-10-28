@@ -7,28 +7,28 @@ class ServerStatusSpec extends MySpecification {
     "be sent automatically when there is new client joined a project" in new ProtocolMocking {
       client(context1).createOrJoinProject("test")
       there was atLeastOne(context1).writeAndFlush(ServerStatusResponse(
-        Seq(ProjectInfoData("test", Seq(ClientInfoResponse(BuildInfo.version, clientId(context1), "test", "Freewind", isMaster = true)), Nil, WorkingMode.CaretSharing)),
+        Seq(ProjectInfoData("test", Seq(ClientInfoResponse(clientId(context1), "test", "Freewind", isMaster = true)), Nil, WorkingMode.CaretSharing)),
         freeClients = 0
       ).toMessage)
     }
     "be sent automatically when client updated info" in new ProtocolMocking {
       client(context1).createOrJoinProject("test")
       there was atLeastOne(context1).writeAndFlush(ServerStatusResponse(
-        Seq(ProjectInfoData("test", Seq(ClientInfoResponse(BuildInfo.version, clientId(context1), "test", "Freewind", isMaster = true)), Nil, WorkingMode.CaretSharing)),
+        Seq(ProjectInfoData("test", Seq(ClientInfoResponse(clientId(context1), "test", "Freewind", isMaster = true)), Nil, WorkingMode.CaretSharing)),
         freeClients = 0
       ).toMessage)
     }
     "be sent automatically when client changed to caret sharing mode" in new ProtocolMocking {
       client(context1).createOrJoinProject("test").shareCaret()
       there was atLeastOne(context1).writeAndFlush(ServerStatusResponse(
-        Seq(ProjectInfoData("test", Seq(ClientInfoResponse(BuildInfo.version, clientId(context1), "test", "Freewind", isMaster = true)), Nil, WorkingMode.CaretSharing)),
+        Seq(ProjectInfoData("test", Seq(ClientInfoResponse(clientId(context1), "test", "Freewind", isMaster = true)), Nil, WorkingMode.CaretSharing)),
         freeClients = 0
       ).toMessage)
     }
     "be sent automatically when client changed to parallel mode" in new ProtocolMocking {
       client(context1).createOrJoinProject("test").parallel()
       there was atLeastOne(context1).writeAndFlush(ServerStatusResponse(
-        Seq(ProjectInfoData("test", Seq(ClientInfoResponse(BuildInfo.version, clientId(context1), "test", "Freewind", isMaster = true)), Nil, WorkingMode.CaretSharing)),
+        Seq(ProjectInfoData("test", Seq(ClientInfoResponse(clientId(context1), "test", "Freewind", isMaster = true)), Nil, WorkingMode.CaretSharing)),
         freeClients = 0
       ).toMessage)
     }
@@ -37,8 +37,8 @@ class ServerStatusSpec extends MySpecification {
       client(context1).send(ChangeMasterRequest("Lily"))
       there was one(context1).writeAndFlush(ServerStatusResponse(
         Seq(ProjectInfoData("test",
-          Seq(ClientInfoResponse(BuildInfo.version, clientId(context1), "test", "Freewind", isMaster = false),
-            ClientInfoResponse(BuildInfo.version, clientId(context2), "test", "Lily", isMaster = true)),
+          Seq(ClientInfoResponse(clientId(context1), "test", "Freewind", isMaster = false),
+            ClientInfoResponse(clientId(context2), "test", "Lily", isMaster = true)),
           Nil, WorkingMode.CaretSharing)),
         freeClients = 0
       ).toMessage)
@@ -50,7 +50,7 @@ class ServerStatusSpec extends MySpecification {
 
       serverHandler.channelInactive(context2)
       there was one(context1).writeAndFlush(ServerStatusResponse(
-        Seq(ProjectInfoData("test", Seq(ClientInfoResponse(BuildInfo.version, clientId(context1), "test", "Freewind", isMaster = true)), Nil, WorkingMode.CaretSharing)),
+        Seq(ProjectInfoData("test", Seq(ClientInfoResponse(clientId(context1), "test", "Freewind", isMaster = true)), Nil, WorkingMode.CaretSharing)),
         freeClients = 0
       ).toMessage)
     }
@@ -59,7 +59,7 @@ class ServerStatusSpec extends MySpecification {
 
       client(context1).send(WatchFilesRequest(Seq("/aaa")))
       there was one(context1).writeAndFlush(ServerStatusResponse(
-        Seq(ProjectInfoData("test", Seq(ClientInfoResponse(BuildInfo.version, clientId(context1), "test", "Freewind", isMaster = true)), Seq("/aaa"), WorkingMode.CaretSharing)),
+        Seq(ProjectInfoData("test", Seq(ClientInfoResponse(clientId(context1), "test", "Freewind", isMaster = true)), Seq("/aaa"), WorkingMode.CaretSharing)),
         freeClients = 0
       ).toMessage)
     }
@@ -67,7 +67,7 @@ class ServerStatusSpec extends MySpecification {
       client(context1, context2)
       client(context1).createOrJoinProject("test")
       there was atLeastOne(context1).writeAndFlush(ServerStatusResponse(
-        Seq(ProjectInfoData("test", Seq(ClientInfoResponse(BuildInfo.version, clientId(context1), "test", "Freewind", isMaster = true)), Nil, WorkingMode.CaretSharing)),
+        Seq(ProjectInfoData("test", Seq(ClientInfoResponse(clientId(context1), "test", "Freewind", isMaster = true)), Nil, WorkingMode.CaretSharing)),
         freeClients = 1
       ).toMessage)
     }

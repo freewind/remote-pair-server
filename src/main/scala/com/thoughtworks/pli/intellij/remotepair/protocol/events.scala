@@ -36,6 +36,7 @@ case class ChangeMasterRequest(clientName: String) extends PairEvent
 
 case class SelectContentEvent(path: String, offset: Int, length: Int) extends PairEvent
 
+case class ServerVersionInfo(version: String) extends PairEvent
 case class ServerStatusResponse(projects: Seq[ProjectInfoData], freeClients: Int) extends PairEvent {
   def findProject(name: String) = projects.find(_.name == name)
 }
@@ -44,7 +45,7 @@ case class ProjectInfoData(name: String, clients: Seq[ClientInfoResponse], watch
   def isCaretSharing = workingMode == WorkingMode.CaretSharing
 }
 
-case class ClientInfoResponse(serverVersion: String, clientId: String, project: String, name: String, isMaster: Boolean) extends PairEvent
+case class ClientInfoResponse(clientId: String, project: String, name: String, isMaster: Boolean) extends PairEvent
 case class ServerErrorResponse(message: String) extends PairEvent
 case class ServerMessageResponse(message: String) extends PairEvent
 
