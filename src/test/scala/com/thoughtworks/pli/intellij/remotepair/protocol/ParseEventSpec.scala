@@ -23,7 +23,8 @@ class ParseEventSpec extends MySpecification {
       parse( """ServerErrorResponse {"message":"test-error"}""", ServerErrorResponse("test-error"))
     }
     "parse ServerStatusResponse" in {
-      parse( """ServerStatusResponse {"projects":[{"name":"myname","clients":[{"clientId":"123","project":"test1","name":"user222","isMaster":true}],"watchingFiles":["/aaa"],"workingMode":"CaretSharing"}],"freeClients":0}""",
+      parse(
+        """ServerStatusResponse {"projects":[{"name":"myname","clients":[{"clientId":"123","project":"test1","name":"user222","isMaster":true}],"watchingFiles":["/aaa"],"workingMode":"CaretSharing"}],"freeClients":0}""",
         ServerStatusResponse(Seq(ProjectInfoData("myname", Seq(ClientInfoResponse("123", "test1", "user222", isMaster = true)), Seq("/aaa"), WorkingMode.CaretSharing)), freeClients = 0))
     }
     "parse SyncFileEvent" in {
@@ -45,7 +46,7 @@ class ParseEventSpec extends MySpecification {
       parse( """CreateServerDocumentRequest {"path":"/aaa"}""", CreateServerDocumentRequest("/aaa"))
     }
     "parse ChangeContentConfirmation" in {
-      parse( """ChangeContentConfirmation {"forEventId":"uuid1","path":"/aaa","newVersion":3,"diffs":[{"op":"insert","offset":11,"content":"aa"},{"op":"delete","offset":43,"length":3}]}""", ChangeContentConfirmation("uuid1", "/aaa", 3, Seq(Insert(11, "aa"), Delete(43, 3))))
+      parse( """ChangeContentConfirmation {"forEventId":"uuid1","path":"/aaa","newVersion":3,"diffs":[{"op":"insert","offset":11,"content":"aa"},{"op":"delete","offset":43,"length":3}]}""", ChangeContentConfirmation("uuid1", "/aaa", 3, Seq(Insert(11, "aa"), Delete(43, 3)), "Freewind"))
     }
     "parse ChangeContentEvent" in {
       parse( """ChangeContentEvent {"eventId":"myEventId","path":"/aaa","baseVersion":20,"diffs":[{"op":"insert","offset":10,"content":"abc"},{"op":"delete","offset":10,"length":2}]}""", ChangeContentEvent("myEventId", "/aaa", 20, Seq(Insert(10, "abc"), Delete(10, 2))))

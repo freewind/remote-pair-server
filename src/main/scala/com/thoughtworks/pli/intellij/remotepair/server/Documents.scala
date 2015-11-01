@@ -9,8 +9,8 @@ class Documents(project: Project) {
 
   private var docs = Map.empty[String, ServerVersionedDocument]
 
-  def update(doc: ServerVersionedDocument, diffs: Seq[ContentDiff]): ServerVersionedDocument = synchronized {
-    val newDoc = doc.copy(versions = doc.versions :+ DocumentVersion(doc.latestVersion + 1, diffs))
+  def update(doc: ServerVersionedDocument, diffs: Seq[ContentDiff], editorName: String): ServerVersionedDocument = synchronized {
+    val newDoc = doc.copy(versions = doc.versions :+ DocumentVersion(doc.latestVersion + 1, diffs, editorName))
     docs += doc.path -> newDoc
     newDoc
   }
@@ -57,7 +57,7 @@ class Documents(project: Project) {
 
 }
 
-case class DocumentVersion(version: Int, diffs: Seq[ContentDiff])
+case class DocumentVersion(version: Int, diffs: Seq[ContentDiff], editorName: String)
 
 case class ServerVersionedDocument(path: String, initContent: Content, initVersion: Int, versions: Seq[DocumentVersion] = Nil) {
 
@@ -79,7 +79,7 @@ case class ServerVersionedDocument(path: String, initContent: Content, initVersi
 
   private def checkMatchVersions(version: Int, matchVersions: Seq[DocumentVersion]): Unit = {
     matchVersions.foldLeft(version) {
-      case (v, DocumentVersion(thisVer, _)) => if (thisVer == v + 1)
+      case (v, DocumentVersion(thisVer, _, _)) => if (thisVer == v + 1)
         thisVer
       else
         throw new RuntimeException(s"Expect version ${v + 1}, get version $thisVer")
