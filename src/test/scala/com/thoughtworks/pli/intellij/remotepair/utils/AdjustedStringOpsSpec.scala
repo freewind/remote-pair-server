@@ -100,15 +100,9 @@ class AdjustedStringOpsSpec extends Specification {
   }
 
   "如果两人几乎同时对同一份文档做了多个操作,后者的操作可能需要调整,才能在前者之后应用到文档上" in {
-    // hope to improve it, to let the `xy` and `op` still be in the final result
     StringDiff.adjustLaterOps(
       Seq(Insert(8, "xy"), Delete(11, 5), Insert(22, "op")),
       Seq(Insert(3, "abc"), Delete(10, 8), Delete(20, 4), Insert(30, "mn"))
     ) === Seq(Insert(3, "abc"), Delete(10, 1), Delete(12, 2), Delete(24, 4), Insert(34, "mn"))
   }
-
-  // 12345678901234567890123456789012345678901234567890
-  // 12345678xy9_____567890123op456789012345678901234567890
-  // 123abc4567________678901____67890123456789mn01234567890
-  // 123abc4567_xy______567890123op456789012345678901234567890
 }
