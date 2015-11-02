@@ -46,7 +46,7 @@ class ParseEventSpec extends MySpecification {
       parse( """CreateServerDocumentRequest {"path":"/aaa"}""", CreateServerDocumentRequest("/aaa"))
     }
     "parse ChangeContentConfirmation" in {
-      parse( """ChangeContentConfirmation {"forEventId":"uuid1","path":"/aaa","newVersion":3,"diffs":[{"op":"insert","offset":11,"content":"aa"},{"op":"delete","offset":43,"length":3}]}""", ChangeContentConfirmation("uuid1", "/aaa", 3, Seq(Insert(11, "aa"), Delete(43, 3)), "Freewind"))
+      parse( """ChangeContentConfirmation {"forEventId":"uuid1","path":"/aaa","newVersion":3,"diffs":[{"op":"insert","offset":11,"content":"aa"},{"op":"delete","offset":43,"length":3}],"editorName":"Freewind"}""", ChangeContentConfirmation("uuid1", "/aaa", 3, Seq(Insert(11, "aa"), Delete(43, 3)), "Freewind"))
     }
     "parse ChangeContentEvent" in {
       parse( """ChangeContentEvent {"eventId":"myEventId","path":"/aaa","baseVersion":20,"diffs":[{"op":"insert","offset":10,"content":"abc"},{"op":"delete","offset":10,"length":2}]}""", ChangeContentEvent("myEventId", "/aaa", 20, Seq(Insert(10, "abc"), Delete(10, 2))))
