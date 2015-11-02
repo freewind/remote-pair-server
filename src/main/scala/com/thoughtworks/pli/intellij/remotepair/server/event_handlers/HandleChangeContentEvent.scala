@@ -12,7 +12,7 @@ class HandleChangeContentEvent(projects: Projects, broadcast: Broadcast) {
           case Some(doc) if event.diffs.isEmpty => project.documents.trackClientVersion(event.path, client.id, event.baseVersion)
           case Some(doc) =>
             val changes = doc.getLaterChangesFromVersion(event.baseVersion)
-            val adjustedChanges = StringDiff.adjustLaterDiffs(changes, event.diffs)
+            val adjustedChanges = StringDiff.adjustLaterOps(changes, event.diffs)
 
             val editorName = client.name.get
             val newDoc = project.documents.update(doc, adjustedChanges, editorName)

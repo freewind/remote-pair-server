@@ -25,6 +25,7 @@ resolvers ++= Seq(
 )
 
 libraryDependencies ++= Seq(
+  "commons-lang" % "commons-lang" % "2.6",
   "org.json4s" %% "json4s-native" % "3.2.11",
   "org.json4s" %% "json4s-core" % "3.2.11",
   "org.json4s" %% "json4s-ext" % "3.2.11",
