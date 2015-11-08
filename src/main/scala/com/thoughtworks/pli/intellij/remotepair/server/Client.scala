@@ -16,9 +16,13 @@ case class Client(context: ChannelHandlerContext) {
 
   @volatile var name: Option[String] = None
 
+  @volatile def idName: ClientIdName = ClientIdName(id, name.get)
+
   def writeEvent(event: PairEvent) = {
     ServerLogger.info("Server -> " + name + ": " + event.toMessage)
     context.writeAndFlush(event.toMessage)
   }
 
 }
+
+case class ClientIdName(id: String, name: String)

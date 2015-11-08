@@ -1,6 +1,7 @@
 package com.thoughtworks.pli.intellij.remotepair.protocol
 
 import com.thoughtworks.pli.intellij.remotepair.MyMocking
+import com.thoughtworks.pli.intellij.remotepair.server.ClientIdName
 import com.thoughtworks.pli.intellij.remotepair.server.event_handlers.ServerHandlerModule
 import com.thoughtworks.pli.intellij.remotepair.utils.Insert
 import io.netty.channel.ChannelHandlerContext
@@ -88,6 +89,8 @@ trait ProtocolMocking extends MyMocking with MockEvents with ServerHandlerModule
 
   def clientId(context: ChannelHandlerContext) = clients.get(context).map(_.id).get
 
+  def clientIdName(context: ChannelHandlerContext) = ClientIdName(clientId(context), getClientName(context))
+
   def resetMocks(mocks: Any*) = mocks.foreach(mock => org.mockito.Mockito.reset(mock))
 }
 
@@ -102,7 +105,7 @@ trait MockEvents {
 
   val moveCaretEvent = MoveCaretEvent("/aaa", 10)
 
-  val selectContentEvent = SelectContentEvent("/aaa", 10, 5)
+  val selectContentEvent = SelectContentEvent("/aaa", 10, 5, ClientIdName("any-id", "any-name"))
 
   val syncFilesRequest = SyncFilesRequest("any-id", Nil)
 

@@ -1,6 +1,6 @@
 package com.thoughtworks.pli.intellij.remotepair.server
 
-import com.thoughtworks.pli.intellij.remotepair.protocol.{DocumentSnapshotEvent, CreateDocumentConfirmation, CreateDocument, Content}
+import com.thoughtworks.pli.intellij.remotepair.protocol._
 import com.thoughtworks.pli.intellij.remotepair.utils.{StringOperation, StringDiff}
 
 class Documents(project: Project) {
@@ -9,14 +9,14 @@ class Documents(project: Project) {
 
   private var docs = Map.empty[String, ServerVersionedDocument]
 
-  def update(doc: ServerVersionedDocument, diffs: Seq[StringOperation], sourceClientId: String): ServerVersionedDocument = synchronized {
-    val newDoc = doc.copy(versions = doc.versions :+ DocumentVersion(doc.latestVersion + 1, diffs, sourceClientId))
+  def update(doc: ServerVersionedDocument, diffs: Seq[StringOperation], sourceClient: ClientIdName): ServerVersionedDocument = synchronized {
+    val newDoc = doc.copy(versions = doc.versions :+ DocumentVersion(doc.latestVersion + 1, diffs, sourceClient))
     docs += doc.path -> newDoc
     newDoc
   }
 
-  def create(createDoc: CreateDocument): ServerVersionedDocument = synchronized {
-    val doc = ServerVersionedDocument(createDoc.path, createDoc.content, ServerVersionedDocument.InitVersion)
+  def create(creator: ClientIdName, createDoc: CreateDocument): ServerVersionedDocument = synchronized {
+    val doc = ServerVersionedDocument(createDoc.path, createDoc.content, ServerVersionedDocument.InitVersion, creator)
     docs += (doc.path -> doc)
     doc
   }
@@ -57,14 +57,14 @@ class Documents(project: Project) {
 
 }
 
-case class DocumentVersion(version: Int, diffs: Seq[StringOperation], sourceClientId: String)
+case class DocumentVersion(version: Int, diffs: Seq[StringOperation], sourceClient: ClientIdName)
 
-case class ServerVersionedDocument(path: String, initContent: Content, initVersion: Int, versions: Seq[DocumentVersion] = Nil) {
+case class ServerVersionedDocument(path: String, initContent: Content, initVersion: Int, creator: ClientIdName, versions: Seq[DocumentVersion] = Nil) {
 
   def createBaseOn(version: Int): ServerVersionedDocument = {
     val (below, up) = versions.partition(_.version <= version)
     val newInitText = StringDiff.applyOperations(initContent.text, below.flatMap(_.diffs))
-    ServerVersionedDocument(path, Content(newInitText, initContent.charset), version, up)
+    ServerVersionedDocument(path, Content(newInitText, initContent.charset), version, creator, up)
   }
 
   def latestChanges: Seq[StringOperation] = versions.lastOption.map(_.diffs).getOrElse(Nil)
@@ -88,7 +88,7 @@ case class ServerVersionedDocument(path: String, initContent: Content, initVersi
 
   def latestContent: String = StringDiff.applyOperations(initContent.text, versions.flatMap(_.diffs))
 
-  def createConfirmation() = CreateDocumentConfirmation(this.path, this.latestVersion, this.initContent)
+  def createConfirmation() = CreateDocumentConfirmation(this.path, this.latestVersion, Content(latestContent, initContent.charset), creator)
 
   def createSnapshot(): DocumentSnapshotEvent = DocumentSnapshotEvent(this.path, this.latestVersion, initContent.copy(text = this.latestContent))
 

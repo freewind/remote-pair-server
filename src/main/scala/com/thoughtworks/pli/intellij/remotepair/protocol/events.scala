@@ -1,5 +1,6 @@
 package com.thoughtworks.pli.intellij.remotepair.protocol
 
+import com.thoughtworks.pli.intellij.remotepair.server.ClientIdName
 import com.thoughtworks.pli.intellij.remotepair.utils.StringOperation
 
 case class InvalidOperationState(message: String) extends PairEvent
@@ -7,9 +8,9 @@ case object DiagnosticRequest extends PairEvent
 case class DiagnosticInfo(version: String) extends PairEvent
 
 case class CreateDocument(path: String, content: Content) extends PairEvent
-case class CreateDocumentConfirmation(path: String, version: Int, content: Content) extends PairEvent
+case class CreateDocumentConfirmation(path: String, version: Int, content: Content, sourceClient: ClientIdName) extends PairEvent
 case class ChangeContentEvent(eventId: String, path: String, baseVersion: Int, diffs: Seq[StringOperation]) extends PairEvent
-case class ChangeContentConfirmation(forEventId: String, path: String, newVersion: Int, diffs: Seq[StringOperation], sourceClientId: String) extends PairEvent
+case class ChangeContentConfirmation(forEventId: String, path: String, newVersion: Int, diffs: Seq[StringOperation], sourceClient: ClientIdName) extends PairEvent
 case class CreateServerDocumentRequest(path: String) extends PairEvent
 case class GetDocumentSnapshot(fromClientId: String, path: String) extends PairEvent
 case class DocumentSnapshotEvent(path: String, version: Int, content: Content) extends PairEvent
@@ -34,7 +35,7 @@ case class WatchFilesRequest(files: Seq[String]) extends PairEvent
 case class WatchFilesChangedEvent(files: Seq[String]) extends PairEvent
 case class ChangeMasterRequest(clientName: String) extends PairEvent
 
-case class SelectContentEvent(path: String, offset: Int, length: Int) extends PairEvent
+case class SelectContentEvent(path: String, offset: Int, length: Int, sourceClient: ClientIdName) extends PairEvent
 
 case class ServerVersionInfo(version: String) extends PairEvent
 case class ServerStatusResponse(projects: Seq[ProjectInfoData], freeClients: Int) extends PairEvent {

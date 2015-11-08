@@ -1,6 +1,7 @@
 package com.thoughtworks.pli.intellij.remotepair.protocol
 
 import com.thoughtworks.pli.intellij.remotepair.MySpecification
+import com.thoughtworks.pli.intellij.remotepair.server.ClientIdName
 import com.thoughtworks.pli.intellij.remotepair.utils.{Delete, Insert}
 
 class ParseEventSpec extends MySpecification {
@@ -40,13 +41,13 @@ class ParseEventSpec extends MySpecification {
       parse( """CreateDocument {"path":"/aaa","content":{"text":"my-content","charset":"UTF-8"}}""", CreateDocument("/aaa", Content("my-content", "UTF-8")))
     }
     "parse CreateDocumentConfirmation" in {
-      parse( """CreateDocumentConfirmation {"path":"/aaa","version":12,"content":{"text":"my-content","charset":"UTF-8"}}""", CreateDocumentConfirmation("/aaa", 12, Content("my-content", "UTF-8")))
+      parse( """CreateDocumentConfirmation {"path":"/aaa","version":12,"content":{"text":"my-content","charset":"UTF-8"},"sourceClient":{"id":"freewind","name":"id123456"}}""", CreateDocumentConfirmation("/aaa", 12, Content("my-content", "UTF-8"), ClientIdName("freewind", "id123456")))
     }
     "parse CreateServerDocumentRequest" in {
       parse( """CreateServerDocumentRequest {"path":"/aaa"}""", CreateServerDocumentRequest("/aaa"))
     }
     "parse ChangeContentConfirmation" in {
-      parse( """ChangeContentConfirmation {"forEventId":"uuid1","path":"/aaa","newVersion":3,"diffs":[{"op":"insert","offset":11,"content":"aa"},{"op":"delete","offset":43,"length":3}],"sourceClientId":"id123456"}""", ChangeContentConfirmation("uuid1", "/aaa", 3, Seq(Insert(11, "aa"), Delete(43, 3)), "id123456"))
+      parse( """ChangeContentConfirmation {"forEventId":"uuid1","path":"/aaa","newVersion":3,"diffs":[{"op":"insert","offset":11,"content":"aa"},{"op":"delete","offset":43,"length":3}],"sourceClient":{"id":"freewind","name":"id123456"}}""", ChangeContentConfirmation("uuid1", "/aaa", 3, Seq(Insert(11, "aa"), Delete(43, 3)), ClientIdName("freewind", "id123456")))
     }
     "parse ChangeContentEvent" in {
       parse( """ChangeContentEvent {"eventId":"myEventId","path":"/aaa","baseVersion":20,"diffs":[{"op":"insert","offset":10,"content":"abc"},{"op":"delete","offset":10,"length":2}]}""", ChangeContentEvent("myEventId", "/aaa", 20, Seq(Insert(10, "abc"), Delete(10, 2))))

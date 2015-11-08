@@ -14,8 +14,8 @@ class HandleChangeContentEvent(projects: Projects, broadcast: Broadcast) {
             val changes = doc.getLaterChangesFromVersion(event.baseVersion)
             val adjustedChanges = StringDiff.adjustLaterOps(changes, event.diffs)
 
-            val newDoc = project.documents.update(doc, adjustedChanges, client.id)
-            val confirm = ChangeContentConfirmation(event.eventId, event.path, newDoc.latestVersion, newDoc.latestChanges, client.id)
+            val newDoc = project.documents.update(doc, adjustedChanges, client.idName)
+            val confirm = ChangeContentConfirmation(event.eventId, event.path, newDoc.latestVersion, newDoc.latestChanges, client.idName)
 
             project.documents.trackClientVersion(event.path, client.id, event.baseVersion)
 
