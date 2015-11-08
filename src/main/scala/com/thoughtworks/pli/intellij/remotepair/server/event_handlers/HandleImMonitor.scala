@@ -11,7 +11,7 @@ class HandleImMonitor(projects: Projects) {
       project.documents.allPaths.flatMap(project.documents.find).foreach { doc =>
         client.writeEvent(new MonitorEvent(project.name, CreateDocumentConfirmation(doc.path, doc.initVersion, doc.initContent).toMessage))
         doc.versions
-          .map(version => MonitorEvent(project.name, ChangeContentConfirmation("any", doc.path, version.version, version.diffs, version.editorName).toMessage))
+          .map(version => MonitorEvent(project.name, ChangeContentConfirmation("any", doc.path, version.version, version.diffs, version.sourceClientId).toMessage))
           .foreach(client.writeEvent)
       }
     }

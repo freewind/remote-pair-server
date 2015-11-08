@@ -9,8 +9,8 @@ class Documents(project: Project) {
 
   private var docs = Map.empty[String, ServerVersionedDocument]
 
-  def update(doc: ServerVersionedDocument, diffs: Seq[StringOperation], editorName: String): ServerVersionedDocument = synchronized {
-    val newDoc = doc.copy(versions = doc.versions :+ DocumentVersion(doc.latestVersion + 1, diffs, editorName))
+  def update(doc: ServerVersionedDocument, diffs: Seq[StringOperation], sourceClientId: String): ServerVersionedDocument = synchronized {
+    val newDoc = doc.copy(versions = doc.versions :+ DocumentVersion(doc.latestVersion + 1, diffs, sourceClientId))
     docs += doc.path -> newDoc
     newDoc
   }
@@ -57,7 +57,7 @@ class Documents(project: Project) {
 
 }
 
-case class DocumentVersion(version: Int, diffs: Seq[StringOperation], editorName: String)
+case class DocumentVersion(version: Int, diffs: Seq[StringOperation], sourceClientId: String)
 
 case class ServerVersionedDocument(path: String, initContent: Content, initVersion: Int, versions: Seq[DocumentVersion] = Nil) {
 

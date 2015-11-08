@@ -71,7 +71,7 @@ class DocumentSpec extends MySpecification {
       client(context1).createOrJoinProject("test1")
       client(context1).send(CreateDocument("/aaa", Content("abc", "UTF-8")))
       client(context1).send(ChangeContentEvent("eventId1", "/aaa", 0, Seq(Insert(3, "123"))))
-      there was one(context1).writeAndFlush(ChangeContentConfirmation("eventId1", "/aaa", 1, Seq(Insert(3, "123")), "Freewind").toMessage)
+      there was one(context1).writeAndFlush(ChangeContentConfirmation("eventId1", "/aaa", 1, Seq(Insert(3, "123")), clientId(context1)).toMessage)
     }
     "get confirmation with new version and changes based on old version if there is conflict" in new ProtocolMocking {
       client(context1, context2).createOrJoinProject("test1")
@@ -79,15 +79,15 @@ class DocumentSpec extends MySpecification {
       client(context2).send(ChangeContentEvent("eventId1", "/aaa", 0, Seq(Insert(3, "111"))))
       client(context1).send(ChangeContentEvent("eventId2", "/aaa", 0, Seq(Insert(3, "222"))))
 
-      there was one(context1).writeAndFlush(ChangeContentConfirmation("eventId1", "/aaa", 1, Seq(Insert(3, "111")), "Lily").toMessage)
-      there was one(context1).writeAndFlush(ChangeContentConfirmation("eventId2", "/aaa", 2, Seq(Insert(6, "222")), "Freewind").toMessage)
+      there was one(context1).writeAndFlush(ChangeContentConfirmation("eventId1", "/aaa", 1, Seq(Insert(3, "111")), clientId(context2)).toMessage)
+      there was one(context1).writeAndFlush(ChangeContentConfirmation("eventId2", "/aaa", 2, Seq(Insert(6, "222")), clientId(context1)).toMessage)
     }
     "not change doc version on server if the diffs is empty" in new ProtocolMocking {
       client(context1).createOrJoinProject("test1")
       client(context1).send(CreateDocument("/aaa", Content("abc", "UTF-8")))
       client(context1).send(ChangeContentEvent("eventId1", "/aaa", 0, Nil))
       client(context1).send(ChangeContentEvent("eventId1", "/aaa", 0, Seq(Insert(3, "111"))))
-      there was one(context1).writeAndFlush(ChangeContentConfirmation("eventId1", "/aaa", 1, Seq(Insert(3, "111")), "Freewind").toMessage)
+      there was one(context1).writeAndFlush(ChangeContentConfirmation("eventId1", "/aaa", 1, Seq(Insert(3, "111")), clientId(context1)).toMessage)
     }
   }
 
