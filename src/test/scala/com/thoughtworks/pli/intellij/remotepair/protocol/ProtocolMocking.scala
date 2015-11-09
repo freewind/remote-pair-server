@@ -6,8 +6,7 @@ import com.thoughtworks.pli.intellij.remotepair.server.event_handlers.ServerHand
 import com.thoughtworks.pli.intellij.remotepair.utils.Insert
 import io.netty.channel.ChannelHandlerContext
 
-trait ProtocolMocking extends MyMocking with MockEvents with ServerHandlerModule {
-  m =>
+trait ProtocolMocking extends MyMocking with MockEvents with ServerHandlerModule {m =>
 
   def dataOf(context: ChannelHandlerContext) = {
     clients.get(context).get
@@ -103,7 +102,7 @@ trait MockEvents {
 
   val changeMasterEvent = ChangeMasterRequest("Lily")
 
-  val moveCaretEvent = MoveCaretEvent("/aaa", 10)
+  val moveCaretEvent = MoveCaretEvent("/aaa", 10, ClientIdName("any-id", "any-name"))
 
   val selectContentEvent = SelectContentEvent("/aaa", 10, 5, ClientIdName("any-id", "any-name"))
 

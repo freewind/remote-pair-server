@@ -41,7 +41,7 @@ class ParseEventSpec extends MySpecification {
       parse( """CreateDocument {"path":"/aaa","content":{"text":"my-content","charset":"UTF-8"}}""", CreateDocument("/aaa", Content("my-content", "UTF-8")))
     }
     "parse CreateDocumentConfirmation" in {
-      parse( """CreateDocumentConfirmation {"path":"/aaa","version":12,"content":{"text":"my-content","charset":"UTF-8"},"sourceClient":{"id":"freewind","name":"id123456"}}""", CreateDocumentConfirmation("/aaa", 12, Content("my-content", "UTF-8"), ClientIdName("freewind", "id123456")))
+      parse( """CreateDocumentConfirmation {"path":"/aaa","version":12,"content":{"text":"my-content","charset":"UTF-8"},"sourceClient":{"id":"id123456","name":"freewind"}}""", CreateDocumentConfirmation("/aaa", 12, Content("my-content", "UTF-8"), ClientIdName("id123456","freewind")))
     }
     "parse CreateServerDocumentRequest" in {
       parse( """CreateServerDocumentRequest {"path":"/aaa"}""", CreateServerDocumentRequest("/aaa"))
@@ -56,7 +56,7 @@ class ParseEventSpec extends MySpecification {
       parse( """JoinedToProjectEvent {"projectName":"my-project","clientName":"my-name"}""", JoinedToProjectEvent("my-project", "my-name"))
     }
     "parse MoveCaretEvent" in {
-      parse( """MoveCaretEvent {"path":"/aaa","offset":12}""", MoveCaretEvent("/aaa", 12))
+      parse( """MoveCaretEvent {"path":"/aaa","offset":12,"sourceClient":{"id":"id123456","name":"freewind"}}""", MoveCaretEvent("/aaa", 12, ClientIdName("id123456", "freewind")))
     }
     "parse CreateDirEvent" in {
       parse( """CreateDirEvent {"path":"/aaa"} """, CreateDirEvent("/aaa"))

@@ -15,7 +15,7 @@ case class CreateServerDocumentRequest(path: String) extends PairEvent
 case class GetDocumentSnapshot(fromClientId: String, path: String) extends PairEvent
 case class DocumentSnapshotEvent(path: String, version: Int, content: Content) extends PairEvent
 
-case class MoveCaretEvent(path: String, offset: Int) extends PairEvent
+case class MoveCaretEvent(path: String, offset: Int, sourceClient: ClientIdName) extends PairEvent
 
 case class CreateDirEvent(path: String) extends PairEvent
 case class DeleteDirEvent(path: String) extends PairEvent
