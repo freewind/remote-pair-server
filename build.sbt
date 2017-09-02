@@ -2,17 +2,13 @@ organization := "com.thoughtworks"
 
 name := "remote-pair-server"
 
-version := "0.9.0"
+version := "0.10.0"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.12.3"
 
 scalacOptions ++= Seq("-unchecked", "-deprecation", "-feature", "-language:reflectiveCalls")
 
-sbtVersion := "0.13.9"
-
-ivyScala := ivyScala.value map {
-  _.copy(overrideScalaVersion = true)
-}
+sbtVersion := "1.0.0"
 
 resolvers ++= Seq(
   "Scalaz" at "http://dl.bintray.com/scalaz/releases",
@@ -26,12 +22,12 @@ resolvers ++= Seq(
 
 libraryDependencies ++= Seq(
   "commons-lang" % "commons-lang" % "2.6",
-  "org.json4s" %% "json4s-native" % "3.2.11",
-  "org.json4s" %% "json4s-core" % "3.2.11",
-  "org.json4s" %% "json4s-ext" % "3.2.11",
+  "org.json4s" %% "json4s-native" % "3.5.3",
+  "org.json4s" %% "json4s-core" % "3.5.3",
+  "org.json4s" %% "json4s-ext" % "3.5.3",
   "ch.qos.logback" % "logback-classic" % "1.1.2",
   "org.slf4j" % "slf4j-api" % "1.7.7",
-  "org.specs2" %% "specs2" % "2.4.11" % "test",
+  "org.specs2" %% "specs2" % "2.4.17" % "test",
   "io.netty" % "netty-all" % "5.0.0.Alpha1"
 )
 
