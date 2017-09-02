@@ -31,11 +31,11 @@ libraryDependencies ++= Seq(
   "io.netty" % "netty-all" % "5.0.0.Alpha1"
 )
 
-mainClass in Compile := Some("com.thoughtworks.pli.intellij.remotepair.server.StandaloneServer")
+mainClass in Compile := Some("in.freewind.intellij.remotepair.server.StandaloneServer")
 
 lazy val root = (project in file("."))
   .enablePlugins(BuildInfoPlugin)
   .settings(
     buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion),
-    buildInfoPackage := "com.thoughtworks.pli.intellij.remotepair"
+    buildInfoPackage := "in.freewind.intellij.remotepair"
   )
