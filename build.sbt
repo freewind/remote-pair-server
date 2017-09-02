@@ -37,14 +37,6 @@ libraryDependencies ++= Seq(
 
 mainClass in Compile := Some("com.thoughtworks.pli.intellij.remotepair.server.StandaloneServer")
 
-initialize ~= { _ =>
-  if (System.getProperty("versionCheck", "true").toBoolean) {
-    val specVersion = sys.props("java.specification.version")
-    println(s"Detected Java version: $specVersion")
-    require(specVersion == "1.6", "Jdk 1.6.x is required")
-  }
-}
-
 lazy val root = (project in file("."))
   .enablePlugins(BuildInfoPlugin)
   .settings(
