@@ -4,7 +4,7 @@ import in.freewind.intellij.remotepair.GoogleDiffMatchPatch
 import in.freewind.intellij.remotepair.GoogleDiffMatchPatch.Diff
 import org.apache.commons.lang.StringUtils
 
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 
 object StringDiff {
 
@@ -193,7 +193,7 @@ object StringDiff {
   }
 
   private def convertDiffs(diffs: java.util.LinkedList[GoogleDiffMatchPatch.Diff]): Seq[StringOperation] = {
-    val diffsWithPosition = diffs.toList.foldLeft(List.empty[(Diff, Int)]) {
+    val diffsWithPosition = diffs.asScala.foldLeft(List.empty[(Diff, Int)]) {
       case (Nil, item) => (item, 0) :: Nil
       case (list@((prev, position) :: _), item) =>
         if (prev.operation == GoogleDiffMatchPatch.Operation.DELETE) {
